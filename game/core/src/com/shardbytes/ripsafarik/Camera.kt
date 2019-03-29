@@ -28,7 +28,7 @@ class Camera(private val resizeStrategy: ResizeStrategy,
      * Use with caution.
      * @return Wrapped orthographic camera object for further customization.
      */
-    var innerCamera: OrthographicCamera? = null
+    var innerCamera: OrthographicCamera
         private set
     
     private var viewport: Viewport? = null
@@ -47,7 +47,7 @@ class Camera(private val resizeStrategy: ResizeStrategy,
             innerCamera = OrthographicCamera()
             viewport = ScreenViewport(innerCamera)
         }
-        innerCamera!!.update()
+        innerCamera.update()
     }
     
     
