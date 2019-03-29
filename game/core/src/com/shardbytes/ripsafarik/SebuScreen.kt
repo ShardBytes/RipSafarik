@@ -33,10 +33,7 @@ class SebuScreen : Screen {
 	
 	override fun render(dt: Float) {
 		gl.glClearColor(0f, 0f, 0f ,0f)
-		gl.glClear(GL20.GL_COLOR_BUFFER_BIT
-				or GL20.GL_DEPTH_BUFFER_BIT
-				or if (graphics.getBufferFormat().coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0
-		)
+		gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
 			cam.position.add(0f, -1f*dt)
