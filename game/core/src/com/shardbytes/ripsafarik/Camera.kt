@@ -4,15 +4,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 
 /**
  * Simple ortographic camera that can be locked onto an object and will follow it.
  */
 class Camera(private val resizeStrategy: ResizeStrategy,
-             private var viewportWidth: Float = 0f,
-             private var viewportHeight: Float = 0f,
+             private val viewportWidth: Float = 0f,
+             private val viewportHeight: Float = 0f,
              private var cameraPosition: Vector2 = Vector2(),
              private var lockTarget: ILockable? = null) : ILockable {
     
