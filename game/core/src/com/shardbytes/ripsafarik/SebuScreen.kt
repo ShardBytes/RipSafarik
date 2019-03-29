@@ -17,7 +17,7 @@ class SebuScreen : Screen {
 	}
 	
 	override fun render(delta: Float) {
-		
+	
 	}
 	
 	
