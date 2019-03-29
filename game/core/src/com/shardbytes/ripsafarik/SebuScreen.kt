@@ -1,7 +1,7 @@
 package com.shardbytes.ripsafarik
 
+import com.badlogic.gdx.Gdx.gl
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -10,14 +10,14 @@ class SebuScreen : Screen {
 	
 	val batch = SpriteBatch()
 	val player = Sprite(Texture("badlogic.jpg"))
-	val cam = OrthographicCamera()
+	val cam = Camera(Camera.ResizeStrategy.KEEP_ZOOM, 10.0f, 10.0f)
 	
 	init {
-	
+		batch.projectionMatrix = cam.innerCamera!!.combined
 	}
 	
 	override fun render(delta: Float) {
-	
+		gl.glClearColor(0f, 0f, 0f, 0f)
 	}
 	
 	
