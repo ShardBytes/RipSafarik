@@ -7,45 +7,51 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.MathUtils.cosDeg
-import com.badlogic.gdx.math.MathUtils.sinDeg
-
-
 
 class Player : ILockable, ITickable{
-
-    override val position: Vector2 = Vector2(0f, 0f)
-    private val maxSpeed = 0.02
-    private val rotationSpeed = 2.5
     
     val sprite = Sprite(Texture("badlogic.jpg")).apply {
+        setSize(1f, 1f)
         setOriginCenter()
         setPosition(0f, 0f)
-        setSize(1f, 1f)
+
+    }
+    
+    override var position: Vector2 get() {
+        return Vector2(sprite.x, sprite.y)
+        
+    } set(value) {
+        sprite.setPosition(value.x, value.y)
         
     }
+    
+    private val maxSpeed = 1.0
+    private val rotationSpeed = 2.5
 
     override fun tick(batch: SpriteBatch, deltaTime: Float) {
-        interpolatedSpeed.step(deltaTime)
-        handleInput()
+        handleInput(deltaTime)
         sprite.draw(batch)
         
     }
 
-    private fun handleInput() {
+    private fun handleInput(delta: Float) {
         /*
 		 * Movement
 		 */
         val rotation = sprite.getRotation()
-        val xAmount = -interpolatedSpeed.float * MathUtils.sinDeg(rotation)
-        val yAmount = interpolatedSpeed.float * MathUtils.cosDeg(rotation)
+        var xAmount = 0.0
+        var yAmount = 0.0
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            interpolatedSpeed.setTarget(maxSpeed)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            interpolatedSpeed.setTarget(-maxSpeed / 2.0)
-        } else {
-            interpolatedSpeed.setTarget(0.0)
+            xAmount = -maxSpeed * MathUtils.sinDeg(rotation)
+            yAmount = maxSpeed * MathUtils.cosDeg(rotation)
+            
+            
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            xAmount = maxSpeed * MathUtils.sinDeg(rotation)
+            yAmount = -maxSpeed * MathUtils.cosDeg(rotation)
+            
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -55,8 +61,8 @@ class Player : ILockable, ITickable{
             sprite.rotate((-rotationSpeed).toFloat())
         }
 
-        position.add(xAmount, yAmount)
-        sprite.translate(xAmount, yAmount)
+        position.add(xAmount.toFloat() * delta, yAmount.toFloat() * delta)
+        sprite.translate(xAmount.toFloat() * delta, yAmount.toFloat() * delta)
 
         /*
 		 * Shooting
