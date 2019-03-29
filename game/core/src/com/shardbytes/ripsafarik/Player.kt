@@ -17,7 +17,6 @@ class Player : ILockable, ITickable{
     override val position: Vector2 = Vector2(0f, 0f)
     private val maxSpeed = 0.02
     private val rotationSpeed = 2.5
-    private val interpolatedSpeed = Tween(0.0, 0.2, true, false)
     
     val sprite = Sprite(Texture("badlogic.jpg")).apply {
         setOriginCenter()
