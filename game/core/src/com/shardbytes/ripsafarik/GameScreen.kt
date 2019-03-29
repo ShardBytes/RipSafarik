@@ -20,12 +20,13 @@ class GameScreen : Screen {
     
     override fun render(delta: Float) {
         camera.update()
-        batch.projectionMatrix = camera.innerCamera.combined
+        batch.projectionMatrix.set(camera.innerCamera.combined)
         
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         
         batch.begin()
+        batch.disableBlending()
         gameObjects.forEach { it.tick(batch, delta) }
         batch.end()
         

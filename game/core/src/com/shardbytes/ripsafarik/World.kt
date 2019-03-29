@@ -13,7 +13,7 @@ class World : ITickable {
     
     val textureMap = mapOf(
             0 to Texture("asfalt.png"),
-            1 to Texture("obrubnik.png")
+            1 to Texture("badlogic.jpg")
     
     )
 
