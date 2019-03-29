@@ -55,6 +55,7 @@ project(":desktop") {
     }
 }
 
+/*
 project(":android") {
     apply plugin: "android"
     apply plugin: "kotlin-android"
@@ -85,6 +86,7 @@ project(":android") {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }
+*/
 
 project(":ios") {
     apply plugin: "kotlin"
