@@ -1,11 +1,10 @@
 package com.shardbytes.ripsafarik
 
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.OrthographicCamera
 
 class GameScreen : Screen {
     
-    var camera = OrthographicCamera()
+    var camera = Camera(Camera.ResizeStrategy.KEEP_ZOOM, 10.0f, 10.0f)
     
     init {
         
