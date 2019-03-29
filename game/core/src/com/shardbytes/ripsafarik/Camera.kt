@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -40,12 +41,12 @@ class Camera(private val resizeStrategy: ResizeStrategy,
      * @param height Height of camera's viewport
      */
     init {
-        if (resizeStrategy == ResizeStrategy.CHANGE_ZOOM) {
+        if (resizeStrategy == ResizeStrategy.KEEP_ZOOM) {
             innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
             viewport = FitViewport(viewportWidth, viewportHeight, innerCamera)
         } else {
             innerCamera = OrthographicCamera()
-            viewport = ScreenViewport(innerCamera)
+            viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
         }
         innerCamera.update()
     }
@@ -89,11 +90,11 @@ class Camera(private val resizeStrategy: ResizeStrategy,
      */
     fun update() {
         if (lockTarget == null) {
-            innerCamera!!.position.set(cameraPosition, 0.0f)
+            innerCamera.position.set(cameraPosition, 0.0f)
         } else {
-            innerCamera!!.position.set(lockTarget!!.position, 0.0f)
+            innerCamera.position.set(lockTarget!!.position, 0.0f)
         }
-        innerCamera!!.update()
+        innerCamera.update()
     }
 
 }
