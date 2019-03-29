@@ -13,11 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 class SebuScreen : Screen {
 	
 	val batch = SpriteBatch()
-	val player = Sprite(Texture("badlogic.jpg")).apply {
-		setPosition(0f, 0f)
-		setSize(1f, 1f)
-		setOriginCenter()
-	}
+	val player = Player()
 	
 	val walls = mutableListOf<Sprite>()
 	
@@ -32,7 +28,7 @@ class SebuScreen : Screen {
 	}
 	
 	override fun render(dt: Float) {
-		gl.glClearColor(0f, 0f, 0f ,0f)
+		gl.glClearColor(0.3f, .3f, .3f ,0f)
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
@@ -47,7 +43,7 @@ class SebuScreen : Screen {
 		
 		batch.begin()
 		batch.projectionMatrix = cam.innerCamera.combined
-		player.draw(batch)
+		player.tick(batch, dt)
 		walls.forEach { it.draw(batch) }
 		batch.end()
 	}
