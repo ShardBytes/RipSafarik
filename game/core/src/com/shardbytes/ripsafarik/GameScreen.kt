@@ -13,8 +13,11 @@ class GameScreen : Screen {
     var gameObjects = mutableListOf<ITickable>()
     
     init {
+        val player = Player()
         gameObjects.add(World())
-        gameObjects.add(Player())
+        gameObjects.add(player)
+        
+        camera.lockOn(player)
         
     }
     

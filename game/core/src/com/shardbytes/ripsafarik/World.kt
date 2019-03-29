@@ -6,14 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 class World : ITickable {
     
     val tileMap = arrayOf(
-            arrayOf(0, 0, 0, 0, 0),
-            arrayOf(1, 1, 1, 1, 1),
-            arrayOf(0, 0, 0, 0, 0)
+            arrayOf(3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
+            arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            arrayOf(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+            arrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            arrayOf(3, 3, 3, 3, 3, 3, 3, 3, 3, 3)
     )
     
     val textureMap = mapOf(
             0 to Texture("asfalt.png"),
-            1 to Texture("badlogic.jpg")
+            1 to Texture("asfalt_ciara.png"),
+            2 to Texture("obrubnik.png"),
+            3 to Texture("beton.png")
     
     )
 
