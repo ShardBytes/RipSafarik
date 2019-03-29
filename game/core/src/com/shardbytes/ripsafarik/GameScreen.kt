@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 class GameScreen : Screen {
 
-    var camera = Camera(Camera.ResizeStrategy.KEEP_ZOOM, 10.0f, 10.0f)
+    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, 10.0f, 10.0f)
     var batch = SpriteBatch()
     
     var gameObjects = mutableListOf<ITickable>()

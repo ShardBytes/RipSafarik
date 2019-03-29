@@ -9,10 +9,15 @@ class Player : ILockable, ITickable{
 
     override val position: Vector2 = Vector2(0f, 0f)
     
-    val playerSprite = Sprite(Texture("badlogic.jpg"))
+    val sprite = Sprite(Texture("badlogic.jpg")).apply {
+        setOriginCenter()
+        setPosition(0f, 0f)
+        setSize(1f, 1f)
+        
+    }
 
     override fun tick(batch: SpriteBatch, deltaTime: Float) {
-        playerSprite.draw(batch)
+        sprite.draw(batch)
         
     }
     

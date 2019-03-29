@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 class MainGame : Game() {
 	
 	override fun create() {
-		setScreen(GameScreen())
+		setScreen(SebuScreen())
 		
 	}
 	
