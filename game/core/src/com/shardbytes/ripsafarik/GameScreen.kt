@@ -44,7 +44,8 @@ class GameScreen : Screen {
     }
 
     override fun resize(width: Int, height: Int) {
-
+        camera.windowResized(width, height)
+        
     }
 
     override fun dispose() {
