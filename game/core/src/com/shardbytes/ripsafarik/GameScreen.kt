@@ -29,7 +29,6 @@ class GameScreen : Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         
         batch.begin()
-        batch.disableBlending()
         gameObjects.forEach { it.tick(batch, delta) }
         batch.end()
         
