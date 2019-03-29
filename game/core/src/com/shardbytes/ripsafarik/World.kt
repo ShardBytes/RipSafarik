@@ -18,8 +18,8 @@ class World : ITickable {
     )
 
     override fun tick(batch: SpriteBatch, deltaTime: Float) {
-        for ((x, row) in tileMap.withIndex()) {
-            for ((y, value) in row.withIndex()) {
+        for ((y, row) in tileMap.withIndex()) {
+            for ((x, value) in row.withIndex()) {
                 batch.draw(textureMap[value] ?: textureMap[0], x.toFloat(), y.toFloat(), 1f, 1f)
                 
             }

@@ -13,8 +13,8 @@ class GameScreen : Screen {
     var gameObjects = mutableListOf<ITickable>()
     
     init {
-        gameObjects.add(Player())
         gameObjects.add(World())
+        gameObjects.add(Player())
         
     }
     
