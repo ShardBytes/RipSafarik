@@ -10,59 +10,53 @@ import com.badlogic.gdx.math.MathUtils
 
 class Player : ILockable, ITickable{
     
-    val sprite = Sprite(Texture("badlogic.jpg")).apply {
+    val sprite = Sprite(Texture("player.png")).apply {
         setSize(1f, 1f)
         setOriginCenter()
-        setPosition(0f, 0f)
-
     }
     
-    override var position: Vector2 get() {
-        return Vector2(sprite.x, sprite.y)
-        
-    } set(value) {
-        sprite.setPosition(value.x, value.y)
-        
-    }
+    override val position = Vector2(0f, 0f)
+    var direction = 0f // degrees
+    val velocity = Vector2(1f, 0f)
     
-    private val maxSpeed = 1.0
-    private val rotationSpeed = 2.5
+    private val maxSpeed = 2.0f
+    private val rotationSpeed = 90f
 
-    override fun tick(batch: SpriteBatch, deltaTime: Float) {
-        handleInput(deltaTime)
+    override fun tick(batch: SpriteBatch, dt: Float) {
+        // handle input
+        handleInput(dt)
+        
+        // update physics
+        position.mulAdd(velocity, dt)
+        
+        // update and draw sprite
+        sprite.setPosition(position.x, position.y) // update absolute sprite position
+        sprite.rotation = direction - 90f
         sprite.draw(batch)
-        
     }
 
-    private fun handleInput(delta: Float) {
+    private fun handleInput(dt: Float) {
         /*
 		 * Movement
 		 */
-        val rotation = sprite.getRotation()
-        var xAmount = 0.0
-        var yAmount = 0.0
+        var speed = 0f
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            xAmount = -maxSpeed * MathUtils.sinDeg(rotation)
-            yAmount = maxSpeed * MathUtils.cosDeg(rotation)
-            
-            
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            xAmount = maxSpeed * MathUtils.sinDeg(rotation)
-            yAmount = -maxSpeed * MathUtils.cosDeg(rotation)
-            
-        }
-
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            speed = maxSpeed
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            speed = -maxSpeed
+        else
+            speed = 0f
+        
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            sprite.rotate(rotationSpeed.toFloat())
+            direction += rotationSpeed * dt
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            sprite.rotate((-rotationSpeed).toFloat())
+            direction -= rotationSpeed * dt
         }
-
-        position.add(xAmount.toFloat() * delta, yAmount.toFloat() * delta)
-        sprite.translate(xAmount.toFloat() * delta, yAmount.toFloat() * delta)
+        
+        // update velocity by speed and direction
+        velocity.set(1f, 0f).setAngle(direction).setLength(speed)
 
         /*
 		 * Shooting
