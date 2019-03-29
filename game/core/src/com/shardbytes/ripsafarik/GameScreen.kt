@@ -10,6 +10,13 @@ class GameScreen : Screen {
     var camera = Camera(Camera.ResizeStrategy.KEEP_ZOOM, 10.0f, 10.0f)
     var batch = SpriteBatch()
     
+    var gameObjects = mutableListOf<ITickable>()
+    
+    init {
+        gameObjects.add(Player())
+        
+    }
+    
     override fun render(delta: Float) {
         camera.update()
         batch.projectionMatrix = camera.innerCamera.combined
@@ -18,7 +25,7 @@ class GameScreen : Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         
         batch.begin()
-        
+        gameObjects.forEach { it.tick(batch, delta) }
         batch.end()
         
     }
