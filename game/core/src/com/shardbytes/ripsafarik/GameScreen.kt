@@ -14,6 +14,7 @@ class GameScreen : Screen {
     
     init {
         gameObjects.add(Player())
+        gameObjects.add(World())
         
     }
     
