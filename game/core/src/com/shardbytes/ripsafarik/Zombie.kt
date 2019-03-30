@@ -34,12 +34,12 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
     private var frameTime = 0
     
     private fun getTextureFromType() : String {
-        when(zombieType) {
-            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster.gif" }
-            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster2.gif" }
-            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster3.gif" }
-            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; return "textures/entity/animatedFastMonster.gif" }
-            
+        return when(zombieType) {
+            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster.gif" }
+            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster2.gif" }
+            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster3.gif" }
+            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; "textures/entity/animatedFastMonster.gif" }
+
         }
         
     }
