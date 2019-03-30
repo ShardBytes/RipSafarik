@@ -1,50 +1,56 @@
 package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Gdx.graphics
+import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.MathUtils.PI
+import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.shardbytes.ripsafarik.GameWorld
 import com.shardbytes.ripsafarik.tools.GameObject
 import com.shardbytes.ripsafarik.tools.GifDecoder
+import ktx.box2d.body
 
-class Player : GameObject {
+class Player(private val world: GameWorld) : GameObject {
     
+    val WIDTH = 1f
+    val HEIGHT = 1f
+    
+    val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
+        circle(radius = WIDTH*0.5f) {
+            density = 10f
+            friction = 0f
+        }
+        linearDamping = 10f
+    }
+    
+    // physics
+    override val position get() = body.position
+    
+    // animation
     private var isWalking = false
     private var elapsedTime = 0f
     private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/entity/animatedPlayer.gif").read())
     
-    override val position = Vector2()
-    private val velocity = Vector2()
-    private var direction = 0f
-    private var speed = 0f
-    
-    private val maxSpeed = 2.0f
-    private val rotationSpeed = 200f //TODO: tweak this shit
-    
-    private fun updatePhysics(dt: Float) {
-        position.mulAdd(velocity, dt)
-    }
-    
     override fun act(dt: Float) {
         handleInput(dt)
-        updatePhysics(dt)
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
-        val width = 1f
-        val height = 1f
-        val originX = width / 2
-        val originY = height / 2
+        val originX = WIDTH * 0.5f
+        val originY = HEIGHT * 0.5f
         val originBasedPositionX = position.x - originX
         val originBasedPositionY = position.y - originY
 
         if(isWalking) {
-            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
+            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, WIDTH, HEIGHT, 1f, 1f, body.angle * radDeg - 90f)
 
         } else {
-            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
-
+            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, WIDTH, HEIGHT, 1f, 1f, body.angle * radDeg - 90f)
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
@@ -52,35 +58,41 @@ class Player : GameObject {
     }
 
     private fun handleInput(dt: Float) {
+        val sped = 4f
         //Movement
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            body.linearDamping = 0f
             isWalking = true
-            speed = maxSpeed
-
+            body.setLinearVelocity(0f, sped)
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            body.linearDamping = 0f
             isWalking = true
-            speed = -maxSpeed
-
+            body.setLinearVelocity(0f, -sped)
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            body.linearDamping = 0f
+            isWalking = true
+            body.setLinearVelocity(-sped, 0f)
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            body.linearDamping = 0f
+            isWalking = true
+            body.setLinearVelocity(sped, 0f)
         } else {
             isWalking = false
-            speed = 0f
-            
+            body.linearDamping = 10f
         }
         
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            direction += rotationSpeed * dt
-            
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            direction -= rotationSpeed * dt
-            
+        val tomouseVect = Vector2(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
+        
+        body.setTransform(
+                position,
+                2*PI - tomouseVect.angleRad()
+        )
+        
+        if (input.isKeyPressed(Input.Keys.Q)) {
+            body.setLinearVelocity(0f, 0f)
         }
         
-        // update velocity by speed and direction
-        velocity.set(1f, 0f).setAngle(direction).rotate(if (speed < 0) 180f else 0f).setLength(speed)
-        
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            //shoot()
+        if (input.justTouched()) {
             
         }
     }

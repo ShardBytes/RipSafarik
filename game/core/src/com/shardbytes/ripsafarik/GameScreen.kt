@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.actors.Player
 import com.shardbytes.ripsafarik.actors.Zombie
 import com.shardbytes.ripsafarik.actors.Camera
@@ -14,17 +15,21 @@ class GameScreen : Screen {
     var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Meta.V_WIDTH, Meta.V_HEIGHT)
     var batch = SpriteBatch()
     
-    // game
+    // world
     val world = GameWorld()
-    val player = Player().apply { position.set(8f, 1f) }
+    val debugRenderer = Box2DDebugRenderer()
+    
+    // entities
+    val player = Player(world).apply { position.set(8f, 1f) }
     val zombies = mutableListOf<Zombie>()
     
     init {
-        zombies.add(Zombie(player, Zombie.ZombieType.NO_HAND_BLOOD).apply { position.set(-2f, -2f) })
-        zombies.add(Zombie(player, Zombie.ZombieType.HAND_BLOOD).apply { position.set(3f, -1f) })
-        zombies.add(Zombie(player, Zombie.ZombieType.NO_HAND).apply { position.set(10f, 5f) })
-        zombies.add(Zombie(player, Zombie.ZombieType.RUNNER).apply { position.set(7f, 9f) })
-        
+        /*
+        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND_BLOOD).apply { position.set(-2f, -2f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.HAND_BLOOD).apply { position.set(3f, -1f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND).apply { position.set(10f, 5f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.RUNNER).apply { position.set(7f, 9f) })
+        */
         camera.lockOn(player)
     }
     
@@ -55,10 +60,16 @@ class GameScreen : Screen {
         
         // render
         batch.begin()
+        
+        // entities
         world.render(dt, batch)
         zombies.forEach { it.render(dt, batch) }
         player.render(dt, batch)
+        
         batch.end()
+    
+        // debug
+        if (Meta.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
     }
 
     override fun show() {
@@ -75,7 +86,6 @@ class GameScreen : Screen {
 
     override fun resize(width: Int, height: Int) {
         camera.windowResized(width, height)
-        
     }
 
     override fun dispose() {

@@ -5,11 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.shardbytes.ripsafarik.GameWorld
 import com.shardbytes.ripsafarik.tools.GameObject
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import kotlin.math.abs
 
-class Zombie(private val player: Player, private val zombieType: ZombieType) : GameObject {
+class Zombie(world: GameWorld, private val player: Player, private val zombieType: ZombieType) : GameObject {
     
     enum class ZombieType {
         NO_HAND,

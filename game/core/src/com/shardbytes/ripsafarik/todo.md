@@ -1,0 +1,1 @@
+- separate input listener, nech triggruje v playerovi velocity updaty nejakym zahadnym sposobom

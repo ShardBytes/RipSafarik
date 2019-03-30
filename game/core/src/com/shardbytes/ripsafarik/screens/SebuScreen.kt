@@ -14,7 +14,6 @@ import com.shardbytes.ripsafarik.actors.Camera
 class SebuScreen : Screen {
 	
 	val batch = SpriteBatch()
-	val player = Player()
 	
 	val walls = mutableListOf<Sprite>()
 	
@@ -44,7 +43,6 @@ class SebuScreen : Screen {
 		
 		batch.begin()
 		batch.projectionMatrix = cam.innerCamera.combined
-		player.render(dt, batch)
 		walls.forEach { it.draw(batch) }
 		batch.end()
 	}

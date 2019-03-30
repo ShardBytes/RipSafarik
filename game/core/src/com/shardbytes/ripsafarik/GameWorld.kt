@@ -1,97 +1,54 @@
 package com.shardbytes.ripsafarik
 
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.shardbytes.ripsafarik.assets.TexturesEnv
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.tools.GameObject
+import ktx.box2d.body
+import ktx.box2d.createWorld
 
 class GameWorld : GameObject {
     
     override val position = Vector2()
     
-    private val spriteMap = mapOf(
-            "0a" to Sprite(TexturesEnv.grass()),
-            "1a" to Sprite(TexturesEnv.asfalt()),
-            "2a" to Sprite(TexturesEnv.asfalt_ciara()),
-            "3a" to Sprite(TexturesEnv.obrubnik()),
-            "3b" to Sprite(TexturesEnv.obrubnik()),
-            "3c" to Sprite(TexturesEnv.obrubnik()),
-            "3d" to Sprite(TexturesEnv.obrubnik()),
-            "4a" to Sprite(TexturesEnv.beton()),
-            "5a" to Sprite(TexturesEnv.stairs()),
-            "5b" to Sprite(TexturesEnv.stairs()),
-            "5c" to Sprite(TexturesEnv.stairs()),
-            "5d" to Sprite(TexturesEnv.stairs()),
-            "6c" to Sprite(TexturesEnv.wall()),
-            "7c" to Sprite(TexturesEnv.roof()),
-            "8a" to Sprite(TexturesEnv.floor()),
-            "9a" to Sprite(TexturesEnv.runningorb())
-
-    ).onEach {
-        it.value.apply {
-            setSize(1f, 1f)
-            setOriginCenter()
-        }
-
-        when(it.key.last()) {
-            'b' -> it.value.apply { rotation = 90f }
-            'c' -> it.value.apply { rotation = 180f }
-            'd' -> it.value.apply { rotation = 270f }
+    val physics = createWorld() // world for physics
+    val levelMain = LevelMain()
+    
+    init {
+        // generate border
+        for ((y, row) in levelMain.tileMap.withIndex()) {
+            for ((x, tile) in row.withIndex()) {
+                if (tile == "0a") { // if grass
+                    physics.body(BodyDef.BodyType.StaticBody) {
+                        box(width = 1f, height = 1f)
+                        position.set(x*1f, y*1f)
+                    }
+                }
+            }
         }
     }
-
-    private val tileMap = arrayOf(
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
-            
-            arrayOf("3a", "3a", "1a", "1a", "1a", "1a", "1a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a"),
-            
-            arrayOf("1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a"),
-            
-            arrayOf("2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a"),
-            
-            arrayOf("1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a"),
-            
-            arrayOf("3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c"),
-            
-            arrayOf("4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a"),
-
-            arrayOf("6c", "6c", "6c", "6c", "6c", "6c", "4a", "4a", "5b", "5b", "5b", "8a", "8a", "8a", "8a", "5d", "5d", "5d", "4a", "4a", "6c"),
-
-            arrayOf("7c", "7c", "7c", "7c", "7c", "7c", "4a", "4a", "5b", "5b", "5b", "8a", "8a", "8a", "8a", "5d", "5d", "5d", "4a", "4a", "7c")
-    ).reversedArray()
     
-    private val overlayMap = arrayOf(
-            spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 0f) },
-            spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 8f) }
-    )
-    
-    override fun act(dt: Float) { }
+    override fun act(dt: Float) {
+        physics.step(dt, 6, 2)
+    }
 
     override fun render(dt: Float, batch: SpriteBatch) {
-        for ((y, row) in tileMap.withIndex()) {
+        
+        // draw level
+        for ((y, row) in levelMain.tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
-                spriteMap.getValue(value).apply { setPosition(x.toFloat(), y.toFloat()) }.draw(batch)
+                levelMain.spriteMap.getValue(value).apply { setPosition(x*1f - 0.5f, y*1f - 0.5f) }.draw(batch)
             }
         }
         
-        overlayMap.forEach { 
+        // draw overlay
+        levelMain.overlayMap.forEach {
             it.draw(batch)
         }
     }
     
     override fun dispose() {
-    
+        physics.dispose()
     }
 
 }
