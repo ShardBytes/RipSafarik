@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import com.shardbytes.ripsafarik.assets.TexturesEnv
 import com.shardbytes.ripsafarik.tools.GameObject
 
 class GameWorld : GameObject {
@@ -12,22 +13,22 @@ class GameWorld : GameObject {
     override val position = Vector2()
     
     private val spriteMap = mapOf(
-            "0a" to Sprite(Texture("textures/env/grass.png")),
-            "1a" to Sprite(Texture("textures/env/asfalt.png")),
-            "2a" to Sprite(Texture("textures/env/asfalt_ciara.png")),
-            "3a" to Sprite(Texture("textures/env/obrubnik.png")),
-            "3b" to Sprite(Texture("textures/env/obrubnik.png")),
-            "3c" to Sprite(Texture("textures/env/obrubnik.png")),
-            "3d" to Sprite(Texture("textures/env/obrubnik.png")),
-            "4a" to Sprite(Texture("textures/env/beton.png")),
-            "5a" to Sprite(Texture("textures/env/stairs.png")),
-            "5b" to Sprite(Texture("textures/env/stairs.png")),
-            "5c" to Sprite(Texture("textures/env/stairs.png")),
-            "5d" to Sprite(Texture("textures/env/stairs.png")),
-            "6c" to Sprite(Texture("textures/env/wall.png")),
-            "7c" to Sprite(Texture("textures/env/roof.png")),
-            "8a" to Sprite(Texture("textures/env/floor.png")),
-            "9a" to Sprite(Texture("textures/orbs/runningorb.png"))
+            "0a" to Sprite(TexturesEnv.grass()),
+            "1a" to Sprite(TexturesEnv.asfalt()),
+            "2a" to Sprite(TexturesEnv.asfalt_ciara()),
+            "3a" to Sprite(TexturesEnv.obrubnik()),
+            "3b" to Sprite(TexturesEnv.obrubnik()),
+            "3c" to Sprite(TexturesEnv.obrubnik()),
+            "3d" to Sprite(TexturesEnv.obrubnik()),
+            "4a" to Sprite(TexturesEnv.beton()),
+            "5a" to Sprite(TexturesEnv.stairs()),
+            "5b" to Sprite(TexturesEnv.stairs()),
+            "5c" to Sprite(TexturesEnv.stairs()),
+            "5d" to Sprite(TexturesEnv.stairs()),
+            "6c" to Sprite(TexturesEnv.wall()),
+            "7c" to Sprite(TexturesEnv.roof()),
+            "8a" to Sprite(TexturesEnv.floor()),
+            "9a" to Sprite(TexturesEnv.runningorb())
 
     ).onEach {
         it.value.apply {
