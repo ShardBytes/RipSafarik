@@ -21,10 +21,33 @@ class World : ITickable {
     */
 
     val tileMap = arrayOf(
-            arrayOf("0a", "0a", "0a", "0a", "0a"),
-            arrayOf("1a", "1a", "1a", "1a", "1a"),
-            arrayOf("0a", "0a", "4a", "4a", "5b"),
-            arrayOf("4a", "4a", "4a", "4a", "4a")
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("0a", "0a", "1a", "1a", "1a", "1a", "1a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a", "0a"),
+            
+            arrayOf("3a", "3a", "1a", "1a", "1a", "1a", "1a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a", "3a"),
+            
+            arrayOf("1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a"),
+            
+            arrayOf("2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a", "2a", "2a", "1a"),
+            
+            arrayOf("1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a", "1a"),
+            
+            arrayOf("3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c", "3c"),
+            
+            arrayOf("4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a", "4a"),
+
+            arrayOf("6c", "6c", "6c", "6c", "6c", "6c", "4a", "4a", "5b", "5b", "5b", "8a", "8a", "8a", "8a", "5d", "5d", "5d", "4a", "4a", "6c"),
+
+            arrayOf("7c", "7c", "7c", "7c", "7c", "7c", "4a", "4a", "5b", "5b", "5b", "8a", "8a", "8a", "8a", "5d", "5d", "5d", "4a", "4a", "7c")
     ).reversedArray()
 
     val spriteMap = mapOf(
@@ -32,9 +55,17 @@ class World : ITickable {
             "1a" to Sprite(Texture("textures/asfalt.png")),
             "2a" to Sprite(Texture("textures/asfalt_ciara.png")),
             "3a" to Sprite(Texture("textures/obrubnik.png")),
+            "3b" to Sprite(Texture("textures/obrubnik.png")),
+            "3c" to Sprite(Texture("textures/obrubnik.png")),
+            "3d" to Sprite(Texture("textures/obrubnik.png")),
             "4a" to Sprite(Texture("textures/beton.png")),
             "5a" to Sprite(Texture("textures/stairs.png")),
-            "5b" to Sprite(Texture("textures/stairs.png"))
+            "5b" to Sprite(Texture("textures/stairs.png")),
+            "5c" to Sprite(Texture("textures/stairs.png")),
+            "5d" to Sprite(Texture("textures/stairs.png")),
+            "6c" to Sprite(Texture("textures/wall.png")),
+            "7c" to Sprite(Texture("textures/roof.png")),
+            "8a" to Sprite(Texture("textures/floor_bad.png"))
 
     ).onEach {
         it.value.apply {
@@ -52,7 +83,7 @@ class World : ITickable {
         
     }
 
-    override fun tick(batch: SpriteBatch, deltaTime: Float) {
+    override fun tick(batch: SpriteBatch, dt: Float) {
         for ((y, row) in tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
                 spriteMap[value]!!.apply { setPosition(x.toFloat(), y.toFloat()) }.draw(batch)
