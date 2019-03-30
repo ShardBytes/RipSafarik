@@ -71,7 +71,6 @@ class World : ITickable {
         it.value.apply {
             setSize(1f, 1f)
             setOriginCenter()
-
         }
 
         when(it.key.last()) {
