@@ -8,19 +8,20 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.MathUtils
 
-class Player : ILockable, ITickable{
+class Player : ILockable, ITickable {
     
-    val sprite = Sprite(Texture("player.png")).apply {
+    val sprite = Sprite(Texture("textures/player.png")).apply {
         setSize(1f, 1f)
         setOriginCenter()
     }
     
     override val position = Vector2(0f, 0f)
     var direction = 0f // degrees
-    val velocity = Vector2(1f, 0f)
+    var speed = 0f
+    val velocity = Vector2(0f, 0f)
     
     private val maxSpeed = 2.0f
-    private val rotationSpeed = 90f
+    private val rotationSpeed = 280f
 
     override fun tick(batch: SpriteBatch, dt: Float) {
         // handle input
@@ -30,7 +31,7 @@ class Player : ILockable, ITickable{
         position.mulAdd(velocity, dt)
         
         // update and draw sprite
-        sprite.setPosition(position.x, position.y) // update absolute sprite position
+        sprite.setOriginBasedPosition(position.x, position.y) // update absolute sprite position
         sprite.rotation = direction - 90f
         sprite.draw(batch)
     }
@@ -39,14 +40,13 @@ class Player : ILockable, ITickable{
         /*
 		 * Movement
 		 */
-        var speed = 0f
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP))
             speed = maxSpeed
         else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
             speed = -maxSpeed
         else
-            speed = 0f
+            speed = if (speed >= 5f*dt) speed - 5f*dt else if (speed <= -5f*dt) speed + 5f*dt else 0f
         
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             direction += rotationSpeed * dt
@@ -56,7 +56,7 @@ class Player : ILockable, ITickable{
         }
         
         // update velocity by speed and direction
-        velocity.set(1f, 0f).setAngle(direction).setLength(speed)
+        velocity.set(1f, 0f).setAngle(direction).rotate(if (speed < 0) 180f else 0f).setLength(speed)
 
         /*
 		 * Shooting

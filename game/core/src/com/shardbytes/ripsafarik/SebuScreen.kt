@@ -20,7 +20,7 @@ class SebuScreen : Screen {
 	val cam = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, 10.0f, 10.0f)
 	
 	init {
-		walls += Sprite(Texture("badlogic.jpg")).apply {
+		walls += Sprite(Texture("textures/badlogic.jpg")).apply {
 			setPosition(-4f, -4f)
 			setSize(1f, 1f)
 			setOriginCenter()
