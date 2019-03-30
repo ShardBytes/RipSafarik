@@ -7,22 +7,45 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import kotlin.math.abs
 
-class Zombie(private val whereIsPlayer: Player) : ILockable, ITickable {
+class Zombie(private val player: Player, private val zombieType: ZombieType) : ILockable, ITickable {
+    
+    enum class ZombieType {
+        NO_HAND,
+        NO_HAND_BLOOD,
+        HAND_BLOOD,
+        RUNNER
+        
+    }
 
     private var isWalking = false
     private var elapsedTime = 0f
-    private val animatedMonster = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/animatedMonster.gif").read())
+    private val animatedMonster = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal(getTextureFromType()).read())
     
     override val position = Vector2()
     private val velocity = Vector2()
     private var direction = 0f 
     private var speed = 0f
 
-    private val maxSpeed = 1.0f
-    private val rotationSpeed = 200f
+    private var maxSpeed = 0f
+    private var rotationSpeed = 200f
+    
+    //Animation properties
+    private var frames = 0
+    private var frameTime = 0
+    
+    private fun getTextureFromType() : String {
+        when(zombieType) {
+            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster.gif" }
+            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster2.gif" }
+            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster3.gif" }
+            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; return "textures/animatedFastMonster.gif" }
+            
+        }
+        
+    }
     
     override fun tick(batch: SpriteBatch, dt: Float) {
-        handleAI(dt, whereIsPlayer.position)
+        handleAI(dt, player.position)
         position.mulAdd(velocity, dt)
 
         val width = 1f
@@ -40,13 +63,13 @@ class Zombie(private val whereIsPlayer: Player) : ILockable, ITickable {
 
         }
         elapsedTime += dt
-        elapsedTime %= 0.8f
+        elapsedTime %= frames * frameTime * 0.001f
         
     }
     
     private fun handleAI(deltaTime: Float, playerPos: Vector2) {
         val distance = playerPos.dst(position)
-        if(distance < 20 && distance > 0.2) {
+        if(distance < 20 && distance > 0.5) {
             isWalking = true
             speed = maxSpeed
             
@@ -59,11 +82,17 @@ class Zombie(private val whereIsPlayer: Player) : ILockable, ITickable {
         val optimalDirectionVector = playerPos.cpy().sub(position).nor()
         val optimalRotation = MathUtils.radiansToDegrees * MathUtils.atan2(optimalDirectionVector.y, optimalDirectionVector.x)
         
-        //var rotation = if(abs(optimalRotation - this.direction) > rotationSpeed * deltaTime) rotationSpeed * deltaTime else optimalRotation
-        //var directionVector = Vector2(MathUtils.cosDeg(rotation), MathUtils.sinDeg(rotation))
-        
-        this.direction = optimalRotation
-        velocity.set(optimalDirectionVector.setLength(speed))
+        var rotation = if(abs(optimalRotation - this.direction) > rotationSpeed * deltaTime) rotationSpeed * deltaTime else optimalRotation - this.direction
+        if(optimalRotation > this.direction) {
+            this.direction += rotation
+            
+        } else {
+            this.direction -= rotation
+            
+        }
+
+        val directionVector = Vector2(MathUtils.cosDeg(this.direction), MathUtils.sinDeg(this.direction))
+        velocity.set(directionVector.setLength(speed))
         
     }
 

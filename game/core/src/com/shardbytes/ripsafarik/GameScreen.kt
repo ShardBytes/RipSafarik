@@ -17,10 +17,10 @@ class GameScreen : Screen {
     init {
         gameObjects.add(World())
         gameObjects.add(player)
-        gameObjects.add(Zombie(player).apply { position.set(-2f, -2f) })
-        gameObjects.add(Zombie(player).apply { position.set(3f, -1f) })
-        gameObjects.add(Zombie(player).apply { position.set(10f, 5f) })
-        gameObjects.add(Zombie(player).apply { position.set(7f, 9f) })
+        gameObjects.add(Zombie(player, Zombie.ZombieType.NO_HAND_BLOOD).apply { position.set(-2f, -2f) })
+        gameObjects.add(Zombie(player, Zombie.ZombieType.HAND_BLOOD).apply { position.set(3f, -1f) })
+        gameObjects.add(Zombie(player, Zombie.ZombieType.NO_HAND).apply { position.set(10f, 5f) })
+        gameObjects.add(Zombie(player, Zombie.ZombieType.RUNNER).apply { position.set(7f, 9f) })
         
         camera.lockOn(player)
     }
