@@ -59,15 +59,7 @@ class Player : ILockable, ITickable {
 
         } else {
             isWalking = false
-            speed = if (speed >= 5f * dt) speed - 5f * dt else if (speed <= -5f * dt) speed + 5f * dt else 0f
-            /*
-             * TODO: the fuck is this
-             * TODO: is this responsible for icey floor?
-             * TODO: if yes then just why
-             * TODO: you don't generally slide on a grass do you
-             * TODO: and how does the >= and <= work, is this kotlin hackery?? :D
-             */
-
+            speed = 0f
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
