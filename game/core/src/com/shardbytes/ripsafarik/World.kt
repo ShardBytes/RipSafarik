@@ -65,7 +65,7 @@ class World : ITickable {
             "5d" to Sprite(Texture("textures/stairs.png")),
             "6c" to Sprite(Texture("textures/wall.png")),
             "7c" to Sprite(Texture("textures/roof.png")),
-            "8a" to Sprite(Texture("textures/floor_bad.png"))
+            "8a" to Sprite(Texture("textures/floor.png"))
 
     ).onEach {
         it.value.apply {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector2
 
 class GameScreen : Screen {
 
@@ -11,11 +12,15 @@ class GameScreen : Screen {
     var batch = SpriteBatch()
     
     var gameObjects = mutableListOf<ITickable>()
-    val player = Player()
+    val player = Player().apply { position.set(8f, 1f) }
     
     init {
         gameObjects.add(World())
         gameObjects.add(player)
+        gameObjects.add(Zombie(player).apply { position.set(-2f, -2f) })
+        gameObjects.add(Zombie(player).apply { position.set(3f, -1f) })
+        gameObjects.add(Zombie(player).apply { position.set(10f, 5f) })
+        gameObjects.add(Zombie(player).apply { position.set(7f, 9f) })
         
         camera.lockOn(player)
     }

@@ -14,7 +14,7 @@ class Player : ILockable, ITickable {
     
     override val position = Vector2()
     private val velocity = Vector2()
-    private var direction = 0f // degrees
+    private var direction = 0f
     private var speed = 0f
     
     private val maxSpeed = 2.0f
@@ -41,7 +41,6 @@ class Player : ILockable, ITickable {
             batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
             
         }
-        
         elapsedTime += dt
         elapsedTime %= 0.8f
         
@@ -60,13 +59,16 @@ class Player : ILockable, ITickable {
         } else {
             isWalking = false
             speed = 0f
+            
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             direction += rotationSpeed * dt
+            
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             direction -= rotationSpeed * dt
+            
         }
         
         // update velocity by speed and direction
@@ -74,6 +76,7 @@ class Player : ILockable, ITickable {
         
         if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
             //shoot()
+            
         }
 
     }
