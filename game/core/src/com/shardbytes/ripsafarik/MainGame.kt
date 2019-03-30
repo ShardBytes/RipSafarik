@@ -2,7 +2,6 @@ package com.shardbytes.ripsafarik
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
-import com.shardbytes.ripsafarik.assets.TexturesEntity
 import com.shardbytes.ripsafarik.assets.TexturesEnv
 
 class MainGame : Game() {
