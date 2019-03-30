@@ -31,7 +31,7 @@ class World : ITickable {
     override fun tick(batch: SpriteBatch, deltaTime: Float) {
         for ((y, row) in tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
-                batch.draw(textureMap[value] ?: textureMap[0], x.toFloat(), y.toFloat(), 1f, 1f)
+                batch.draw(textureMap[value] ?: textureMap[0], x*1f - 0.5f, y*1f - 0.5f, 1f, 1f)
             }
         }
     }

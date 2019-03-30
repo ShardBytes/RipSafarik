@@ -11,14 +11,13 @@ class GameScreen : Screen {
     var batch = SpriteBatch()
     
     var gameObjects = mutableListOf<ITickable>()
+    val player = Player()
     
     init {
-        val player = Player()
         gameObjects.add(World())
         gameObjects.add(player)
         
         camera.lockOn(player)
-        
     }
     
     override fun render(delta: Float) {
@@ -31,7 +30,6 @@ class GameScreen : Screen {
         batch.begin()
         gameObjects.forEach { it.tick(batch, delta) }
         batch.end()
-        
     }
 
     override fun show() {
