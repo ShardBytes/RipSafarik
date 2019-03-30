@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Vector2
 
 class GameScreen : Screen {
 
@@ -23,6 +22,7 @@ class GameScreen : Screen {
         gameObjects.add(Zombie(player, Zombie.ZombieType.RUNNER).apply { position.set(7f, 9f) })
         
         camera.lockOn(player)
+        
     }
     
     override fun render(delta: Float) {

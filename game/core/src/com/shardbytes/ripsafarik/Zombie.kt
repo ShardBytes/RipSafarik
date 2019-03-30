@@ -35,10 +35,10 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
     
     private fun getTextureFromType() : String {
         when(zombieType) {
-            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster.gif" }
-            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster2.gif" }
-            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/animatedMonster3.gif" }
-            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; return "textures/animatedFastMonster.gif" }
+            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster.gif" }
+            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster2.gif" }
+            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; return "textures/entity/animatedMonster3.gif" }
+            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; return "textures/entity/animatedFastMonster.gif" }
             
         }
         
@@ -46,8 +46,17 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
     
     override fun tick(batch: SpriteBatch, dt: Float) {
         handleAI(dt, player.position)
+        updatePhysics(dt)
+        draw(batch, dt)
+        
+    }
+    
+    private fun updatePhysics(dt: Float) {
         position.mulAdd(velocity, dt)
-
+        
+    }
+    
+    private fun draw(batch: SpriteBatch, dt: Float) {
         val width = 1f
         val height = 1f
         val originX = width / 2

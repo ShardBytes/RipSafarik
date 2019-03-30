@@ -51,21 +51,21 @@ class World : ITickable {
     ).reversedArray()
 
     val spriteMap = mapOf(
-            "0a" to Sprite(Texture("textures/grass.png")),
-            "1a" to Sprite(Texture("textures/asfalt.png")),
-            "2a" to Sprite(Texture("textures/asfalt_ciara.png")),
-            "3a" to Sprite(Texture("textures/obrubnik.png")),
-            "3b" to Sprite(Texture("textures/obrubnik.png")),
-            "3c" to Sprite(Texture("textures/obrubnik.png")),
-            "3d" to Sprite(Texture("textures/obrubnik.png")),
-            "4a" to Sprite(Texture("textures/beton.png")),
-            "5a" to Sprite(Texture("textures/stairs.png")),
-            "5b" to Sprite(Texture("textures/stairs.png")),
-            "5c" to Sprite(Texture("textures/stairs.png")),
-            "5d" to Sprite(Texture("textures/stairs.png")),
-            "6c" to Sprite(Texture("textures/wall.png")),
-            "7c" to Sprite(Texture("textures/roof.png")),
-            "8a" to Sprite(Texture("textures/floor.png"))
+            "0a" to Sprite(Texture("textures/env/grass.png")),
+            "1a" to Sprite(Texture("textures/env/asfalt.png")),
+            "2a" to Sprite(Texture("textures/env/asfalt_ciara.png")),
+            "3a" to Sprite(Texture("textures/env/obrubnik.png")),
+            "3b" to Sprite(Texture("textures/env/obrubnik.png")),
+            "3c" to Sprite(Texture("textures/env/obrubnik.png")),
+            "3d" to Sprite(Texture("textures/env/obrubnik.png")),
+            "4a" to Sprite(Texture("textures/env/beton.png")),
+            "5a" to Sprite(Texture("textures/env/stairs.png")),
+            "5b" to Sprite(Texture("textures/env/stairs.png")),
+            "5c" to Sprite(Texture("textures/env/stairs.png")),
+            "5d" to Sprite(Texture("textures/env/stairs.png")),
+            "6c" to Sprite(Texture("textures/env/wall.png")),
+            "7c" to Sprite(Texture("textures/env/roof.png")),
+            "8a" to Sprite(Texture("textures/env/floor.png"))
 
     ).onEach {
         it.value.apply {

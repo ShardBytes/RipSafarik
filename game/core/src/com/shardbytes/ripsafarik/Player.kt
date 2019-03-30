@@ -10,7 +10,7 @@ class Player : ILockable, ITickable {
     
     private var isWalking = false
     private var elapsedTime = 0f
-    private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/animatedPlayer.gif").read())
+    private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/entity/animatedPlayer.gif").read())
     
     override val position = Vector2()
     private val velocity = Vector2()
@@ -21,28 +21,34 @@ class Player : ILockable, ITickable {
     private val rotationSpeed = 200f //TODO: tweak this shit
 
     override fun tick(batch: SpriteBatch, dt: Float) {
-        // handle input
         handleInput(dt)
+        updatePhysics(dt)
+        draw(batch, dt)
         
-        // update physics
+    }
+    
+    private fun updatePhysics(dt: Float) {
         position.mulAdd(velocity, dt)
         
+    }
+    
+    private fun draw(batch: SpriteBatch, dt: Float) {
         val width = 1f
         val height = 1f
         val originX = width / 2
         val originY = height / 2
         val originBasedPositionX = position.x - originX
         val originBasedPositionY = position.y - originY
-        
+
         if(isWalking) {
             batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
-            
+
         } else {
             batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
-            
+
         }
         elapsedTime += dt
-        elapsedTime %= 0.8f
+        elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
         
     }
 
