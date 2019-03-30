@@ -28,22 +28,40 @@ class World : ITickable {
     ).reversedArray()
 
     val spriteMap = mapOf(
-            "0a" to Sprite(Texture("grass.png")),
-            "1a" to Sprite(Texture("asfalt.png")),
-            "2a" to Sprite(Texture("asfalt_ciara.png")),
-            "3a" to Sprite(Texture("obrubnik.png")),
-            "4a" to Sprite(Texture("beton.png")),
-            "5a" to Sprite(Texture("stairs.png")).apply { setSize(1f, 1f); setOriginCenter()},
-            "5b" to Sprite(Texture("stairs.png")).apply { setSize(1f, 1f); setOriginCenter(); rotation = 90f }
+            "0a" to Sprite(Texture("textures/grass.png")),
+            "1a" to Sprite(Texture("textures/asfalt.png")),
+            "2a" to Sprite(Texture("textures/asfalt_ciara.png")),
+            "3a" to Sprite(Texture("textures/obrubnik.png")),
+            "4a" to Sprite(Texture("textures/beton.png")),
+            "5a" to Sprite(Texture("textures/stairs.png")),
+            "5b" to Sprite(Texture("textures/stairs.png"))
 
-    )
+    ).onEach {
+        it.value.apply {
+            setSize(1f, 1f)
+            setOriginCenter()
+
+        }
+
+        when(it.key.last()) {
+            'b' -> it.value.apply { rotation = 90f }
+            'c' -> it.value.apply { rotation = 180f }
+            'd' -> it.value.apply { rotation = 270f }
+
+        }
+        
+    }
 
     override fun tick(batch: SpriteBatch, deltaTime: Float) {
         for ((y, row) in tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
-                batch.draw(textureMap[value] ?: textureMap[0], x*1f - 0.5f, y*1f - 0.5f, 1f, 1f)
+                //batch.draw(textureMap[value] ?: textureMap[0], x*1f - 0.5f, y*1f - 0.5f, 1f, 1f)
+                spriteMap[value]!!.apply { setPosition(x.toFloat(), y.toFloat()) }.draw(batch)
+                
             }
+            
         }
+        
     }
 
 }
