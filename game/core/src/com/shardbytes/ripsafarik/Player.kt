@@ -1,28 +1,21 @@
 package com.shardbytes.ripsafarik
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector2
 
 class Player : ILockable, ITickable {
-    
-    val sprite = Sprite(Texture("textures/player.png")).apply {
-        setSize(1f, 1f)
-        setOriginCenter()
-    }
     
     private var isWalking = false
     private var elapsedTime = 0f
     private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/animatedPlayer.gif").read())
     
-    override val position = Vector2(0f, 0f)
-    var direction = 0f // degrees
-    var speed = 0f
-    val velocity = Vector2(0f, 0f)
+    override val position = Vector2()
+    private val velocity = Vector2()
+    private var direction = 0f // degrees
+    private var speed = 0f
     
     private val maxSpeed = 2.0f
     private val rotationSpeed = 200f //TODO: tweak this shit
@@ -33,11 +26,6 @@ class Player : ILockable, ITickable {
         
         // update physics
         position.mulAdd(velocity, dt)
-        
-        // update and draw sprite
-        //sprite.setOriginBasedPosition(position.x, position.y) // update absolute sprite position //TODO: remove if not needed anymore
-        //sprite.rotation = direction - 90f
-        //sprite.draw(batch)
         
         val width = 1f
         val height = 1f
@@ -55,6 +43,7 @@ class Player : ILockable, ITickable {
         }
         
         elapsedTime += dt
+        elapsedTime %= 0.8f
         
     }
 
@@ -76,6 +65,7 @@ class Player : ILockable, ITickable {
              * TODO: is this responsible for icey floor?
              * TODO: if yes then just why
              * TODO: you don't generally slide on a grass do you
+             * TODO: and how does the >= and <= work, is this kotlin hackery?? :D
              */
 
         }
