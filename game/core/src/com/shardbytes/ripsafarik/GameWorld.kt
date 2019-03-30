@@ -40,9 +40,7 @@ class GameWorld : GameObject {
             'b' -> it.value.apply { rotation = 90f }
             'c' -> it.value.apply { rotation = 180f }
             'd' -> it.value.apply { rotation = 270f }
-
         }
-
     }
 
     private val tileMap = arrayOf(
@@ -95,8 +93,7 @@ class GameWorld : GameObject {
     }
     
     override fun dispose() {
-        spriteMap.values.forEach { it.texture.dispose() }
-        overlayMap.forEach { it.texture.dispose() }
+    
     }
 
 }
