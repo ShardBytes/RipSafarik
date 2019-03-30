@@ -93,7 +93,7 @@ class Player(private val world: GameWorld) : GameObject {
         }
         
         if (input.justTouched()) {
-            
+        
         }
     }
     
