@@ -20,11 +20,11 @@ class World : ITickable {
     ).reversedArray()
     
     val textureMap = mapOf(
-            0 to Texture("asfalt.png"),
-            1 to Texture("asfalt_ciara.png"),
-            2 to Texture("obrubnik.png"),
-            3 to Texture("beton.png"),
-            4 to Texture("grass.png")
+            0 to Texture("textures/asfalt.png"),
+            1 to Texture("textures/asfalt_ciara.png"),
+            2 to Texture("textures/obrubnik.png"),
+            3 to Texture("textures/beton.png"),
+            4 to Texture("textures/grass.png")
     
     )
 
@@ -32,11 +32,8 @@ class World : ITickable {
         for ((y, row) in tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
                 batch.draw(textureMap[value] ?: textureMap[0], x.toFloat(), y.toFloat(), 1f, 1f)
-                
             }
-            
         }
-        
     }
     
 }

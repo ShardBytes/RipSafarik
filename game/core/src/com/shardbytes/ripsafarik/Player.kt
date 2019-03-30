@@ -8,9 +8,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.MathUtils
 
-class Player : ILockable, ITickable{
+class Player : ILockable, ITickable {
     
-    val sprite = Sprite(Texture("player.png")).apply {
+    val sprite = Sprite(Texture("textures/player.png")).apply {
         setSize(1f, 1f)
         setOriginCenter()
     }
