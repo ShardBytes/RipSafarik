@@ -18,15 +18,3 @@ enum class TexturesEnv {
 		lateinit var manager: AssetManager
 	}
 }
-
-enum class TexturesEntity {
-	animatedFastMonster, animatedMonster, animatedMonster2, animatedMonster3, animatedPlayer;
-	
-	val path = "textures/entity/${name}.gif"
-	fun load() = manager.load<Texture>(path)
-	operator fun invoke() = manager.getAsset<Texture>(path)
-	
-	companion object {
-		lateinit var manager: AssetManager
-	}
-}

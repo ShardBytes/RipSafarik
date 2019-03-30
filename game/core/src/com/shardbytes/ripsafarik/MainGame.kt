@@ -13,9 +13,6 @@ class MainGame : Game() {
 		TexturesEnv.manager = assetManager
 		TexturesEnv.values().forEach { it.load() }
 		
-		TexturesEntity.manager = assetManager
-		TexturesEntity.values().forEach { it.load() }
-		
 		assetManager.finishLoading()
 		
 		setScreen(GameScreen())

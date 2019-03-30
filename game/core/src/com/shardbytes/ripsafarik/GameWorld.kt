@@ -1,10 +1,8 @@
 package com.shardbytes.ripsafarik
 
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.Disposable
 import com.shardbytes.ripsafarik.assets.TexturesEnv
 import com.shardbytes.ripsafarik.tools.GameObject
 
