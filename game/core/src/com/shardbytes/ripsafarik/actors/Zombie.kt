@@ -1,20 +1,21 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.tools.GifDecoder
 import kotlin.math.abs
 
-class Zombie(private val player: Player, private val zombieType: ZombieType) : ILockable, ITickable {
+class Zombie(private val player: Player, private val zombieType: ZombieType) : GameObject {
     
     enum class ZombieType {
         NO_HAND,
         NO_HAND_BLOOD,
         HAND_BLOOD,
         RUNNER
-        
     }
 
     private var isWalking = false
@@ -35,28 +36,21 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
     
     private fun getTextureFromType() : String {
         return when(zombieType) {
-            ZombieType.NO_HAND          -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster.gif" }
-            ZombieType.HAND_BLOOD       -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster2.gif" }
-            ZombieType.NO_HAND_BLOOD    -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster3.gif" }
-            ZombieType.RUNNER           -> { frames = 4; frameTime = 100; maxSpeed = 3f; "textures/entity/animatedFastMonster.gif" }
+            ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster.gif" }
+            ZombieType.HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster2.gif" }
+            ZombieType.NO_HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster3.gif" }
+            ZombieType.RUNNER -> { frames = 4; frameTime = 100; maxSpeed = 3f; "textures/entity/animatedFastMonster.gif" }
 
         }
         
     }
     
-    override fun tick(batch: SpriteBatch, dt: Float) {
+    override fun act(dt: Float) {
         handleAI(dt, player.position)
         updatePhysics(dt)
-        draw(batch, dt)
-        
     }
     
-    private fun updatePhysics(dt: Float) {
-        position.mulAdd(velocity, dt)
-        
-    }
-    
-    private fun draw(batch: SpriteBatch, dt: Float) {
+    override fun render(dt: Float, batch: SpriteBatch) {
         val width = 1f
         val height = 1f
         val originX = width / 2
@@ -74,6 +68,10 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
         elapsedTime += dt
         elapsedTime %= frames * frameTime * 0.001f
         
+    }
+    
+    private fun updatePhysics(dt: Float) {
+        position.mulAdd(velocity, dt)
     }
     
     private fun handleAI(deltaTime: Float, playerPos: Vector2) {
@@ -104,5 +102,7 @@ class Zombie(private val player: Player, private val zombieType: ZombieType) : I
         velocity.set(directionVector.setLength(speed))
         
     }
+    
+    override fun dispose() {}
 
 }

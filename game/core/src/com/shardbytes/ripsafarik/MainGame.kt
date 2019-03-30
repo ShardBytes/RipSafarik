@@ -6,7 +6,6 @@ class MainGame : Game() {
 	
 	override fun create() {
 		setScreen(GameScreen())
-		
 	}
 	
 }

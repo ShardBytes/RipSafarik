@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik;
+package com.shardbytes.ripsafarik.tools;
 
 /* Copyright by Johannes Borchardt */
 /* LibGdx conversion 2014 by Anton Persson */

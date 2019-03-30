@@ -3,9 +3,14 @@ package com.shardbytes.ripsafarik
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Disposable
+import com.shardbytes.ripsafarik.tools.GameObject
 
-class World : ITickable {
-
+class GameWorld : GameObject {
+    
+    override val position = Vector2()
+    
     private val spriteMap = mapOf(
             "0a" to Sprite(Texture("textures/env/grass.png")),
             "1a" to Sprite(Texture("textures/env/asfalt.png")),
@@ -72,23 +77,25 @@ class World : ITickable {
     private val overlayMap = arrayOf(
             spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 0f) },
             spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 8f) }
-            
     )
+    
+    override fun act(dt: Float) { }
 
-    override fun tick(batch: SpriteBatch, dt: Float) {
+    override fun render(dt: Float, batch: SpriteBatch) {
         for ((y, row) in tileMap.withIndex()) {
             for ((x, value) in row.withIndex()) {
                 spriteMap.getValue(value).apply { setPosition(x.toFloat(), y.toFloat()) }.draw(batch)
-                
             }
-            
         }
         
         overlayMap.forEach { 
             it.draw(batch)
-            
         }
-        
+    }
+    
+    override fun dispose() {
+        spriteMap.values.forEach { it.texture.dispose() }
+        overlayMap.forEach { it.texture.dispose() }
     }
 
 }

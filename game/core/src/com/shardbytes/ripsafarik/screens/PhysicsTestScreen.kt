@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.screens
 
 import com.badlogic.gdx.Gdx.gl
 import com.badlogic.gdx.Gdx.input
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
+import com.shardbytes.ripsafarik.actors.Camera
 import ktx.box2d.body
 import ktx.box2d.createWorld
 import ktx.box2d.earthGravity

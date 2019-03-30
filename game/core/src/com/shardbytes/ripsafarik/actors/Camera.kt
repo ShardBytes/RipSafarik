@@ -1,10 +1,12 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
+import com.shardbytes.ripsafarik.tools.GameObject
 
 /**
  * Simple ortographic camera that can be locked onto an object and will follow it.
@@ -13,7 +15,7 @@ class Camera(private val resizeStrategy: ResizeStrategy,
              private val viewportWidth: Float = 0f,
              private val viewportHeight: Float = 0f,
              private var cameraPosition: Vector2 = Vector2(),
-             private var lockTarget: ILockable? = null) : ILockable {
+             private var lockTarget: GameObject? = null) : GameObject {
     
     
     /**
@@ -67,7 +69,7 @@ class Camera(private val resizeStrategy: ResizeStrategy,
      * Sets camera's lockObject to any object implementing ILockable interface.
      * @param object Object to lock the camera on
      */
-    fun lockOn(target: ILockable) {
+    fun lockOn(target: GameObject) {
         lockTarget = target
     }
 
@@ -95,5 +97,10 @@ class Camera(private val resizeStrategy: ResizeStrategy,
         }
         innerCamera.update()
     }
+    
+    override fun render(dt: Float, batch: SpriteBatch) {}
+    override fun act(dt: Float) {}
+    override fun dispose() {}
+    
 
 }

@@ -1,14 +1,15 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Gdx.gl
-import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.shardbytes.ripsafarik.actors.Player
+import com.shardbytes.ripsafarik.actors.Camera
 
 class SebuScreen : Screen {
 	
@@ -43,7 +44,7 @@ class SebuScreen : Screen {
 		
 		batch.begin()
 		batch.projectionMatrix = cam.innerCamera.combined
-		player.tick(batch, dt)
+		player.render(dt, batch)
 		walls.forEach { it.draw(batch) }
 		batch.end()
 	}

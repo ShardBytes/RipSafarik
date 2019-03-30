@@ -1,12 +1,14 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.tools.GifDecoder
 
-class Player : ILockable, ITickable {
+class Player : GameObject {
     
     private var isWalking = false
     private var elapsedTime = 0f
@@ -19,20 +21,17 @@ class Player : ILockable, ITickable {
     
     private val maxSpeed = 2.0f
     private val rotationSpeed = 200f //TODO: tweak this shit
-
-    override fun tick(batch: SpriteBatch, dt: Float) {
-        handleInput(dt)
-        updatePhysics(dt)
-        draw(batch, dt)
-        
-    }
     
     private fun updatePhysics(dt: Float) {
         position.mulAdd(velocity, dt)
-        
     }
     
-    private fun draw(batch: SpriteBatch, dt: Float) {
+    override fun act(dt: Float) {
+        handleInput(dt)
+        updatePhysics(dt)
+    }
+    
+    override fun render(dt: Float, batch: SpriteBatch) {
         val width = 1f
         val height = 1f
         val originX = width / 2
@@ -84,7 +83,10 @@ class Player : ILockable, ITickable {
             //shoot()
             
         }
-
+    }
+    
+    override fun dispose() {
+    
     }
     
 }
