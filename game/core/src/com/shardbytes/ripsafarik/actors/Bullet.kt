@@ -27,7 +27,7 @@ class BulletSwarm(private val world: GameWorld) : GameObject {
 			}
 			position.set(spawnPosition)
 			angle = targetAngle
-			linearVelocity.set(50f, 0f).setAngle(angle)
+			linearVelocity.set(30f, 0f).setAngle(angle)
 		}
 	}
 	

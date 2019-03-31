@@ -91,7 +91,7 @@ class Player(private val world: GameWorld) : Entity {
         }
         
         if (input.justTouched()) {
-            world.bulletSwarm.spawn(Vector2.Zero, rotation)
+            world.bulletSwarm.spawn(position.cpy().add(Vector2.X.setAngle(rotation).setLength(1f)), rotation)
         }
         
         

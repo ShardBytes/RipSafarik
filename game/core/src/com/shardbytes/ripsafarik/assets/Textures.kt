@@ -8,7 +8,7 @@ import ktx.assets.load
 // typesafe asset class
 enum class TexturesEnv {
 	asfalt, asfalt_ciara, beton, floor, grass, obrubnik, roof, roof_bad, stairs, stairs_bad, wall,
-	runningorb;
+	runningorb, safarik;
 	
 	val path = "textures/env/${name}.png"
 	fun load() = manager.load<Texture>(path)

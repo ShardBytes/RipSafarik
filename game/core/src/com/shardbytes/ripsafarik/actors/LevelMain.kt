@@ -21,7 +21,7 @@ class LevelMain {
 			"6c" to Sprite(TexturesEnv.wall()),
 			"7c" to Sprite(TexturesEnv.roof()),
 			"8a" to Sprite(TexturesEnv.floor()),
-			"9a" to Sprite(TexturesEnv.runningorb())
+			"9a" to Sprite(TexturesEnv.safarik())
 	
 	).onEach {
 		it.value.apply {
@@ -68,6 +68,6 @@ class LevelMain {
 	
 	val overlayMap = arrayOf(
 			spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 0f) },
-			spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(13f, 8f) }
+			spriteMap.getValue("9a").apply { setSize(1f, 1f); setOriginCenter(); setPosition(3f, 3f) }
 	)
 }
