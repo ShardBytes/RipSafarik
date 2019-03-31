@@ -34,10 +34,10 @@ class GameWorld : GameObject {
         }
         
         // spawn some zombies
-        zombies.add(Zombie(this, player, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
-        zombies.add(Zombie(this, player, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
-        zombies.add(Zombie(this, player, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
-        zombies.add(Zombie(this, player, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
+        zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
+        zombies.add(Zombie(this, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
+        zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
+        zombies.add(Zombie(this, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
     }
     
     override fun act(dt: Float) {

@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.GameWorld
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
 
-class Zombie(world: GameWorld,
-             private val player: Player,
+class Zombie(private val world: GameWorld,
              private val zombieType: ZombieType) : Entity {
     
     enum class ZombieType {
@@ -43,6 +43,8 @@ class Zombie(world: GameWorld,
     private var frames = 0
     private var frameTime = 0
     
+    val vecToPlayer = Vector2()
+    
     private fun getTextureFromType() : String {
         return when(zombieType) {
             ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster.gif" }
@@ -56,6 +58,9 @@ class Zombie(world: GameWorld,
     
     override fun act(dt: Float) {
         // TODO: follow player
+        vecToPlayer.set(world.player.position.x - position.x, world.player.position.y - position.y).nor().setLength(1f)
+        rotation = vecToPlayer.angle()
+        body.setLinearVelocity(vecToPlayer)
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
