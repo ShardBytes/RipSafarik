@@ -22,6 +22,7 @@ allprojects {
     apply plugin: "idea"
 
     version = '1.0'
+    
     ext {
         appName = "RipSafarik"
         gdxVersion = '1.9.9'

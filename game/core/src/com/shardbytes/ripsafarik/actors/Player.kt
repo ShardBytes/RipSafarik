@@ -32,7 +32,7 @@ class Player(private val world: GameWorld) : Entity {
     override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = WIDTH*0.5f) {
             density = 10f
-            friction = 0f
+            friction = 1f
             userData = this@Player // store reference to body
         }
         linearDamping = 10f
@@ -91,7 +91,7 @@ class Player(private val world: GameWorld) : Entity {
         }
         
         if (input.justTouched()) {
-        
+            world.bulletSwarm.spawn(Vector2.Zero, rotation)
         }
         
         

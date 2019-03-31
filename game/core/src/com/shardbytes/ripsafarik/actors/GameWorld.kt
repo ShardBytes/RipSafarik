@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.ContactListener
 import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.components.GameObject
-import com.shardbytes.ripsafarik.entity
+import com.shardbytes.ripsafarik.dataType
 import ktx.box2d.body
 import ktx.box2d.createWorld
 
@@ -22,6 +22,7 @@ class GameWorld : GameObject, ContactListener {
     // entities
     val player = Player(this).apply { position.set(8f, 1f) }
     val zombies = mutableListOf<Zombie>()
+    val bulletSwarm = BulletSwarm(this)
     
     init {
         // generate bodies for static tiles
@@ -47,9 +48,10 @@ class GameWorld : GameObject, ContactListener {
     }
     
     override fun act(dt: Float) {
+        bulletSwarm.act(dt)
         player.act(dt)
         zombies.forEach { it.act(dt) }
-        physics.step(dt, 6, 2) // update physics of world after user input!!
+        physics.step(dt, 10, 10) // update physics of world after user input!!
     }
 
     override fun render(dt: Float, batch: SpriteBatch) {
@@ -71,6 +73,9 @@ class GameWorld : GameObject, ContactListener {
         
         // player
         player.render(dt, batch)
+        
+        // bullets
+        bulletSwarm.render(dt, batch)
     }
     
     override fun dispose() {
@@ -83,8 +88,8 @@ class GameWorld : GameObject, ContactListener {
     override fun beginContact(contact: Contact?) {
         if (contact == null) return
         
-        contact.entity<Player> { player ->
-            contact.entity<Zombie> { zombie ->
+        contact.dataType<Player> { player, fxPlayer ->
+            contact.dataType<Zombie> { zombie, fxZombie ->
                 
                 // knock back
                 zombie.body.applyLinearImpulse(

@@ -37,7 +37,7 @@ class Zombie(private val world: GameWorld,
     override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = WIDTH*0.5f) {
             density = 10f
-            friction = 0f
+            friction = 1f
             userData = this@Zombie // store reference
         }
         linearDamping = 10f
