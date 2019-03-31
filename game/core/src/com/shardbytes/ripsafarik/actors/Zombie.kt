@@ -21,20 +21,15 @@ class Zombie(private val world: GameWorld,
         RUNNER
     }
     
-    val WIDTH = 1f
-    val HEIGHT = 1f
-    
-    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = WIDTH*0.5f) {
-            density = 10f
-            friction = 0f
-        }
-        linearDamping = 10f
+    companion object {
+        const val FIXTURE_ZOMBIE = "zombie"
     }
     
-    
+    val WIDTH = 1f
+    val HEIGHT = 1f
     private var maxSpeed = 0f
     private var rotationSpeed = 200f
+    val vecToPlayer = Vector2()
     
     //Animation
     private var isWalking = false
@@ -43,7 +38,14 @@ class Zombie(private val world: GameWorld,
     private var frames = 0
     private var frameTime = 0
     
-    val vecToPlayer = Vector2()
+    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
+        circle(radius = WIDTH*0.5f) {
+            density = 10f
+            friction = 0f
+            //userData = FIXTURE_ZOMBIE
+        }
+        linearDamping = 10f
+    }
     
     private fun getTextureFromType() : String {
         return when(zombieType) {

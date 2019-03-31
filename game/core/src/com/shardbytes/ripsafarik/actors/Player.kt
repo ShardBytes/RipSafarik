@@ -17,22 +17,28 @@ import ktx.box2d.body
 
 class Player(private val world: GameWorld) : Entity {
     
+    companion object {
+    	const val FIXTURE_PLAYER = "player"
+    }
+    
     val WIDTH = 1f
     val HEIGHT = 1f
     var health = 100f
-    
-    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = WIDTH*0.5f) {
-            density = 10f
-            friction = 0f
-        }
-        linearDamping = 10f
-    }
+    val vecToMouse = Vector2()
     
     // animation
     private var isWalking = false
     private var elapsedTime = 0f
     private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/entity/animatedPlayer.gif").read())
+    
+    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
+        circle(radius = WIDTH*0.5f) {
+            density = 10f
+            friction = 0f
+            userData = FIXTURE_PLAYER
+        }
+        linearDamping = 10f
+    }
     
     override fun act(dt: Float) {
         handleInput(dt)
@@ -79,7 +85,7 @@ class Player(private val world: GameWorld) : Entity {
             body.linearDamping = 10f
         }
         
-        val vecToMouse = Vector2(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
+        vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
         rotation = 360f - vecToMouse.angle()
         
         if (input.isKeyPressed(Input.Keys.Q)) {

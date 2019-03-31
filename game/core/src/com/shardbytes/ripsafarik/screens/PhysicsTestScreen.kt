@@ -26,6 +26,7 @@ class PhysicsTestScreen : Screen {
 	
 	val bodies: MutableList<Body>
 	val grund: Body
+	
 	val mousePos = Vector3()
 	
 	init {
