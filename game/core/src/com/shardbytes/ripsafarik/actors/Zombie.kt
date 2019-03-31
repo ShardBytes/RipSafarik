@@ -4,13 +4,15 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.GameWorld
-import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
-import kotlin.math.abs
+import ktx.box2d.body
 
-class Zombie(world: GameWorld, private val player: Player, private val zombieType: ZombieType) : GameObject {
+class Zombie(world: GameWorld,
+             private val player: Player,
+             private val zombieType: ZombieType) : Entity {
     
     enum class ZombieType {
         NO_HAND,
@@ -18,20 +20,28 @@ class Zombie(world: GameWorld, private val player: Player, private val zombieTyp
         HAND_BLOOD,
         RUNNER
     }
-
-    private var isWalking = false
-    private var elapsedTime = 0f
-    private val animatedMonster = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal(getTextureFromType()).read())
     
-    override val position = Vector2()
-    private val velocity = Vector2()
-    private var direction = 0f 
-    private var speed = 0f
-
+    val WIDTH = 1f
+    val HEIGHT = 1f
+    
+    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
+        circle(radius = WIDTH*0.5f) {
+            density = 10f
+            friction = 0f
+        }
+        linearDamping = 10f
+    }
+    
+    
+    // physics
+    override val position get() = body.position
     private var maxSpeed = 0f
     private var rotationSpeed = 200f
     
-    //Animation properties
+    //Animation
+    private var isWalking = false
+    private var elapsedTime = 0f
+    private val animatedMonster = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal(getTextureFromType()).read())
     private var frames = 0
     private var frameTime = 0
     
@@ -47,23 +57,20 @@ class Zombie(world: GameWorld, private val player: Player, private val zombieTyp
     }
     
     override fun act(dt: Float) {
-        handleAI(dt, player.position)
-        updatePhysics(dt)
+    
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
-        val width = 1f
-        val height = 1f
-        val originX = width / 2
-        val originY = height / 2
+        val originX = WIDTH * 0.5f
+        val originY = HEIGHT * 0.5f
         val originBasedPositionX = position.x - originX
         val originBasedPositionY = position.y - originY
 
         if(isWalking) {
-            batch.draw(animatedMonster.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
+            batch.draw(animatedMonster.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, WIDTH, HEIGHT, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
 
         } else {
-            batch.draw(animatedMonster.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, direction - 90f)
+            batch.draw(animatedMonster.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY,WIDTH, HEIGHT, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
 
         }
         elapsedTime += dt
@@ -71,38 +78,6 @@ class Zombie(world: GameWorld, private val player: Player, private val zombieTyp
         
     }
     
-    private fun updatePhysics(dt: Float) {
-        position.mulAdd(velocity, dt)
-    }
-    
-    private fun handleAI(deltaTime: Float, playerPos: Vector2) {
-        val distance = playerPos.dst(position)
-        if(distance < 20 && distance > 0.5) {
-            isWalking = true
-            speed = maxSpeed
-            
-        } else {
-            isWalking = false
-            speed = 0f
-            
-        }
-        
-        val optimalDirectionVector = playerPos.cpy().sub(position).nor()
-        val optimalRotation = MathUtils.radiansToDegrees * MathUtils.atan2(optimalDirectionVector.y, optimalDirectionVector.x)
-        
-        var rotation = if(abs(optimalRotation - this.direction) > rotationSpeed * deltaTime) rotationSpeed * deltaTime else optimalRotation - this.direction
-        if(optimalRotation > this.direction) {
-            this.direction += rotation
-            
-        } else {
-            this.direction -= rotation
-            
-        }
-
-        val directionVector = Vector2(MathUtils.cosDeg(this.direction), MathUtils.sinDeg(this.direction))
-        velocity.set(directionVector.setLength(speed))
-        
-    }
     
     override fun dispose() {}
 

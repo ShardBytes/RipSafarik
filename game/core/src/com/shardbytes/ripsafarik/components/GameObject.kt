@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik.tools
+package com.shardbytes.ripsafarik.components
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2

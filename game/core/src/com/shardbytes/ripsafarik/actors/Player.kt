@@ -11,25 +11,22 @@ import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.GameWorld
-import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
 
-class Player(private val world: GameWorld) : GameObject {
+class Player(private val world: GameWorld) : Entity {
     
     val WIDTH = 1f
     val HEIGHT = 1f
     
-    val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
+    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = WIDTH*0.5f) {
             density = 10f
             friction = 0f
         }
         linearDamping = 10f
     }
-    
-    // physics
-    override val position get() = body.position
     
     // animation
     private var isWalking = false

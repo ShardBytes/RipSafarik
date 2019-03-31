@@ -24,12 +24,10 @@ class GameScreen : Screen {
     val zombies = mutableListOf<Zombie>()
     
     init {
-        /*
-        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND_BLOOD).apply { position.set(-2f, -2f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.HAND_BLOOD).apply { position.set(3f, -1f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND).apply { position.set(10f, 5f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.RUNNER).apply { position.set(7f, 9f) })
-        */
+        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
+        zombies.add(Zombie(world, player, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
         camera.lockOn(player)
     }
     

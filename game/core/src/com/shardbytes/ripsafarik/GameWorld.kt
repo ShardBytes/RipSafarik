@@ -3,7 +3,7 @@ package com.shardbytes.ripsafarik
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.components.GameObject
 import ktx.box2d.body
 import ktx.box2d.createWorld
 

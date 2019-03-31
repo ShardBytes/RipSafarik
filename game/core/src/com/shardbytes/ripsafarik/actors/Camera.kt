@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.shardbytes.ripsafarik.tools.GameObject
+import com.shardbytes.ripsafarik.components.GameObject
 
 /**
  * Simple ortographic camera that can be locked onto an object and will follow it.
