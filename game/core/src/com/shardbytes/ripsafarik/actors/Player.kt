@@ -6,20 +6,18 @@ import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.MathUtils.PI
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.GameWorld
+import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.ContactListener
+import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
 
 class Player(private val world: GameWorld) : Entity {
-    
-    companion object {
-    	const val FIXTURE_PLAYER = "player"
-    }
     
     val WIDTH = 1f
     val HEIGHT = 1f
@@ -35,7 +33,7 @@ class Player(private val world: GameWorld) : Entity {
         circle(radius = WIDTH*0.5f) {
             density = 10f
             friction = 0f
-            userData = FIXTURE_PLAYER
+            userData = this@Player // store reference to body
         }
         linearDamping = 10f
     }
@@ -95,10 +93,13 @@ class Player(private val world: GameWorld) : Entity {
         if (input.justTouched()) {
         
         }
+        
+        
     }
     
     override fun dispose() {
     
     }
+    
     
 }

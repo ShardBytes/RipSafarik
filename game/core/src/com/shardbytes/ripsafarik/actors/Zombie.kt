@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.GameWorld
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
@@ -21,12 +20,9 @@ class Zombie(private val world: GameWorld,
         RUNNER
     }
     
-    companion object {
-        const val FIXTURE_ZOMBIE = "zombie"
-    }
-    
     val WIDTH = 1f
     val HEIGHT = 1f
+    val knockbackForce = 100f
     private var maxSpeed = 0f
     private var rotationSpeed = 200f
     val vecToPlayer = Vector2()
@@ -42,7 +38,7 @@ class Zombie(private val world: GameWorld,
         circle(radius = WIDTH*0.5f) {
             density = 10f
             friction = 0f
-            //userData = FIXTURE_ZOMBIE
+            userData = this@Zombie // store reference
         }
         linearDamping = 10f
     }
@@ -60,9 +56,9 @@ class Zombie(private val world: GameWorld,
     
     override fun act(dt: Float) {
         // TODO: follow player
-        vecToPlayer.set(world.player.position.x - position.x, world.player.position.y - position.y).nor().setLength(1f)
+        vecToPlayer.set(world.player.position.x - position.x, world.player.position.y - position.y).nor().setLength(80f)
         rotation = vecToPlayer.angle()
-        body.setLinearVelocity(vecToPlayer)
+        body.applyForceToCenter(vecToPlayer, true)
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {

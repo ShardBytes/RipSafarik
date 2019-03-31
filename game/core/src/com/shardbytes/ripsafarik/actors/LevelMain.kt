@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.shardbytes.ripsafarik.assets.TexturesEnv

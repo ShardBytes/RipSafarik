@@ -1,15 +1,18 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.actors.Player
-import com.shardbytes.ripsafarik.actors.Zombie
+import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.ContactListener
+import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.components.GameObject
+import com.shardbytes.ripsafarik.entity
 import ktx.box2d.body
 import ktx.box2d.createWorld
 
-class GameWorld : GameObject {
+class GameWorld : GameObject, ContactListener {
     
     override val position = Vector2()
     
@@ -38,6 +41,9 @@ class GameWorld : GameObject {
         zombies.add(Zombie(this, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
         zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
         zombies.add(Zombie(this, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
+        
+        // setup contact listner
+        physics.setContactListener(this)
     }
     
     override fun act(dt: Float) {
@@ -70,5 +76,32 @@ class GameWorld : GameObject {
     override fun dispose() {
         physics.dispose()
     }
+    
+    /**
+     * Custom contact handling.
+     */
+    override fun beginContact(contact: Contact?) {
+        if (contact == null) return
+        
+        contact.entity<Player> { player ->
+            contact.entity<Zombie> { zombie ->
+                
+                // knock back
+                zombie.body.applyLinearImpulse(
+                        zombie.vecToPlayer.cpy().rotate(180f).setLength(zombie.knockbackForce),
+                        zombie.body.position,
+                        true
+                )
+            }
+        }
+    }
+    
+    override fun endContact(contact: Contact) {
+    
+    }
+    
+    
+    override fun preSolve(contact: Contact?, oldManifold: Manifold?) {}
+    override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {}
 
 }
