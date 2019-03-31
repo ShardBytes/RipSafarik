@@ -30,7 +30,7 @@ interface Entity : GameObject {
 	/**
 	 * Sets and gets the angle of body in degrees.
 	 */
-	var angle: Float
+	var rotation: Float
 		get() = body.angle * radDeg
 		set(degrees) {
 			body.setTransform(body.position, degrees * degRad)

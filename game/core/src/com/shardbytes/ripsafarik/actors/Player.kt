@@ -19,6 +19,7 @@ class Player(private val world: GameWorld) : Entity {
     
     val WIDTH = 1f
     val HEIGHT = 1f
+    var health = 100f
     
     override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = WIDTH*0.5f) {
@@ -57,19 +58,19 @@ class Player(private val world: GameWorld) : Entity {
     private fun handleInput(dt: Float) {
         val sped = 4f
         //Movement
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             body.linearDamping = 0f
             isWalking = true
             body.setLinearVelocity(0f, sped)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             body.linearDamping = 0f
             isWalking = true
             body.setLinearVelocity(0f, -sped)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             body.linearDamping = 0f
             isWalking = true
             body.setLinearVelocity(-sped, 0f)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             body.linearDamping = 0f
             isWalking = true
             body.setLinearVelocity(sped, 0f)
@@ -78,12 +79,8 @@ class Player(private val world: GameWorld) : Entity {
             body.linearDamping = 10f
         }
         
-        val tomouseVect = Vector2(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
-        
-        body.setTransform(
-                position,
-                2*PI - tomouseVect.angleRad()
-        )
+        val vecToMouse = Vector2(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
+        rotation = 360f - vecToMouse.angle()
         
         if (input.isKeyPressed(Input.Keys.Q)) {
             body.setLinearVelocity(0f, 0f)

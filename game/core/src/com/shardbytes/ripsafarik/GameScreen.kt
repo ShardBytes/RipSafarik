@@ -19,6 +19,7 @@ class GameScreen : Screen {
     val world = GameWorld()
     val debugRenderer = Box2DDebugRenderer()
     
+    
     init {
         camera.lockOn(world.player)
     }
@@ -53,6 +54,9 @@ class GameScreen : Screen {
     
         // debug render world physics into camera matrix
         if (Meta.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
+
+        // render hud at the top
+        
     }
 
     override fun show() {

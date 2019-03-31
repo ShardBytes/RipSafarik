@@ -55,7 +55,7 @@ class Zombie(world: GameWorld,
     }
     
     override fun act(dt: Float) {
-    
+        // TODO: follow player
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
