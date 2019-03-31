@@ -19,16 +19,8 @@ class GameScreen : Screen {
     val world = GameWorld()
     val debugRenderer = Box2DDebugRenderer()
     
-    // entities
-    val player = Player(world).apply { position.set(8f, 1f) }
-    val zombies = mutableListOf<Zombie>()
-    
     init {
-        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
-        zombies.add(Zombie(world, player, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
-        camera.lockOn(player)
+        camera.lockOn(world.player)
     }
     
     
@@ -44,9 +36,7 @@ class GameScreen : Screen {
      */
     override fun render(dt: Float) {
         // first act
-        player.act(dt)
-        zombies.forEach { it.act(dt) }
-        world.act(dt) // update physics of world after user input!!
+        world.act(dt)
         
         // update camera before rendering
         camera.update()
@@ -56,17 +46,12 @@ class GameScreen : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         
-        // render
+        // render stuff
         batch.begin()
-        
-        // entities
         world.render(dt, batch)
-        zombies.forEach { it.render(dt, batch) }
-        player.render(dt, batch)
-        
         batch.end()
     
-        // debug
+        // debug render world physics into camera matrix
         if (Meta.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
     }
 

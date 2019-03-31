@@ -33,8 +33,6 @@ class Zombie(world: GameWorld,
     }
     
     
-    // physics
-    override val position get() = body.position
     private var maxSpeed = 0f
     private var rotationSpeed = 200f
     
