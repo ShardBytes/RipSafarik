@@ -9,10 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.Contact
-import com.badlogic.gdx.physics.box2d.ContactImpulse
-import com.badlogic.gdx.physics.box2d.ContactListener
-import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
@@ -21,8 +17,6 @@ class Player(private val world: GameWorld) : Entity {
     
     val WIDTH = 1f
     val HEIGHT = 1f
-    var health = 100f
-    val vecToMouse = Vector2()
     
     // animation
     private var isWalking = false
@@ -60,24 +54,23 @@ class Player(private val world: GameWorld) : Entity {
     }
 
     private fun handleInput(dt: Float) {
-        val sped = 4f
         //Movement
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             body.linearDamping = 0f
             isWalking = true
-            body.setLinearVelocity(0f, sped)
+            body.setLinearVelocity(0f, 4f)
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             body.linearDamping = 0f
             isWalking = true
-            body.setLinearVelocity(0f, -sped)
+            body.setLinearVelocity(0f, -4f)
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             body.linearDamping = 0f
             isWalking = true
-            body.setLinearVelocity(-sped, 0f)
+            body.setLinearVelocity(-4f, 0f)
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             body.linearDamping = 0f
             isWalking = true
-            body.setLinearVelocity(sped, 0f)
+            body.setLinearVelocity(4f, 0f)
         } else {
             isWalking = false
             body.linearDamping = 10f
