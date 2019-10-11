@@ -11,7 +11,7 @@ import ktx.box2d.body
  * Swarm that generates, renders and destroys bullets.
  * Program efficiently!
  */
-class BulletSwarm(private val world: GameWorld) : GameObject {
+class bulletswarm_old(private val world: gameworld_old) : GameObject {
 	
 	override val position: Vector2 = Vector2()
 	
@@ -23,7 +23,7 @@ class BulletSwarm(private val world: GameWorld) : GameObject {
 			circle(radius = 0.2f) {
 				density = 10f
 				friction = 1f
-				userData = this@BulletSwarm
+				userData = this@bulletswarm_old
 			}
 			position.set(spawnPosition)
 			angle = targetAngle
@@ -52,4 +52,5 @@ class BulletSwarm(private val world: GameWorld) : GameObject {
 	override fun dispose() {
 	
 	}
+	
 }

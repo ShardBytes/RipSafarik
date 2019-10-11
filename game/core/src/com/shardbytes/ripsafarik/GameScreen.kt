@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.actors.Camera
-import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.actors.gameworld_old
 
 class GameScreen : Screen {
 
@@ -15,7 +15,7 @@ class GameScreen : Screen {
     var batch = SpriteBatch()
     
     // world
-    val world = GameWorld()
+    val world = gameworld_old()
     val debugRenderer = Box2DDebugRenderer()
     
     

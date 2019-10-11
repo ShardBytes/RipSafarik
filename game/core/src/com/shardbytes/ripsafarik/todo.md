@@ -1,3 +1,0 @@
-- separate input listener, nech triggruje v playerovi velocity updaty nejakym zahadnym sposobom
-- brutális fizika fur zombiken
-- safarik implement somewhhow

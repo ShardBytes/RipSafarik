@@ -15,6 +15,8 @@ class MainGame : Game() {
 		assetManager.finishLoading()
 		
 		setScreen(GameScreen())
+		
+		
 	}
 	
 	override fun dispose() {

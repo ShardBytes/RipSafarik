@@ -10,7 +10,7 @@ import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
 
-class Zombie(private val world: GameWorld,
+class Zombie(private val world: gameworld_old,
              private val zombieType: ZombieType) : Entity {
     
     enum class ZombieType {

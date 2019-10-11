@@ -9,12 +9,13 @@ import ktx.assets.load
 enum class TexturesEnv {
 	asfalt, asfalt_ciara, beton, floor, grass, obrubnik, roof, roof_bad, stairs, stairs_bad, wall,
 	runningorb, safarik;
-	
-	val path = "textures/env/${name}.png"
-	fun load() = manager.load<Texture>(path)
-	operator fun invoke() = manager.getAsset<Texture>(path)
-	
+
 	companion object {
 		lateinit var manager: AssetManager
 	}
+	
+	val path = "textures/env/$name.png"
+	fun load() = manager.load<Texture>(path)
+	operator fun invoke() = manager.getAsset<Texture>(path)
+	
 }

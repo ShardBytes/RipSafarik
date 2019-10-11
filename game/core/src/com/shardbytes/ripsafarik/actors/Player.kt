@@ -12,28 +12,26 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
+import kotlin.math.sqrt
 
-class Player(private val world: GameWorld) : Entity {
+class Player(world: gameworld_old) : Entity {
     
     val WIDTH = 1f
     val HEIGHT = 1f
+    val maxSpeed = 4f //What unit?
     
-    // animation
     private var isWalking = false
-    private var elapsedTime = 0f
+    private var elapsedTime = 0f 
     private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/entity/animatedPlayer.gif").read())
     
     override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = WIDTH*0.5f) {
-            density = 10f
-            friction = 1f
-            userData = this@Player // store reference to body
-        }
-        linearDamping = 10f
+        circle(radius = WIDTH*0.5f)
+        
     }
     
     override fun act(dt: Float) {
-        handleInput(dt)
+        handleInput()
+        
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
@@ -53,46 +51,90 @@ class Player(private val world: GameWorld) : Entity {
         
     }
 
-    private fun handleInput(dt: Float) {
-        //Movement
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            body.linearDamping = 0f
-            isWalking = true
-            body.setLinearVelocity(0f, 4f)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            body.linearDamping = 0f
-            isWalking = true
-            body.setLinearVelocity(0f, -4f)
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            body.linearDamping = 0f
-            isWalking = true
-            body.setLinearVelocity(-4f, 0f)
+    private fun handleInput() {
+        val invsqrt2 = 1f / sqrt(2f)
+        val dir = getKeyboardDirection()
+        isWalking = (dir != "  ")
+        
+        when(dir) {
+            "W " -> body.setLinearVelocity(0f, maxSpeed)
+            
+            "S " -> body.setLinearVelocity(0f, -maxSpeed)
+            
+            "A " -> body.setLinearVelocity(-maxSpeed, 0f)
+            
+            "D " -> body.setLinearVelocity(maxSpeed, 0f)
+            
+            "WA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
+            
+            "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 *maxSpeed)
+            
+            "SA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
+            
+            "SD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
+            
+            else -> body.setLinearVelocity(0f, 0f)
+            
+        }
+        
+        val vecToMouse = Vector2()
+        when(dir) {
+            "W " -> rotation = 90f
+            
+            "S " -> rotation = 270f
+            
+            "A " -> rotation = 180f
+            
+            "D " -> rotation = 0f
+            
+            "WA" -> rotation = 135f
+            
+            "WD" -> rotation = 45f
+            
+            "SA" -> rotation = 225f
+            
+            "SD" -> rotation = 315f
+            
+            else -> rotation = 360f - vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor().angle()
+            
+        }
+        
+        if(input.justTouched()) {
+            //world.bulletSwarm.spawn(position.cpy().add(Vector2.X.setAngle(rotation).setLength(1f)), rotation)
+            
+        }
+        
+    }
+    
+    private fun getKeyboardDirection() : String {
+        val dir = charArrayOf(' ', ' ')
+        var w_or_s = false
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+            dir[0] = 'W'
+            w_or_s = true
+            
+        } else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+            dir[0] = 'S'
+            w_or_s = true
+            
+        }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+            dir[if (w_or_s) 1 else 0] = 'A'
+            
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            body.linearDamping = 0f
-            isWalking = true
-            body.setLinearVelocity(4f, 0f)
-        } else {
-            isWalking = false
-            body.linearDamping = 10f
+            dir[if (w_or_s) 1 else 0] = 'D'
+            
         }
         
-        vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor()
-        rotation = 360f - vecToMouse.angle()
-        
-        if (input.isKeyPressed(Input.Keys.Q)) {
-            body.setLinearVelocity(0f, 0f)
-        }
-        
-        if (input.justTouched()) {
-            world.bulletSwarm.spawn(position.cpy().add(Vector2.X.setAngle(rotation).setLength(1f)), rotation)
-        }
-        
+        return String(dir)
         
     }
     
     override fun dispose() {
-    
+        //y tho
+        
     }
-    
     
 }
