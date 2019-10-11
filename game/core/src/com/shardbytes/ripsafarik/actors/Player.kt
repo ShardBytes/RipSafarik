@@ -9,23 +9,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.World
+import com.shardbytes.ripsafarik.assets.Animations
+import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
 import kotlin.math.sqrt
 
-class Player(world: gameworld_old) : Entity {
+class Player(physics: World) : Entity {
     
-    val WIDTH = 1f
-    val HEIGHT = 1f
-    val maxSpeed = 4f //What unit?
+    private val width = 1f
+    private val height = 1f
+    private val maxSpeed = 4f //What unit?
     
     private var isWalking = false
     private var elapsedTime = 0f 
-    private val animatedPlayer = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/entity/animatedPlayer.gif").read())
+    private val animatedPlayer = Animations["animatedPlayer"]
     
-    override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = WIDTH*0.5f)
+    override val body = physics.body(BodyDef.BodyType.DynamicBody) {
+        circle(radius = width*0.5f)
         
     }
     
@@ -35,16 +38,16 @@ class Player(world: gameworld_old) : Entity {
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
-        val originX = WIDTH * 0.5f
-        val originY = HEIGHT * 0.5f
+        val originX = width * 0.5f
+        val originY = height * 0.5f
         val originBasedPositionX = position.x - originX
         val originBasedPositionY = position.y - originY
 
         if(isWalking) {
-            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, WIDTH, HEIGHT, 1f, 1f, body.angle * radDeg - 90f)
+            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
 
         } else {
-            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, WIDTH, HEIGHT, 1f, 1f, body.angle * radDeg - 90f)
+            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
@@ -108,23 +111,23 @@ class Player(world: gameworld_old) : Entity {
     
     private fun getKeyboardDirection() : String {
         val dir = charArrayOf(' ', ' ')
-        var w_or_s = false
+        var primaryDirectionSet = false
         
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             dir[0] = 'W'
-            w_or_s = true
+            primaryDirectionSet = true
             
         } else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             dir[0] = 'S'
-            w_or_s = true
+            primaryDirectionSet = true
             
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            dir[if (w_or_s) 1 else 0] = 'A'
+            dir[if (primaryDirectionSet) 1 else 0] = 'A'
             
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            dir[if (w_or_s) 1 else 0] = 'D'
+            dir[if (primaryDirectionSet) 1 else 0] = 'D'
             
         }
         

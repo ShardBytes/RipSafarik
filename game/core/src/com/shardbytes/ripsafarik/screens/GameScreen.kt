@@ -1,11 +1,13 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
+import com.shardbytes.ripsafarik.Meta
 import com.shardbytes.ripsafarik.actors.Camera
+import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.actors.gameworld_old
 
 class GameScreen : Screen {
@@ -15,7 +17,8 @@ class GameScreen : Screen {
     var batch = SpriteBatch()
     
     // world
-    val world = gameworld_old()
+    //val world = gameworld_old()
+    val world = GameWorld()
     val debugRenderer = Box2DDebugRenderer()
     
     

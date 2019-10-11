@@ -1,27 +1,27 @@
 package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.shardbytes.ripsafarik.assets.TexturesEnv
+import com.shardbytes.ripsafarik.assets.Textures
 
 class LevelMain {
 	
 	val spriteMap = mapOf(
-			"0a" to Sprite(TexturesEnv.grass()),
-			"1a" to Sprite(TexturesEnv.asfalt()),
-			"2a" to Sprite(TexturesEnv.asfalt_ciara()),
-			"3a" to Sprite(TexturesEnv.obrubnik()),
-			"3b" to Sprite(TexturesEnv.obrubnik()),
-			"3c" to Sprite(TexturesEnv.obrubnik()),
-			"3d" to Sprite(TexturesEnv.obrubnik()),
-			"4a" to Sprite(TexturesEnv.beton()),
-			"5a" to Sprite(TexturesEnv.stairs()),
-			"5b" to Sprite(TexturesEnv.stairs()),
-			"5c" to Sprite(TexturesEnv.stairs()),
-			"5d" to Sprite(TexturesEnv.stairs()),
-			"6c" to Sprite(TexturesEnv.wall()),
-			"7c" to Sprite(TexturesEnv.roof()),
-			"8a" to Sprite(TexturesEnv.floor()),
-			"9a" to Sprite(TexturesEnv.safarik())
+			"0a" to Sprite(Textures.Env["grass"]),
+			"1a" to Sprite(Textures.Env["asfalt"]),
+			"2a" to Sprite(Textures.Env["asfalt_ciara"]),
+			"3a" to Sprite(Textures.Env["obrubnik"]),
+			"3b" to Sprite(Textures.Env["obrubnik"]),
+			"3c" to Sprite(Textures.Env["obrubnik"]),
+			"3d" to Sprite(Textures.Env["obrubnik"]),
+			"4a" to Sprite(Textures.Env["beton"]),
+			"5a" to Sprite(Textures.Env["stairs"]),
+			"5b" to Sprite(Textures.Env["stairs"]),
+			"5c" to Sprite(Textures.Env["stairs"]),
+			"5d" to Sprite(Textures.Env["stairs"]),
+			"6c" to Sprite(Textures.Env["wall"]),
+			"7c" to Sprite(Textures.Env["roof"]),
+			"8a" to Sprite(Textures.Env["floor"]),
+			"9a" to Sprite(Textures.Env["safarik"])
 	
 	).onEach {
 		it.value.apply {

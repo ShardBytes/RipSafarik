@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
+import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.tools.GifDecoder
 import ktx.box2d.body
@@ -30,7 +31,7 @@ class Zombie(private val world: gameworld_old,
     //Animation
     private var isWalking = false
     private var elapsedTime = 0f
-    private val animatedMonster = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal(getTextureFromType()).read())
+    private val animatedMonster = Animations[getTextureFromType()]
     private var frames = 0
     private var frameTime = 0
     
@@ -44,11 +45,12 @@ class Zombie(private val world: gameworld_old,
     }
     
     private fun getTextureFromType() : String {
+        //TODO: fix walking animation
         return when(zombieType) {
-            ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster.gif" }
-            ZombieType.HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster2.gif" }
-            ZombieType.NO_HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "textures/entity/animatedMonster3.gif" }
-            ZombieType.RUNNER -> { frames = 4; frameTime = 100; maxSpeed = 3f; "textures/entity/animatedFastMonster.gif" }
+            ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; "animatedMonster" }
+            ZombieType.HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "animatedMonster2" }
+            ZombieType.NO_HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; "animatedMonster3" }
+            ZombieType.RUNNER -> { frames = 4; frameTime = 100; maxSpeed = 3f; "animatedFastMonster" }
 
         }
         

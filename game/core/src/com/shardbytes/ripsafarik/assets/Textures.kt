@@ -1,21 +1,40 @@
 package com.shardbytes.ripsafarik.assets
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.utils.JsonReader
 import ktx.assets.getAsset
 import ktx.assets.load
 
-// typesafe asset class
-enum class TexturesEnv {
-	asfalt, asfalt_ciara, beton, floor, grass, obrubnik, roof, roof_bad, stairs, stairs_bad, wall,
-	runningorb, safarik;
-
+class Textures {
+	
 	companion object {
 		lateinit var manager: AssetManager
+		
 	}
 	
-	val path = "textures/env/$name.png"
-	fun load() = manager.load<Texture>(path)
-	operator fun invoke() = manager.getAsset<Texture>(path)
+	init {
+		Env.load()
+		//...
+		
+	}
+	
+	object Env {
+		fun load() {
+			val jsonString = Gdx.files.internal("textures/envTextures.json").readString()
+			val textures = JsonReader().parse(jsonString).get("textures").asStringArray()
+
+			for (texture in textures) {
+				val path = "textures/env/$texture.png"
+				manager.load<Texture>(path)
+
+			}
+			
+		}
+
+		operator fun get(texture: String) = manager.getAsset<Texture>("textures/env/$texture.png")
+		
+	}
 	
 }

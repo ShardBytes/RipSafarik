@@ -20,7 +20,7 @@ class gameworld_old : GameObject, ContactListener {
     val levelMain = LevelMain()
     
     // entities
-    val player = Player(this).apply { position.set(8f, 1f) }
+    val player = Player(physics).apply { position.set(8f, 1f) }
     val zombies = mutableListOf<Zombie>()
     val bulletSwarm = bulletswarm_old(this)
     
