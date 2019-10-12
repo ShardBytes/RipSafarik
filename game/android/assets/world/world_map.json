@@ -1,0 +1,19 @@
+{
+  "env": [
+	["grass", "grass", "grass"],
+	["grass", "grass", "grass"],
+	["grass", "grass", "grass"],
+	["grass", "grass", "grass"],
+	["asfalt", "grass", "grass"],
+	["asfalt", "asfalt", "grass"]
+  ],
+  "overlay":[
+	{
+	  "name": "safarik",
+	  "posX": 1,
+	  "posY": 1,
+	  "scale": 3,
+	  "rotation": 45
+	}
+  ]
+}

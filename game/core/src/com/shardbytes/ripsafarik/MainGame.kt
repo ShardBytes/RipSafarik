@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
+import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.screens.GameScreen
 
@@ -11,11 +12,13 @@ class MainGame : Game() {
 	
 	override fun create() { 
 		Textures.manager = assetManager
-		Textures()  //load all textures required for that level
-					//animations actually load dynamically soo...
+		Textures.loadAll()  //load all textures required for that level
+							//animations actually load dynamically soo...
 		
 		//Load sounds and other assets if required
 		assetManager.finishLoading()
+		
+		GameMap().loadAll("world")
 		
 		setScreen(GameScreen())
 		

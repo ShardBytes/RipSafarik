@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Texture
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.Block
 
-class Grass : Block {
+class Asfalt : Block {
 
-	override val name: String = "grass"
-	override val texture: Texture = Textures.Env["grass"]
-
+	override val name: String = "asfalt"
+	override val texture: Texture = Textures.Env["asfalt"]
+	
 }
