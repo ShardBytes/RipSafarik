@@ -27,8 +27,8 @@ class GameWorld : GameObject {
 	}
 	
 	override fun render(dt: Float, batch: SpriteBatch) {
-		GameMap.Env.render(dt, batch)
-		GameMap.Overlay.render(dt, batch)
+		GameMap.Env.render(dt, batch, player.position)
+		GameMap.Overlay.render(dt, batch, player.position)
 		player.render(dt, batch)
 		
 	}

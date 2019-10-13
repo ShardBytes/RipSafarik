@@ -5,15 +5,14 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.shardbytes.ripsafarik.Meta
+import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.actors.GameWorld
-import com.shardbytes.ripsafarik.actors.gameworld_old
 
 class GameScreen : Screen {
 
     // rendering
-    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Meta.V_WIDTH, Meta.V_HEIGHT)
+    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.V_WIDTH, Settings.V_HEIGHT)
     var batch = SpriteBatch()
     
     // world
@@ -55,7 +54,7 @@ class GameScreen : Screen {
         batch.end()
     
         // debug render world physics into camera matrix
-        if (Meta.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
+        if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
         // render hud at the top
         

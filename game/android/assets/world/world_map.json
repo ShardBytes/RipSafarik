@@ -1,11 +1,18 @@
 {
   "env": [
-	["grass", "grass", "grass"],
-	["grass", "grass", "grass"],
-	["grass", "grass", "grass"],
-	["grass", "grass", "grass"],
-	["asfalt", "grass", "grass"],
-	["asfalt", "asfalt", "grass"]
+	["grass", "grass", "grass", "grass", "grass", "asfalt", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "asfalt", "grass", "asfalt", "asfalt"],
+	["grass", "grass", "grass", "grass", "grass", "asfalt", "grass", "asfalt", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "asfalt", "asfalt", "asfalt", "grass"],
+	["asfalt", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["asfalt", "asfalt", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"]
   ],
   "overlay":[
 	{
