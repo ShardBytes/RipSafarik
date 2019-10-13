@@ -8,9 +8,8 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.JsonReader
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.BlockCatalog
-import kotlin.math.roundToInt
 
-class GameMap {
+object GameMap {
 	
 	fun loadAll(mapName: String) {
 		val jsonString = Gdx.files.internal("world/${mapName}_map.json").readString()
@@ -89,8 +88,11 @@ class GameMap {
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
 				val texture = BlockCatalog[overlayBlock.name]?.texture
-				if(overlayBlock.posX + Settings.RENDER_DISTANCE > playerPos.x && playerPos.x > overlayBlock.posX - Settings.RENDER_DISTANCE) {
-					if(overlayBlock.posY + Settings.RENDER_DISTANCE > playerPos.y && playerPos.y > overlayBlock.posY - Settings.RENDER_DISTANCE) {
+				
+				//if number is in range
+				//nice Kotlin stuff
+				if(overlayBlock.posX in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
+					if(overlayBlock.posY in (playerPos.y.toInt() - Settings.RENDER_DISTANCE)..(playerPos.y.toInt() + Settings.RENDER_DISTANCE)) {
 						batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 						
 					}

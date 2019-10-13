@@ -18,7 +18,7 @@ class MainGame : Game() {
 		//Load sounds and other assets if required
 		assetManager.finishLoading()
 		
-		GameMap().loadAll("world")
+		GameMap.loadAll("world")
 		
 		setScreen(GameScreen())
 		
@@ -28,6 +28,7 @@ class MainGame : Game() {
 	override fun dispose() {
 		super.dispose()
 		assetManager.dispose()
+		
 	}
 	
 }

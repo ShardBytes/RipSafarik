@@ -11,6 +11,11 @@ interface Block {
 	val name: String
 
 	/**
+	 * Name that is shown to the user, eg. when inside an inventory.
+	 */
+	val displayName: String
+
+	/**
 	 * Block texture.
 	 * @see Texture
 	 * @see com.shardbytes.ripsafarik.assets.Textures

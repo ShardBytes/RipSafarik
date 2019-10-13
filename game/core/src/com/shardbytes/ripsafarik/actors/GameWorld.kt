@@ -1,17 +1,14 @@
 package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.blocks.Asfalt
 import com.shardbytes.ripsafarik.blocks.Grass
 import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
-import com.shardbytes.ripsafarik.components.GameObject
+import com.shardbytes.ripsafarik.ui.Hotbar
 import ktx.box2d.createWorld
 
-class GameWorld : GameObject {
-	
-	override val position: Vector2 = Vector2()
+class GameWorld {
 	
 	val physics = createWorld()
 	val player = Player(physics)
@@ -26,20 +23,23 @@ class GameWorld : GameObject {
 		
 	}
 	
-	override fun render(dt: Float, batch: SpriteBatch) {
+	fun render(dt: Float, batch: SpriteBatch) {
+		//Draw the world and everything
 		GameMap.Env.render(dt, batch, player.position)
 		GameMap.Overlay.render(dt, batch, player.position)
 		player.render(dt, batch)
 		
 	}
-
-	override fun act(dt: Float) {
-		player.act(dt)
-		physics.step(dt, 10, 10) //TODO: the amount of time to simulate - dt or 1/20s?
+	
+	fun renderUI(dt: Float, batch: SpriteBatch) {
+		//Draw the UI
+		Hotbar.render(dt, batch)
 		
 	}
 
-	override fun dispose() {
+	fun act(dt: Float) {
+		player.act(dt)
+		physics.step(dt, 10, 10) //TODO: the amount of time to simulate - dt or 1/20s?
 		
 	}
 

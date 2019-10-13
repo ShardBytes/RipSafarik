@@ -35,4 +35,5 @@ interface Entity : GameObject {
         set(degrees) {
             body.setTransform(body.position, degrees * degRad)
         }
+    
 }

@@ -7,6 +7,7 @@ import com.shardbytes.ripsafarik.components.Block
 class Safarik : Block {
 
 	override val name: String = "safarik"
+	override val displayName: String = "Šafárik 10/10 best block ever"
 	override val texture: Texture = Textures.Overlay["safarik"]
 	
 }

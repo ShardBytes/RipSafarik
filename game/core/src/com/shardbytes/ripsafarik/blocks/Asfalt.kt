@@ -7,6 +7,7 @@ import com.shardbytes.ripsafarik.components.Block
 class Asfalt : Block {
 
 	override val name: String = "asfalt"
+	override val displayName: String = "Asphalt"
 	override val texture: Texture = Textures.Env["asfalt"]
 	
 }

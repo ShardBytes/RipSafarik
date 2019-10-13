@@ -4,16 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import com.shardbytes.ripsafarik.assets.Animations
-import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.Entity
-import com.shardbytes.ripsafarik.tools.GifDecoder
+import com.shardbytes.ripsafarik.components.ItemInventory
 import ktx.box2d.body
 import kotlin.math.sqrt
 
@@ -26,6 +24,8 @@ class Player(physics: World) : Entity {
     private var isWalking = false
     private var elapsedTime = 0f 
     private val animatedPlayer = Animations["animatedPlayer"]
+    
+    val inventory: ItemInventory = ItemInventory()
     
     override val body = physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = width*0.5f)

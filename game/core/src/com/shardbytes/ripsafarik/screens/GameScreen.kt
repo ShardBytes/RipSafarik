@@ -12,11 +12,10 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 class GameScreen : Screen {
 
     // rendering
-    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.V_WIDTH, Settings.V_HEIGHT)
+    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
     var batch = SpriteBatch()
     
     // world
-    //val world = gameworld_old()
     val world = GameWorld()
     val debugRenderer = Box2DDebugRenderer()
     
@@ -57,6 +56,11 @@ class GameScreen : Screen {
         if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
         // render hud at the top
+        batch.projectionMatrix.set(camera.innerCamera.projection)
+        
+        batch.begin()
+        world.renderUI(dt, batch)
+        batch.end()
         
     }
 
@@ -74,9 +78,11 @@ class GameScreen : Screen {
 
     override fun resize(width: Int, height: Int) {
         camera.windowResized(width, height)
+        
     }
 
     override fun dispose() {
+        debugRenderer.dispose()
 
     }
 
