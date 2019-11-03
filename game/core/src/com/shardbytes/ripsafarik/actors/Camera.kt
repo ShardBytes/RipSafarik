@@ -84,7 +84,6 @@ class Camera(private val resizeStrategy: ResizeStrategy,
     fun windowResized(width: Int, height: Int) {
         viewport!!.update(width, height)
         Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
-        println(viewport!!.screenHeight)
         update()
         
     }
