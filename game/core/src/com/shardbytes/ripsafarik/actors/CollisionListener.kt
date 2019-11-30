@@ -19,7 +19,7 @@ class CollisionListener : ContactListener {
                 //player.body.applyForceToCenter(knockbackVector, true)
                 //zombie.body.applyForceToCenter(knockbackVector.rotate(180.0f).setLength(zombie.knockbackForce * 0.33f), true)
 
-                player.body.applyLinearImpulse(knockbackVector, player.body.position, true)
+                //player.body.applyLinearImpulse(knockbackVector, player.body.position, true)
                 zombie.body.applyLinearImpulse(knockbackVector.setLength(zombie.knockbackForce * 0.33f), zombie.body.position, true)
 
 

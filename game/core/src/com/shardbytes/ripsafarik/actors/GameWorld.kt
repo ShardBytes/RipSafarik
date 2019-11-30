@@ -50,7 +50,7 @@ class GameWorld {
 			GameMap.Entities.spawn(zombie)
 		}
 		//ok here
-		physics.step(dt, 10, 10) //TODO: the amount of time to simulate - dt or 1/20s?
+		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
 		
 	}
 

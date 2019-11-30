@@ -29,7 +29,7 @@ class Player(physics: World) : Entity {
     override val body = physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = width*0.5f) { userData = this@Player }
         fixedRotation = true
-        
+
     }
     
     override fun tick(dt: Float) {
