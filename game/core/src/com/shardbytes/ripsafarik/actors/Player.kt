@@ -27,7 +27,8 @@ class Player(physics: World) : Entity {
     val inventory: ItemInventory = ItemInventory()
     
     override val body = physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = width*0.5f)
+        circle(radius = width*0.5f) { userData = this@Player }
+        fixedRotation = true
         
     }
     

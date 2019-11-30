@@ -35,23 +35,18 @@ class Zombie(private var world: GameWorld,
     private var frameTime = 0
     
     override val body = world.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = WIDTH*0.5f)// {
-         //   density = 10f
-         //   friction = 1f
-         //   userData = this@Zombie // store reference
-
-        //}
-        //linearDamping = 10f
+        circle(radius = WIDTH*0.5f) { userData = this@Zombie }
+        linearDamping = 1f
 
     }
     
     private fun getTextureFromType() : String {
         //TODO: fix walking animation
         return when(zombieType) {
-            ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 5f; "animatedMonster" }
-            ZombieType.HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 5f; "animatedMonster2" }
-            ZombieType.NO_HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 5f; "animatedMonster3" }
-            ZombieType.RUNNER -> { frames = 4; frameTime = 100; maxSpeed = 3f; followRange = 10f; knockbackForce = 5f; "animatedFastMonster" }
+            ZombieType.NO_HAND -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 20f; "animatedMonster" }
+            ZombieType.HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 20f; "animatedMonster2" }
+            ZombieType.NO_HAND_BLOOD -> { frames = 4; frameTime = 150; maxSpeed = 1f; followRange = 10f; knockbackForce = 20f; "animatedMonster3" }
+            ZombieType.RUNNER -> { frames = 4; frameTime = 100; maxSpeed = 3f; followRange = 10f; knockbackForce = 50f; "animatedFastMonster" }
 
         }
         

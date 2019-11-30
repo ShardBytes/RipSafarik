@@ -10,19 +10,17 @@ import com.shardbytes.ripsafarik.dataType
 
 class CollisionListener : ContactListener {
 
-    //TODO: why does this not pass the "P" and "Z"
-    //???
     override fun beginContact(contact: Contact?) {
-        println("beginContact")
         if(contact == null) return
-        println("null check pass")
         contact.dataType<Player> { player, _ ->
-            println("p")
             contact.dataType<Zombie> { zombie, _ ->
-                println("z")
-                val rotationVector = Vector2(MathUtils.cosDeg(zombie.rotation), MathUtils.sinDeg(zombie.rotation))
+                val knockbackVector = Vector2(MathUtils.cosDeg(zombie.rotation), MathUtils.sinDeg(zombie.rotation)).setLength(zombie.knockbackForce)
 
-                player.body.applyLinearImpulse(rotationVector.setLength(zombie.knockbackForce), player.body.position, true)
+                //player.body.applyForceToCenter(knockbackVector, true)
+                //zombie.body.applyForceToCenter(knockbackVector.rotate(180.0f).setLength(zombie.knockbackForce * 0.33f), true)
+
+                player.body.applyLinearImpulse(knockbackVector, player.body.position, true)
+                zombie.body.applyLinearImpulse(knockbackVector.setLength(zombie.knockbackForce * 0.33f), zombie.body.position, true)
 
 
             }
