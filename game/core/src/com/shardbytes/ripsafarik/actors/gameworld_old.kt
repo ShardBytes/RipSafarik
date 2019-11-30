@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import com.shardbytes.ripsafarik.components.GameObject
+import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.entity.Zombie
 import ktx.box2d.body
 import ktx.box2d.createWorld
 
@@ -15,7 +17,7 @@ class gameworld_old : GameObject, ContactListener {
     val levelMain = LevelMain()
     
     // entities
-    val player = Player(physics).apply { position.set(8f, 1f) }
+    val player = Player().apply { position.set(8f, 1f) }
     val zombies = mutableListOf<Zombie>()
     val bulletSwarm = bulletswarm_old(this)
     

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.shardbytes.ripsafarik.actors.Player
 import com.shardbytes.ripsafarik.actors.Camera
 
 class SebuScreen : Screen {

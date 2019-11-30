@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik.components
 
 import com.badlogic.gdx.math.MathUtils.degRad
 import com.badlogic.gdx.math.MathUtils.radDeg
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 
 /**
@@ -25,6 +26,13 @@ interface Entity : GameObject {
      */
     fun setPosition(x: Float, y: Float) {
         body.setTransform(x, y, body.angle)
+    }
+
+    /**
+     * Sets the position of entity (sets its body transform)
+     */
+    fun setPosition(pos: Vector2) {
+        body.setTransform(pos.x, pos.y, body.angle)
     }
 
     /**

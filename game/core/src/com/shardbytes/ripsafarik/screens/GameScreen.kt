@@ -9,19 +9,20 @@ import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.actors.GameWorld
 
-class GameScreen : Screen {
+object GameScreen : Screen {
 
     // rendering
     var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
     var batch = SpriteBatch()
     
     // world
-    val world = GameWorld()
+    val world = GameWorld
     val debugRenderer = Box2DDebugRenderer()
     
     
     init {
         camera.lockOn(world.player)
+
     }
     
     

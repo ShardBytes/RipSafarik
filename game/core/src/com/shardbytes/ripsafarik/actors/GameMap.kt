@@ -106,6 +106,7 @@ object GameMap {
 	object Entities {
 
 		private var entities: MutableList<Entity> = mutableListOf()
+		private var despawnSchedule: MutableList<Entity> = mutableListOf()
 
 		fun load() {
 			return
@@ -127,7 +128,20 @@ object GameMap {
 		fun tick(dt: Float) {
 			//tick all entities anywhere they are
 			//time flows in this game everywhere, no chunk loading or similar crap magic
-			for (entity in entities) {
+
+			//despawn all entities that are marked for despawn
+			if(despawnSchedule.isNotEmpty()) {
+				for(entity in despawnSchedule) {
+					println("Despawning: ${entity}")
+					GameWorld.physics.destroyBody(entity.body)
+					entities.remove(entity)
+
+				}
+				despawnSchedule.clear()
+
+			}
+
+			for(entity in entities) {
 				entity.tick(dt)
 
 			}
@@ -136,6 +150,14 @@ object GameMap {
 
 		fun spawn(entity: Entity) {
 			entities.add(entity)
+
+		}
+
+		fun despawn(entity: Entity) {
+			if(!despawnSchedule.contains(entity)) {
+				despawnSchedule.add(entity)
+
+			}
 
 		}
 

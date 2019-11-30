@@ -20,7 +20,7 @@ class MainGame : Game() {
 		
 		GameMap.loadAll("world")
 		
-		setScreen(GameScreen())
+		setScreen(GameScreen)
 		
 		
 	}

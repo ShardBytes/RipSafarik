@@ -7,6 +7,9 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.ContactListener
 import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.dataType
+import com.shardbytes.ripsafarik.entity.Bullet
+import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.entity.Zombie
 
 class CollisionListener : ContactListener {
 
@@ -22,6 +25,15 @@ class CollisionListener : ContactListener {
                 //player.body.applyLinearImpulse(knockbackVector, player.body.position, true)
                 zombie.body.applyLinearImpulse(knockbackVector.setLength(zombie.knockbackForce * 0.33f), zombie.body.position, true)
 
+
+            }
+
+        }
+
+        contact.dataType<Bullet> { bullet, _ ->
+            contact.dataType<Zombie> { zombie, _ ->
+                GameMap.Entities.despawn(bullet)
+                GameMap.Entities.despawn(zombie)
 
             }
 

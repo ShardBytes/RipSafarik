@@ -6,13 +6,15 @@ import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.blocks.Grass
 import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
+import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Hotbar
 import ktx.box2d.createWorld
 
-class GameWorld {
+object GameWorld {
 	
 	val physics = createWorld()
-	val player = Player(physics)
+	val player = Player()
 	
 	init {
 		//Set physics collider

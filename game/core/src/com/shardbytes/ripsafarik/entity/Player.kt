@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik.actors
+package com.shardbytes.ripsafarik.entity
 
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
@@ -7,14 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.World
+import com.shardbytes.ripsafarik.actors.GameMap
+import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.ItemInventory
 import ktx.box2d.body
 import kotlin.math.sqrt
 
-class Player(physics: World) : Entity {
+class Player() : Entity {
     
     private val width = 1f
     private val height = 1f
@@ -26,7 +27,7 @@ class Player(physics: World) : Entity {
     
     val inventory: ItemInventory = ItemInventory()
     
-    override val body = physics.body(BodyDef.BodyType.DynamicBody) {
+    override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = width*0.5f) { userData = this@Player }
         fixedRotation = true
 
@@ -103,9 +104,16 @@ class Player(physics: World) : Entity {
             
         }
         
-        if(input.justTouched()) {
-            //world.bulletSwarm.spawn(position.cpy().add(Vector2.X.setAngle(rotation).setLength(1f)), rotation)
-            
+        if(input.isTouched) {
+            val playerPos = position.cpy()
+            val bullet = Bullet().apply {
+                setPosition(playerPos.add(Vector2.X.setAngle(rotation - 90f).setLength(1f)))
+                body.setLinearVelocity(Vector2.X.setAngle(rotation).setLength(30f))
+
+            }
+
+            GameMap.Entities.spawn(bullet)
+
         }
         
     }
