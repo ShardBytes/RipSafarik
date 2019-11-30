@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.shardbytes.ripsafarik.blocks.Asfalt
+import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.blocks.Grass
 import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
@@ -21,6 +22,7 @@ class GameWorld {
 		BlockCatalog.registerBlock(Grass())
 		BlockCatalog.registerBlock(Asfalt())
 		BlockCatalog.registerBlock(Safarik())
+		BlockCatalog.registerBlock(Concrete())
 		
 		player.position.set(1f, 1f)
 		
