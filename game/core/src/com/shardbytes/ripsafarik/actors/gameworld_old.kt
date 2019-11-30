@@ -2,13 +2,8 @@ package com.shardbytes.ripsafarik.actors
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.Contact
-import com.badlogic.gdx.physics.box2d.ContactImpulse
-import com.badlogic.gdx.physics.box2d.ContactListener
-import com.badlogic.gdx.physics.box2d.Manifold
+import com.badlogic.gdx.physics.box2d.*
 import com.shardbytes.ripsafarik.components.GameObject
-import com.shardbytes.ripsafarik.dataType
 import ktx.box2d.body
 import ktx.box2d.createWorld
 
@@ -38,19 +33,19 @@ class gameworld_old : GameObject, ContactListener {
         }
         
         // spawn some zombies
-        zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
-        zombies.add(Zombie(this, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
-        zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
-        zombies.add(Zombie(this, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
+    //  zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND_BLOOD).apply { setPosition(-2f, -2f) })
+    //  zombies.add(Zombie(this, Zombie.ZombieType.HAND_BLOOD).apply { setPosition(3f, -1f) })
+    //  zombies.add(Zombie(this, Zombie.ZombieType.NO_HAND).apply { setPosition(10f, 5f) })
+    //  zombies.add(Zombie(this, Zombie.ZombieType.RUNNER).apply { setPosition(7f, 9f) })
         
         // setup contact listner
         physics.setContactListener(this)
     }
     
-    override fun act(dt: Float) {
-        bulletSwarm.act(dt)
-        player.act(dt)
-        zombies.forEach { it.act(dt) }
+    override fun tick(dt: Float) {
+        bulletSwarm.tick(dt)
+        player.tick(dt)
+        zombies.forEach { it.tick(dt) }
         physics.step(dt, 10, 10) // update physics of world after user input!!
     }
 
@@ -88,17 +83,17 @@ class gameworld_old : GameObject, ContactListener {
     override fun beginContact(contact: Contact?) {
         if (contact == null) return
         
-        contact.dataType<Player> { player, fxPlayer ->
-            contact.dataType<Zombie> { zombie, fxZombie ->
+    //  contact.dataType<Player> { player, fxPlayer ->
+    //      contact.dataType<Zombie> { zombie, fxZombie ->
                 
                 // knock back
-                zombie.body.applyLinearImpulse(
-                        zombie.vecToPlayer.cpy().rotate(180f).setLength(zombie.knockbackForce),
-                        zombie.body.position,
-                        true
-                )
-            }
-        }
+    //          zombie.body.applyLinearImpulse(
+    //                  zombie.vecToPlayer.cpy().rotate(180f).setLength(zombie.knockbackForce),
+    //                  zombie.body.position,
+    //                  true
+    //          )
+    //      }
+    //  }
     }
     
     override fun endContact(contact: Contact) {}

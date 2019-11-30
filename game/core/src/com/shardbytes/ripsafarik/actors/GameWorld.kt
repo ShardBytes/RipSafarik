@@ -14,6 +14,9 @@ class GameWorld {
 	val player = Player(physics)
 	
 	init {
+		//Set physics collider
+		physics.setContactListener(CollisionListener())
+
 		//Register all blocks
 		BlockCatalog.registerBlock(Grass())
 		BlockCatalog.registerBlock(Asfalt())
@@ -27,6 +30,7 @@ class GameWorld {
 		//Draw the world and everything
 		GameMap.Env.render(dt, batch, player.position)
 		GameMap.Overlay.render(dt, batch, player.position)
+		GameMap.Entities.render(dt, batch, player.position)
 		player.render(dt, batch)
 		
 	}
@@ -37,8 +41,15 @@ class GameWorld {
 		
 	}
 
-	fun act(dt: Float) {
-		player.act(dt)
+	fun tick(dt: Float) {
+		player.tick(dt)
+		GameMap.Entities.tick(dt)
+		//BADBADBAD
+		if(GameMap.Entities.totalEntities() < 3) {
+			val zombie = Zombie(this, Zombie.ZombieType.values().random()).apply { setPosition(8.0f, 9.0f) }
+			GameMap.Entities.spawn(zombie)
+		}
+		//ok here
 		physics.step(dt, 10, 10) //TODO: the amount of time to simulate - dt or 1/20s?
 		
 	}

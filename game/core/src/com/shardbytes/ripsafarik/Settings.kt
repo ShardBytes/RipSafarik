@@ -8,7 +8,7 @@ object Settings {
 	const val GAME_V_HEIGHT = 15f
 	
 	var CURRENT_ASPECT_RATIO = 1f
-	
+
 	var RENDER_DISTANCE = 15
 	
 }

@@ -8,6 +8,6 @@ interface GameObject: Disposable {
 	
 	val position: Vector2
 	fun render(dt: Float, batch: SpriteBatch)
-	fun act(dt: Float)
+	fun tick(dt: Float)
 	
 }

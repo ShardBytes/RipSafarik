@@ -36,8 +36,8 @@ class GameScreen : Screen {
     UI depends on the scene to already be rendered, so it goes fifth.
      */
     override fun render(dt: Float) {
-        // first act
-        world.act(dt)
+        // first act/tick
+        world.tick(dt)
         
         // update camera before rendering
         camera.update()
@@ -57,7 +57,6 @@ class GameScreen : Screen {
 
         // render hud at the top
         batch.projectionMatrix.set(camera.innerCamera.projection)
-        
         batch.begin()
         world.renderUI(dt, batch)
         batch.end()

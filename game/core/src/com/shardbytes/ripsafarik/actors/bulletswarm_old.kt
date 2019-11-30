@@ -37,7 +37,7 @@ class bulletswarm_old(private val world: gameworld_old) : GameObject {
 		println("bullet marked for destruction")
 	}
 	
-	override fun act(dt: Float) {
+	override fun tick(dt: Float) {
 		bulletsToDelete.forEach {
 			bulletsToDelete -= it
 			world.physics.destroyBody(it)

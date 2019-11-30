@@ -1,6 +1,5 @@
 package com.shardbytes.ripsafarik.actors
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
@@ -19,7 +18,7 @@ class Player(physics: World) : Entity {
     
     private val width = 1f
     private val height = 1f
-    private val maxSpeed = 4f //What unit?
+    private val maxSpeed = 4f //TODO: What unit?
     
     private var isWalking = false
     private var elapsedTime = 0f 
@@ -32,7 +31,7 @@ class Player(physics: World) : Entity {
         
     }
     
-    override fun act(dt: Float) {
+    override fun tick(dt: Float) {
         handleInput()
         
     }
@@ -48,6 +47,7 @@ class Player(physics: World) : Entity {
 
         } else {
             batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
+
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
@@ -70,7 +70,7 @@ class Player(physics: World) : Entity {
             
             "WA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
             
-            "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 *maxSpeed)
+            "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
             
             "SA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
             
@@ -113,20 +113,20 @@ class Player(physics: World) : Entity {
         val dir = charArrayOf(' ', ' ')
         var primaryDirectionSet = false
         
-        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if(input.isKeyPressed(Input.Keys.W)) {
             dir[0] = 'W'
             primaryDirectionSet = true
             
-        } else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if(input.isKeyPressed(Input.Keys.S)) {
             dir[0] = 'S'
             primaryDirectionSet = true
             
         }
         
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if(input.isKeyPressed(Input.Keys.A)) {
             dir[if (primaryDirectionSet) 1 else 0] = 'A'
             
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (input.isKeyPressed(Input.Keys.D)) {
             dir[if (primaryDirectionSet) 1 else 0] = 'D'
             
         }
@@ -139,5 +139,5 @@ class Player(physics: World) : Entity {
         //y tho
         
     }
-    
+
 }
