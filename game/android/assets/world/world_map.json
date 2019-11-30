@@ -1,25 +1,32 @@
 {
   "env": [
-	["grass", "grass", "grass", "grass", "grass", "asfalt", "asfalt", "asfalt", "asfalt"],
-	["grass", "grass", "grass", "grass", "grass", "asfalt", "asfalt", "asfalt", "asfalt"],
-	["grass", "grass", "grass", "grass", "grass", "asfalt", "asfalt", "asfalt", "grass"],
-	["grass", "grass", "grass", "grass", "grass", "asfalt", "asfalt", "asfalt", "grass"],
-	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "grass"],
-	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "grass"],
-	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "grass"],
+	["grass", "grass", "grass", "grass", "concrete", "asfalt", "asfalt", "asfalt", "concrete"],
+	["grass", "grass", "grass", "grass", "concrete", "asfalt", "asfalt", "asfalt", "concrete"],
+	["grass", "grass", "grass", "grass", "concrete", "asfalt", "asfalt", "asfalt", "concrete"],
+	["concrete", "concrete", "concrete", "concrete", "concrete", "asfalt", "asfalt", "asfalt", "concrete"],
+	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "concrete"],
+	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "concrete"],
+	["asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "asfalt", "concrete"],
+	["concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete"],
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
-	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"]
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
+	["concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete", "concrete"]
   ],
   "overlay":[
 	{
 	  "name": "safarik",
 	  "posX": 1,
 	  "posY": 1,
-	  "scale": 3,
+	  "scale": 2,
 	  "rotation": 45
 	}
   ]
