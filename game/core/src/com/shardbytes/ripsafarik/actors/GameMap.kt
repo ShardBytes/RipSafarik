@@ -132,7 +132,6 @@ object GameMap {
 			//despawn all entities that are marked for despawn
 			if(despawnSchedule.isNotEmpty()) {
 				for(entity in despawnSchedule) {
-					println("Despawning: ${entity}")
 					GameWorld.physics.destroyBody(entity.body)
 					entities.remove(entity)
 

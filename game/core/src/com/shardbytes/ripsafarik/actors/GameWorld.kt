@@ -42,6 +42,8 @@ object GameWorld {
 	fun renderUI(dt: Float, batch: SpriteBatch) {
 		//Draw the UI
 		Hotbar.render(dt, batch)
+		//Healthbar.render(dt, batch, player.rotation.toInt())
+		//TODO: decide if healthbar is per-entity or one global for one player
 		
 	}
 

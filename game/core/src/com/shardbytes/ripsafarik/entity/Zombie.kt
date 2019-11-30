@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
+import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
+import com.shardbytes.ripsafarik.ui.Healthbar
 import ktx.box2d.body
+import kotlin.math.min
 
 class Zombie(private var world: GameWorld,
              private var zombieType: ZombieType) : Entity {
@@ -22,9 +25,15 @@ class Zombie(private var world: GameWorld,
     
     val WIDTH = 1f
     val HEIGHT = 1f
-    var maxSpeed = 0f
-    var followRange = 0f
+    private var maxSpeed = 0f
+    private var followRange = 0f
     var knockbackForce = 0f
+
+    //Health stuff
+    private val healthbar = Healthbar()
+    private val maxHealth = 100f
+    private var health = 100f
+    private var regenSpeed = 1f
     
     //Animation
     private var isWalking = false
@@ -74,6 +83,9 @@ class Zombie(private var world: GameWorld,
 
         //TODO: implement random zombie behaviour
 
+        //health regen
+        health = min(maxHealth, health + regenSpeed)
+
     }
     
     override fun render(dt: Float, batch: SpriteBatch) {
@@ -91,10 +103,25 @@ class Zombie(private var world: GameWorld,
         }
         elapsedTime += dt
         elapsedTime %= frames * frameTime * 0.001f
+
+        healthbar.render(health.toInt(), position, batch)
         
     }
     
     override fun dispose() {}
+
+    /**
+     * Damage the Zombie. If health goes below zero, despawn.
+     */
+    fun takeDamage(amount: Float) {
+        health -= amount
+
+        if(health <= 0) {
+            GameMap.Entities.despawn(this)
+
+        }
+
+    }
 
     fun isZombieInPlayerFollowRadius(): Boolean {
         return position.dst2(world.player.position) < (followRange * followRange)

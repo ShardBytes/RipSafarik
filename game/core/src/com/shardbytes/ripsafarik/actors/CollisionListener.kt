@@ -23,8 +23,9 @@ class CollisionListener : ContactListener {
                 //zombie.body.applyForceToCenter(knockbackVector.rotate(180.0f).setLength(zombie.knockbackForce * 0.33f), true)
 
                 //player.body.applyLinearImpulse(knockbackVector, player.body.position, true)
-                zombie.body.applyLinearImpulse(knockbackVector.setLength(zombie.knockbackForce * 0.33f), zombie.body.position, true)
+                zombie.body.applyLinearImpulse(knockbackVector.rotate(180f).setLength(zombie.knockbackForce * 0.5f), zombie.body.position, true) //TODO: bad bad bad
 
+                player.takeDamage(20f)
 
             }
 
@@ -33,10 +34,17 @@ class CollisionListener : ContactListener {
         contact.dataType<Bullet> { bullet, _ ->
             contact.dataType<Zombie> { zombie, _ ->
                 GameMap.Entities.despawn(bullet)
-                GameMap.Entities.despawn(zombie)
+                zombie.takeDamage(5f)
 
             }
 
+        }
+
+        contact.dataType<Bullet> { bullet, _ ->
+            contact.dataType<Player> { player, _ ->
+                GameMap.Entities.despawn(bullet)
+
+            }
         }
 
     }

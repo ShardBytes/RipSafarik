@@ -12,7 +12,9 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.ItemInventory
+import com.shardbytes.ripsafarik.ui.Healthbar
 import ktx.box2d.body
+import kotlin.math.min
 import kotlin.math.sqrt
 
 class Player() : Entity {
@@ -24,6 +26,12 @@ class Player() : Entity {
     private var isWalking = false
     private var elapsedTime = 0f 
     private val animatedPlayer = Animations["animatedPlayer"]
+
+    //Health stuff
+    private val healthbar = Healthbar()
+    private val maxHealth = 100f
+    private var health = 100f
+    private var regenSpeed = 1f
     
     val inventory: ItemInventory = ItemInventory()
     
@@ -35,6 +43,9 @@ class Player() : Entity {
     
     override fun tick(dt: Float) {
         handleInput()
+
+        //health regen
+        health = min(maxHealth, health + regenSpeed)
         
     }
     
@@ -53,6 +64,8 @@ class Player() : Entity {
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
+
+        healthbar.render(health.toInt(), position, batch)
         
     }
 
@@ -106,18 +119,19 @@ class Player() : Entity {
         
         if(input.isTouched) {
             val playerPos = position.cpy()
+            val playerRotation = rotation
             val bullet = Bullet().apply {
-                setPosition(playerPos.add(Vector2.X.setAngle(rotation - 90f).setLength(1f)))
-                body.setLinearVelocity(Vector2.X.setAngle(rotation).setLength(30f))
+                setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
+                body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
 
             }
 
             GameMap.Entities.spawn(bullet)
 
         }
-        
+
     }
-    
+
     private fun getKeyboardDirection() : String {
         val dir = charArrayOf(' ', ' ')
         var primaryDirectionSet = false
@@ -142,6 +156,19 @@ class Player() : Entity {
         
         return String(dir)
         
+    }
+
+    /**
+     * Damage the player. If health goes below zero, weelllll that sucks.
+     */
+    fun takeDamage(amount: Float) {
+        health -= amount
+
+        if(health <= 0) {
+            System.exit(0)
+
+        }
+
     }
     
     override fun dispose() {
