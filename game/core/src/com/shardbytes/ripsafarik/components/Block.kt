@@ -1,6 +1,6 @@
 package com.shardbytes.ripsafarik.components
 
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 
 interface Block {
 
@@ -16,10 +16,10 @@ interface Block {
 	val displayName: String
 
 	/**
-	 * Block texture.
-	 * @see Texture
+	 * Block texture. TextureRegion for better performance when not animated.
+	 * @see TextureRegion
 	 * @see com.shardbytes.ripsafarik.assets.Textures
 	 */
-	val texture: Texture
+	val texture: TextureRegion
 	
 }

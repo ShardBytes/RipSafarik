@@ -8,6 +8,7 @@ import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
+import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.Hotbar
 import ktx.box2d.createWorld
 
@@ -42,8 +43,7 @@ object GameWorld {
 	fun renderUI(dt: Float, batch: SpriteBatch) {
 		//Draw the UI
 		Hotbar.render(dt, batch)
-		//Healthbar.render(dt, batch, player.rotation.toInt())
-		//TODO: decide if healthbar is per-entity or one global for one player
+		Healthbar.render(player.health.toInt(), batch)
 		
 	}
 

@@ -18,6 +18,8 @@ object Textures {
 		Env.load()
 		Overlay.load()
 		UI.load()
+		Item.load()
+		Entity.load()
 		
 	}
 	
@@ -73,6 +75,50 @@ object Textures {
 
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/ui/$texture.png")
 		
+	}
+
+	object Item {
+
+		fun load() {
+			val json = JsonReader().parse(Gdx.files.internal("textures/itemTextures.json").readString())
+			val categories = json.get("categories").asStringArray()
+
+			for (category in categories) {
+				val textures = json.get(category).asStringArray()
+				for (texture in textures) {
+					val path = "textures/item/$category/$texture.png"
+					manager.load<Texture>(path)
+
+				}
+
+			}
+
+		}
+
+		/**
+		 * @param texture Texture address in format category/texture
+		 * @return The requested texture
+		 */
+		operator fun get(texture: String) = manager.getAsset<Texture>("textures/item/$texture.png")
+
+	}
+
+	object Entity {
+
+		fun load() {
+			val jsonString = Gdx.files.internal("textures/entityTextures.json").readString()
+			val textures = JsonReader().parse(jsonString).get("textures").asStringArray()
+
+			for (texture in textures) {
+				val path = "textures/entity/$texture.png"
+				manager.load<Texture>(path)
+
+			}
+
+		}
+
+		operator fun get(texture: String) = manager.getAsset<Texture>("textures/entity/$texture.png")
+
 	}
 	
 }

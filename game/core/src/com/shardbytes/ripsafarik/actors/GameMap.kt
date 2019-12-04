@@ -9,14 +9,18 @@ import com.badlogic.gdx.utils.JsonReader
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.Entity
+import com.shardbytes.ripsafarik.entity.ItemDrop
+import com.shardbytes.ripsafarik.items.Gun
 
 object GameMap {
-	
+
+	//TODO: optimize, do not pass string but already parsed json object
 	fun loadAll(mapName: String) {
 		val jsonString = Gdx.files.internal("world/${mapName}_map.json").readString()
 		
 		Env.load(jsonString)
 		Overlay.load(jsonString)
+		Entities.load(jsonString)
 		
 	}
 	
@@ -108,8 +112,33 @@ object GameMap {
 		private var entities: MutableList<Entity> = mutableListOf()
 		private var despawnSchedule: MutableList<Entity> = mutableListOf()
 
-		fun load() {
-			return
+		fun load(jsonString: String) {
+			val mapJson = JsonReader().parse(jsonString).get("entities")
+
+			entities.clear()
+			despawnSchedule.clear()
+
+			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
+
+			//TODO: LOADING ENTITIES FROM WORLD
+/*
+			mapJson.forEach {
+				val obj = Class.forName(it["className"].asString())
+				val instance = obj.newInstance()
+				it.forEach {
+					if(it.name != "className") {
+						val field = obj.getDeclaredField(it.name)
+						field.isAccessible = true
+						field.set(instance, it.asString())
+
+					}
+
+				}
+
+				spawn(instance as Entity)
+
+			}
+*/
 		}
 
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {

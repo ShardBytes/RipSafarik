@@ -8,7 +8,6 @@ import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
-import com.shardbytes.ripsafarik.ui.Healthbar
 import ktx.box2d.body
 import kotlin.math.min
 
@@ -30,7 +29,6 @@ class Zombie(private var world: GameWorld,
     var knockbackForce = 0f
 
     //Health stuff
-    private val healthbar = Healthbar()
     private val maxHealth = 100f
     private var health = 100f
     private var regenSpeed = 1f
@@ -103,8 +101,6 @@ class Zombie(private var world: GameWorld,
         }
         elapsedTime += dt
         elapsedTime %= frames * frameTime * 0.001f
-
-        healthbar.render(health.toInt(), position, batch)
         
     }
     

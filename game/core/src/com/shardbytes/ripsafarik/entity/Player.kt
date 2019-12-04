@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.ItemInventory
-import com.shardbytes.ripsafarik.ui.Healthbar
+import com.shardbytes.ripsafarik.components.Weapon
+import com.shardbytes.ripsafarik.ui.Hotbar
 import ktx.box2d.body
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -28,10 +28,9 @@ class Player() : Entity {
     private val animatedPlayer = Animations["animatedPlayer"]
 
     //Health stuff
-    private val healthbar = Healthbar()
-    private val maxHealth = 100f
-    private var health = 100f
-    private var regenSpeed = 1f
+    val maxHealth = 100f
+    var health = 100f
+    var regenSpeed = 1f
     
     val inventory: ItemInventory = ItemInventory()
     
@@ -43,6 +42,8 @@ class Player() : Entity {
     
     override fun tick(dt: Float) {
         handleInput()
+        handleTouches()
+        handleNumbers()
 
         //health regen
         health = min(maxHealth, health + regenSpeed)
@@ -64,8 +65,6 @@ class Player() : Entity {
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
-
-        healthbar.render(health.toInt(), position, batch)
         
     }
 
@@ -116,17 +115,86 @@ class Player() : Entity {
             else -> rotation = 360f - vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor().angle()
             
         }
-        
-        if(input.isTouched) {
-            val playerPos = position.cpy()
-            val playerRotation = rotation
-            val bullet = Bullet().apply {
-                setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
-                body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
+
+    }
+
+    private fun handleTouches() {
+        if (input.isTouched) {
+            val item = inventory.hotbar[Hotbar.selectedSlot]
+            if (item is Weapon) {
+                item.use(this)
 
             }
 
-            GameMap.Entities.spawn(bullet)
+        }
+
+    }
+
+    /**
+     * The worst method you'll ever see.
+     * Just because LibGDX has no input.getKeyPressed().
+     * And I'm lazy to create a custom Input Processor just for this.
+     */
+    private fun handleNumbers() {
+        if(input.isKeyPressed(Input.Keys.NUM_1)) {
+            if(Hotbar.hotbarSlots > 0) {
+                Hotbar.selectedSlot = 0
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_2)) {
+            if(Hotbar.hotbarSlots > 1) {
+                Hotbar.selectedSlot = 1
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_3)) {
+            if(Hotbar.hotbarSlots > 2) {
+                Hotbar.selectedSlot = 2
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_4)) {
+            if(Hotbar.hotbarSlots > 3) {
+                Hotbar.selectedSlot = 3
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_5)) {
+            if(Hotbar.hotbarSlots > 4) {
+                Hotbar.selectedSlot = 4
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_6)) {
+            if(Hotbar.hotbarSlots > 5) {
+                Hotbar.selectedSlot = 5
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_7)) {
+            if(Hotbar.hotbarSlots > 6) {
+                Hotbar.selectedSlot = 6
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_8)) {
+            if(Hotbar.hotbarSlots > 7) {
+                Hotbar.selectedSlot = 7
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_9)) {
+            if(Hotbar.hotbarSlots > 8) {
+                Hotbar.selectedSlot = 8
+
+            }
+
+        } else if(input.isKeyPressed(Input.Keys.NUM_0)) {
+            if(Hotbar.hotbarSlots > 9) {
+                Hotbar.selectedSlot = 9
+
+            }
 
         }
 

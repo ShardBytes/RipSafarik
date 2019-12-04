@@ -1,5 +1,8 @@
 package com.shardbytes.ripsafarik.entity
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
@@ -16,6 +19,9 @@ class ItemDrop(private val item: Item) : Entity {
     private val maximumLifetime = 10f //seconds before despawn
     private var currentLifetime = 0f
 
+    private val font = BitmapFont().apply { data.setScale(0.1f) } //TODO: font scale fucks shit up, fix asap
+    private var availableForPickup = false
+
     override val body: Body = GameWorld.physics.body(BodyDef.BodyType.StaticBody)
 
     override fun render(dt: Float, batch: SpriteBatch) {
@@ -24,11 +30,32 @@ class ItemDrop(private val item: Item) : Entity {
         val originBasedPositionX = position.x - originX
         val originBasedPositionY = position.y - originY
 
+        //Draw the item
         batch.draw(TextureRegion(item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 0.33f, 0.33f, body.angle * MathUtils.radDeg - 90f)
+
+        //Pickup notice
+        if(availableForPickup) {
+            font.draw(batch, "Press E to pick up", position.x, position.y)
+
+        }
 
     }
 
     override fun tick(dt: Float) {
+        //If close enough to the player, set available for picking up
+        availableForPickup = position.dst(GameWorld.player.position) < 1
+
+        //And actually pick up, if key is pressed
+        if(availableForPickup) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                GameWorld.player.inventory.pickUpItem(item)
+                GameMap.Entities.despawn(this)
+
+            }
+
+        }
+
+        //Despawn logic
         currentLifetime += dt
 
         if(currentLifetime > maximumLifetime) {
