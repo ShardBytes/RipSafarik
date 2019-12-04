@@ -2,7 +2,7 @@ package com.shardbytes.ripsafarik
 
 object Settings {
 	
-	var PHYSICS_DEBUG_ACTIVE = true
+	var PHYSICS_DEBUG_ACTIVE = false
 	
 	const val GAME_V_WIDTH = 15f
 	const val GAME_V_HEIGHT = 15f
