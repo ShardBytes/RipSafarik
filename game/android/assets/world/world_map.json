@@ -36,5 +36,10 @@
 	  "scale": 2,
 	  "rotation": 45
 	}
-  ]
+  ],
+	"entities": [
+		{
+			"className": "com.shardbytes.ripsafarik.entity.ItemDrop"
+		}
+	]
 }
