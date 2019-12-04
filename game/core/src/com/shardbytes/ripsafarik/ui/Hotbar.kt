@@ -10,7 +10,7 @@ object Hotbar {
 	
 	var hotbarSlots = 4
 	
-	private val itemSlotTexture = Textures.UI["itemslot"]
+	private val itemSlotTexture = TextureRegion(Textures.UI["itemslot"])
 	private val itemSlotTextureSize = 1f
 	
 	val locations = mapOf(
@@ -40,8 +40,8 @@ object Hotbar {
 	
 	fun render(dt: Float, batch: SpriteBatch) {
 		for (i in Math.round(-(hotbarSlots / 2f)) until Math.round((hotbarSlots / 2f))) {
-			//Draw itemSlotTexture                        at bottom center              minus offset when total slot count is even               at bottom center
-			batch.draw(TextureRegion(itemSlotTexture), (itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) { 0.0f } else { 0.5f }), (Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO, 0.5f, 0.5f, 1f, 1f, itemSlotTextureSize, itemSlotTextureSize, 0f)
+			//Draw itemSlotTexture               at center                minus offset when total slot count is even               at bottom
+			batch.draw(itemSlotTexture, (itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) { 0.0f } else { 0.5f }), (Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO, 0.5f, 0.5f, 1f, 1f, itemSlotTextureSize, itemSlotTextureSize, 0f)
 			
 		}
 		

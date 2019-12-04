@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Vector2
+import com.shardbytes.ripsafarik.Settings
 
-class Healthbar {
+object Healthbar {
 
     var width = 100
-    var height = 5
+    var height = 1
 
-    fun render(healthValue: Int, position: Vector2, batch: SpriteBatch) {
+    fun render(healthValue: Int, batch: SpriteBatch) {
         val pixels = Pixmap(width, height, Pixmap.Format.RGBA8888)
         pixels.setColor(1f, 0f, 0f, 1f)
         pixels.fillRectangle(0, 0, healthValue, height)
@@ -19,7 +19,19 @@ class Healthbar {
         pixels.setColor(0.15f, 0.15f, 0.15f, 1f)
         pixels.fillRectangle(healthValue, 0, width - healthValue, height)
 
-        batch.draw(TextureRegion(Texture(pixels)), position.x - 1f, position.y + 0.5f, 0.5f, 0.5f, 2f, 0.05f, 1f, 1f, 0f)
+        val screenWidth = Settings.GAME_V_WIDTH * Settings.CURRENT_ASPECT_RATIO
+        val screenHeight = Settings.GAME_V_HEIGHT / Settings.CURRENT_ASPECT_RATIO
+
+        batch.draw(TextureRegion(Texture(pixels)),
+                -5f, //half the width of the healthbar
+                screenHeight * -0.5f + 1.1f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
+                0.5f,
+                0.5f,
+                10f,
+                0.3f,
+                1f,
+                1f,
+                0f)
 
     }
 

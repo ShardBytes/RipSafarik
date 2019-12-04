@@ -12,7 +12,6 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.ItemInventory
-import com.shardbytes.ripsafarik.ui.Healthbar
 import ktx.box2d.body
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -28,10 +27,9 @@ class Player() : Entity {
     private val animatedPlayer = Animations["animatedPlayer"]
 
     //Health stuff
-    private val healthbar = Healthbar()
-    private val maxHealth = 100f
-    private var health = 100f
-    private var regenSpeed = 1f
+    val maxHealth = 100f
+    var health = 100f
+    var regenSpeed = 1f
     
     val inventory: ItemInventory = ItemInventory()
     
@@ -64,8 +62,6 @@ class Player() : Entity {
         }
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
-
-        healthbar.render(health.toInt(), position, batch)
         
     }
 
