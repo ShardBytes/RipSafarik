@@ -10,6 +10,7 @@ import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.Hotbar
+import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.createWorld
 
 object GameWorld {
@@ -44,6 +45,7 @@ object GameWorld {
 		//Draw the UI
 		Hotbar.render(dt, batch)
 		Healthbar.render(player.health.toInt(), batch)
+		PlayerInventory.render(dt, batch)
 		
 	}
 

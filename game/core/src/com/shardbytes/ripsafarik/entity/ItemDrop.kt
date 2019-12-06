@@ -27,15 +27,15 @@ class ItemDrop(private val item: Item) : Entity {
     override fun render(dt: Float, batch: SpriteBatch) {
         val originX = 0.5f
         val originY = 0.5f
-        val originBasedPositionX = position.x - originX
+        val originBasedPositionX = position.x - originX //TODO: redo naming because originX and originY mean something else
         val originBasedPositionY = position.y - originY
 
         //Draw the item
-        batch.draw(TextureRegion(item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 0.33f, 0.33f, body.angle * MathUtils.radDeg - 90f)
+        batch.draw(TextureRegion(item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
 
         //Pickup notice
         if(availableForPickup) {
-            font.draw(batch, "Press E to pick up", position.x, position.y)
+            font.draw(batch, "Press F to pick up", position.x, position.y)
 
         }
 
@@ -47,7 +47,7 @@ class ItemDrop(private val item: Item) : Entity {
 
         //And actually pick up, if key is pressed
         if(availableForPickup) {
-            if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                 GameWorld.player.inventory.pickUpItem(item)
                 GameMap.Entities.despawn(this)
 

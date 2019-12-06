@@ -16,8 +16,8 @@ object Hotbar {
 	
 	fun render(dt: Float, batch: SpriteBatch) {
 		drawHotbarSlots(batch)
-		drawSelectedSlot(batch) //Draw that one slot one more time to make it less transparent for how
-								//TODO: you can do better
+		drawSelectedSlot(batch) //Draw that one slot one more time to make it less transparent for now
+								//TODO: you can do better <-- graphics i meant
 
 		drawItems(batch)
 		
@@ -55,12 +55,12 @@ object Hotbar {
 							0.5f
 						}),
 						(Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO,
-						0.5f,
-						0.5f,
+						0.5f, //Rotation origin
+						0.5f, //Ah i see
 						1f,
 						1f,
-						itemSlotTextureSize - 0.1f, //Make item sligthly smaller in the inventory
-						itemSlotTextureSize - 0.1f,
+						itemSlotTextureSize - 0.33f, //Make item sligthly smaller in the inventory
+						itemSlotTextureSize - 0.33f, //TODO: scale is good?
 						0f)
 
 			}

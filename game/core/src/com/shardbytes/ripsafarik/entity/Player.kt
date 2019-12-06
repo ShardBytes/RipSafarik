@@ -13,6 +13,7 @@ import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.ItemInventory
 import com.shardbytes.ripsafarik.components.Weapon
 import com.shardbytes.ripsafarik.ui.Hotbar
+import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.body
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -44,6 +45,7 @@ class Player() : Entity {
         handleInput()
         handleTouches()
         handleNumbers()
+        handleKeys()
 
         //health regen
         health = min(maxHealth, health + regenSpeed)
@@ -69,60 +71,72 @@ class Player() : Entity {
     }
 
     private fun handleInput() {
-        val invsqrt2 = 1f / sqrt(2f)
-        val dir = getKeyboardDirection()
-        isWalking = (dir != "  ")
-        
-        when(dir) {
-            "W " -> body.setLinearVelocity(0f, maxSpeed)
-            
-            "S " -> body.setLinearVelocity(0f, -maxSpeed)
-            
-            "A " -> body.setLinearVelocity(-maxSpeed, 0f)
-            
-            "D " -> body.setLinearVelocity(maxSpeed, 0f)
-            
-            "WA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
-            
-            "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
-            
-            "SA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
-            
-            "SD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
-            
-            else -> body.setLinearVelocity(0f, 0f)
-            
-        }
-        
-        val vecToMouse = Vector2()
-        when(dir) {
-            "W " -> rotation = 90f
-            
-            "S " -> rotation = 270f
-            
-            "A " -> rotation = 180f
-            
-            "D " -> rotation = 0f
-            
-            "WA" -> rotation = 135f
-            
-            "WD" -> rotation = 45f
-            
-            "SA" -> rotation = 225f
-            
-            "SD" -> rotation = 315f
-            
-            else -> rotation = 360f - vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor().angle()
-            
+        //No movement when inventory is opened
+        if(!PlayerInventory.isOpened) {
+            val invsqrt2 = 1f / sqrt(2f)
+            val dir = getKeyboardDirection()
+            isWalking = (dir != "  ")
+
+            when(dir) {
+                "W " -> body.setLinearVelocity(0f, maxSpeed)
+
+                "S " -> body.setLinearVelocity(0f, -maxSpeed)
+
+                "A " -> body.setLinearVelocity(-maxSpeed, 0f)
+
+                "D " -> body.setLinearVelocity(maxSpeed, 0f)
+
+                "WA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
+
+                "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
+
+                "SA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
+
+                "SD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
+
+                else -> body.setLinearVelocity(0f, 0f)
+
+            }
+
+            val vecToMouse = Vector2()
+            when(dir) {
+                "W " -> rotation = 90f
+
+                "S " -> rotation = 270f
+
+                "A " -> rotation = 180f
+
+                "D " -> rotation = 0f
+
+                "WA" -> rotation = 135f
+
+                "WD" -> rotation = 45f
+
+                "SA" -> rotation = 225f
+
+                "SD" -> rotation = 315f
+
+                else -> rotation = 360f - vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor().angle()
+
+            }
+
+        } else {
+            //When player opens the inventory during walking, HALT
+            //Also open the inventory but that's in separate method xd
+            body.setLinearVelocity(0f, 0f)
+
         }
 
     }
 
     private fun handleTouches() {
-        if (input.isTouched) {
-            val item = inventory.hotbar[Hotbar.selectedSlot]
-            if (item is Weapon) {
-                item.use(this)
+        if(!PlayerInventory.isOpened) {
+            if (input.isTouched) {
+                val item = inventory.hotbar[Hotbar.selectedSlot]
+                if (item is Weapon) {
+                    item.use(this)
+
+                }
 
             }
 
@@ -136,65 +150,76 @@ class Player() : Entity {
      * And I'm lazy to create a custom Input Processor just for this.
      */
     private fun handleNumbers() {
-        if(input.isKeyPressed(Input.Keys.NUM_1)) {
-            if(Hotbar.hotbarSlots > 0) {
-                Hotbar.selectedSlot = 0
+        if(!PlayerInventory.isOpened) {
+            if(input.isKeyPressed(Input.Keys.NUM_1)) {
+                if(Hotbar.hotbarSlots > 0) {
+                    Hotbar.selectedSlot = 0
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_2)) {
+                if(Hotbar.hotbarSlots > 1) {
+                    Hotbar.selectedSlot = 1
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_3)) {
+                if(Hotbar.hotbarSlots > 2) {
+                    Hotbar.selectedSlot = 2
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_4)) {
+                if(Hotbar.hotbarSlots > 3) {
+                    Hotbar.selectedSlot = 3
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_5)) {
+                if(Hotbar.hotbarSlots > 4) {
+                    Hotbar.selectedSlot = 4
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_6)) {
+                if(Hotbar.hotbarSlots > 5) {
+                    Hotbar.selectedSlot = 5
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_7)) {
+                if(Hotbar.hotbarSlots > 6) {
+                    Hotbar.selectedSlot = 6
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_8)) {
+                if(Hotbar.hotbarSlots > 7) {
+                    Hotbar.selectedSlot = 7
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_9)) {
+                if(Hotbar.hotbarSlots > 8) {
+                    Hotbar.selectedSlot = 8
+
+                }
+
+            } else if(input.isKeyPressed(Input.Keys.NUM_0)) {
+                if(Hotbar.hotbarSlots > 9) {
+                    Hotbar.selectedSlot = 9
+
+                }
 
             }
 
-        } else if(input.isKeyPressed(Input.Keys.NUM_2)) {
-            if(Hotbar.hotbarSlots > 1) {
-                Hotbar.selectedSlot = 1
+        }
 
-            }
+    }
 
-        } else if(input.isKeyPressed(Input.Keys.NUM_3)) {
-            if(Hotbar.hotbarSlots > 2) {
-                Hotbar.selectedSlot = 2
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_4)) {
-            if(Hotbar.hotbarSlots > 3) {
-                Hotbar.selectedSlot = 3
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_5)) {
-            if(Hotbar.hotbarSlots > 4) {
-                Hotbar.selectedSlot = 4
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_6)) {
-            if(Hotbar.hotbarSlots > 5) {
-                Hotbar.selectedSlot = 5
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_7)) {
-            if(Hotbar.hotbarSlots > 6) {
-                Hotbar.selectedSlot = 6
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_8)) {
-            if(Hotbar.hotbarSlots > 7) {
-                Hotbar.selectedSlot = 7
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_9)) {
-            if(Hotbar.hotbarSlots > 8) {
-                Hotbar.selectedSlot = 8
-
-            }
-
-        } else if(input.isKeyPressed(Input.Keys.NUM_0)) {
-            if(Hotbar.hotbarSlots > 9) {
-                Hotbar.selectedSlot = 9
-
-            }
+    private fun handleKeys() {
+        if(input.isKeyJustPressed(Input.Keys.E)) {
+            PlayerInventory.isOpened = !PlayerInventory.isOpened
 
         }
 
