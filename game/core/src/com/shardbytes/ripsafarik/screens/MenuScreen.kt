@@ -77,12 +77,12 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 		})
 
 		val label = Label("RipSafarik", skin)
-		label.setPosition((Gdx.graphics.width / 2 - label.width / 2), (Gdx.graphics.height / 2 - label.height / 2) + 200)
+		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 200)
 
 		val safarik = Image(Textures.Overlay["safarik"])
 		safarik.width = 100F
 		safarik.height = 100F
-		safarik.setPosition((Gdx.graphics.width / 2 - safarik.width / 2), (Gdx.graphics.height / 2 - safarik.height / 2) + 90)
+		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + 90)
 
 		uiStage.addActor(loadButton)
 		uiStage.addActor(exitButton)
