@@ -2,26 +2,48 @@ import p5 = require('p5')
 import { WorldMap } from './types'
 
 const worldMap = require('./copy_map.json') as WorldMap
-const path = require('path')
 
 export default (p: p5): void => {
 
-    let img: p5.Image
+    const textures = new Map<String, p5.Image>()
+
+
+    p.preload = () => {
+        const testenv: string[][] = [["kys", "asfalt"]]
+        const missingTextures: string[] = []
+
+        // load ze texturi
+        for (let row of testenv) {
+            for (let tileName of row) {
+
+
+                if (!textures.has(tileName) && !missingTextures.includes(tileName)) {
+                    try {
+                        let img = p.loadImage(`/asset/${tileName}.png`)
+                    } catch(e) {
+                        console.log("XXXXXXXXXXXXX" + e)
+                    }
+                }
+
+            }
+        }
+
+        console.log(missingTextures)
+    }
 
     p.setup = () => {
         console.log("P5 RUNNING!")
-
+        
         p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
-
-        img = p.loadImage()
         p.frameRate(120)
+        
+        
     }
 
     p.draw = () => {
         p.background(0)
-        
 
-        p.image(img, p.mouseX - img.width/2, p.mouseY - img.height/2)
+
 
 
         // draw cursor at top

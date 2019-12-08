@@ -6,7 +6,7 @@
   "author": "Plasmoxy <sebohacker@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "parcel": "parcel src/index.html",
+    "parcel": "parcel src/index.html --no-hmr",
     "build": "parcel build src/index.html -d build"
   },
   "dependencies": {
