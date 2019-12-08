@@ -218,8 +218,6 @@ class Player() : Entity {
     }
 
     private fun handleKeys() {
-        if(input.scroll)
-
         if(input.isKeyJustPressed(Input.Keys.E)) {
             PlayerInventory.isOpened = !PlayerInventory.isOpened
 
