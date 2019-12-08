@@ -1,25 +1,60 @@
 package com.shardbytes.ripsafarik.actors
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.GameObject
+import kotlin.math.min
 
 /**
  * Simple ortographic camera that can be locked onto an object and will follow it.
  */
-class Camera(private val resizeStrategy: ResizeStrategy,
-             private val viewportWidth: Float = 0f,
-             private val viewportHeight: Float = 0f,
+class Camera(resizeStrategy: ResizeStrategy,
+             viewportWidth: Float = 0f,
+             viewportHeight: Float = 0f,
              private var cameraPosition: Vector2 = Vector2(),
              private var lockTarget: GameObject? = null) {
-    
-    
+
+    private var previousZoom = 1f
+    private var newZoom = 1f
+
+    private val zoomTime = 2f
+    private var zoomTimeElapsed = 0f
+
+    fun getZoom(): Float = newZoom
+
+    fun setZoom(value: Float) {
+        previousZoom = innerCamera.zoom
+        newZoom = value
+        zoomTimeElapsed = 0f
+
+    }
+
+    private fun updateZoom() {
+        println("PZ: $previousZoom, NZ: $newZoom")
+        if(newZoom != innerCamera.zoom) {
+            val rangeMin = 0f
+            val rangeMax = zoomTime
+
+            val pointMin = previousZoom
+            val pointMax = newZoom
+
+            val progress = min(zoomTime, zoomTimeElapsed / zoomTime)
+            val alpha = Interpolation.fade.apply(progress)
+
+            innerCamera.zoom = pointMin + (pointMax - pointMin) * (alpha - rangeMin) / (rangeMax - rangeMin)
+
+            zoomTimeElapsed += Gdx.graphics.deltaTime
+
+        }
+
+    }
+
     /**
      * Enum defining what should camera do on window resize.
      */
@@ -37,12 +72,12 @@ class Camera(private val resizeStrategy: ResizeStrategy,
     
     private var viewport: Viewport? = null
     
-    /**
-     * Constructs a camera on [0, 0] world position.
-     * @param strategy What should camera do when window is resized
-     * @param width Width of camera's viewport
-     * @param height Height of camera's viewport
-     */
+   // /**
+   //  * Constructs a camera on [0, 0] world position.
+   //  * @param strategy What should camera do when window is resized
+   //  * @param width Width of camera's viewport
+   //  * @param height Height of camera's viewport
+   //  */
     init {
         if (resizeStrategy == ResizeStrategy.KEEP_ZOOM) {
             innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
@@ -55,10 +90,10 @@ class Camera(private val resizeStrategy: ResizeStrategy,
     }
     
     
-    /**
-     * Unlocks camera from any locked object and sets its position manually.
-     * @param pos Camera position
-     */
+  //  /**
+  //   * Unlocks camera from any locked object and sets its position manually.
+  //   * @param pos Camera position
+  //   */
     var position: Vector2
         get() = cameraPosition
         set(pos) {
@@ -69,7 +104,7 @@ class Camera(private val resizeStrategy: ResizeStrategy,
 
     /**
      * Sets cameras lockObject to any GameObject.
-     * @param object Object to lock the camera on
+     * @param target Object to lock the camera on
      */
     fun lockOn(target: GameObject) {
         lockTarget = target
@@ -94,6 +129,8 @@ class Camera(private val resizeStrategy: ResizeStrategy,
      * @see OrthographicCamera.update
      */
     fun update() {
+        updateZoom()
+
         if (lockTarget == null) {
             innerCamera.position.set(cameraPosition, 0.0f)
         } else {

@@ -11,6 +11,7 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.IUsable
+import com.shardbytes.ripsafarik.components.InputCore
 import com.shardbytes.ripsafarik.components.ItemInventory
 import com.shardbytes.ripsafarik.ui.Hotbar
 import com.shardbytes.ripsafarik.ui.PlayerInventory
@@ -40,12 +41,16 @@ class Player() : Entity {
         fixedRotation = true
 
     }
+
+    init {
+        input.inputProcessor = InputCore()
+    }
     
     override fun tick(dt: Float) {
-        handleInput()
-        handleTouches()
-        handleNumbers()
-        handleKeys()
+        //handleInput()
+        //handleTouches()
+        //handleNumbers()
+        //handleKeys()
 
         //health regen
         health = min(maxHealth, health + regenSpeed)
