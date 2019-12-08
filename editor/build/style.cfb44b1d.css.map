@@ -1,0 +1,1 @@
+{"version":3,"sources":["src\\style.scss"],"names":[],"mappings":"AAAA,KACI,SAAA,CACA,eAAA,CACA","file":"style.cfb44b1d.css","sourceRoot":"..","sourcesContent":["body {\r\n    margin: 20;\r\n    background: #111;\r\n    color: white;\r\n}"]}
