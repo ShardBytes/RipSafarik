@@ -1,6 +1,8 @@
 import p5 = require('p5')
 import { WorldMap } from './types'
+
 const worldMap = require('./copy_map.json') as WorldMap
+const path = require('path')
 
 export default (p: p5): void => {
 
@@ -11,7 +13,7 @@ export default (p: p5): void => {
 
         p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
 
-        img = p.loadImage("assets/kozmonaut.png")
+        img = p.loadImage()
         p.frameRate(120)
     }
 
