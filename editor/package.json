@@ -1,0 +1,13 @@
+{
+  "name": "RipSafarik-Editor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ShardBytes/RipSafarik-Editor.git",
+  "author": "Plasmoxy <sebohacker@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/p5": "^0.9.0",
+    "p5": "^0.10.2",
+    "typescript": "^3.7.3"
+  }
+}
