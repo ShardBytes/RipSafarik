@@ -13,19 +13,18 @@ object GameScreen : Screen {
 
     // rendering
     var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
+    var uiCamera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
     var batch = SpriteBatch()
-    
+
     // world
     val world = GameWorld
     val debugRenderer = Box2DDebugRenderer()
-    
-    
+
     init {
         camera.lockOn(world.player)
 
     }
-    
-    
+
     /*
     ==== update oredr ====
     It's easiest to think of your order in a single frame, think of it as a series of dependencies.
@@ -57,7 +56,8 @@ object GameScreen : Screen {
         if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
         // render hud at the top
-        batch.projectionMatrix.set(camera.innerCamera.projection)
+        uiCamera.update()
+        batch.projectionMatrix.set(uiCamera.innerCamera.projection)
         batch.begin()
         world.renderUI(dt, batch)
         batch.end()
@@ -78,6 +78,7 @@ object GameScreen : Screen {
 
     override fun resize(width: Int, height: Int) {
         camera.windowResized(width, height)
+        uiCamera.windowResized(width, height)
         
     }
 

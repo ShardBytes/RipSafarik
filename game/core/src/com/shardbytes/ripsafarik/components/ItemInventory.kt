@@ -8,8 +8,18 @@ class ItemInventory {
 	var items: Array<Item?> = Array(9) { null }
 	var hotbar: Array<Item?> = Array(4) { null }
 
-	fun pickUpItem(item: Item) {
-		hotbar.forEachIndexed { index, item2 -> if (item2 == null) { hotbar[index] = item; return } }
+	/**
+	 * @return could the item be picked up
+	 */
+	fun pickUpItem(item: Item): Boolean {
+		if(hotbar.contains(null)){
+			hotbar.forEachIndexed { index, item2 -> if (item2 == null) { hotbar[index] = item; return true } }
+
+		} else {
+			items.forEachIndexed { index, item2 -> if (item2 == null) { items[index]= item; return true } }
+
+		}
+		return false
 
 	}
 	

@@ -15,6 +15,9 @@ class Gun : Item, Weapon {
     override val displayName = "Gun"
     override val texture = TextureRegion(Textures.Item["weapon/gun"])
 
+    override val maxUses: Int = 100
+    override var leftUses: Int = 87
+
     override fun use(player: Player) {
         val playerPos = player.position.cpy()
         val playerRotation = player.rotation

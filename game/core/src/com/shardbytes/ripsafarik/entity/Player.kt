@@ -10,8 +10,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
+import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.ItemInventory
-import com.shardbytes.ripsafarik.components.Weapon
 import com.shardbytes.ripsafarik.ui.Hotbar
 import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.body
@@ -133,7 +133,7 @@ class Player() : Entity {
         if(!PlayerInventory.isOpened) {
             if (input.isTouched) {
                 val item = inventory.hotbar[Hotbar.selectedSlot]
-                if (item is Weapon) {
+                if (item is IUsable) {
                     item.use(this)
 
                 }
@@ -218,6 +218,8 @@ class Player() : Entity {
     }
 
     private fun handleKeys() {
+        if(input.scroll)
+
         if(input.isKeyJustPressed(Input.Keys.E)) {
             PlayerInventory.isOpened = !PlayerInventory.isOpened
 
