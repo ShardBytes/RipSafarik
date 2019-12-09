@@ -20,14 +20,14 @@ object GameMap {
 	//TODO: optimize, do not pass string but already parsed json object
 	fun loadAll(mapName: String) {
 		val jsonString = Gdx.files.internal("world/${mapName}_map.json").readString()
-		
+
 		Env.load(jsonString)
 		Overlay.load(jsonString)
 		Entities.load(jsonString)
 		Lights.load()
-		
+
 	}
-	
+
 	object Env {
 		private var env: MutableList<MutableList<String>> = mutableListOf()
 
@@ -42,48 +42,48 @@ object GameMap {
 			}
 
 		}
-		
+
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			//nice loop
 			//draw only the stuff inside player's render distance
 			val yMin = clamp(playerPos.y.toInt() - Settings.RENDER_DISTANCE, 0, env.size - 1)
 			val yMax = clamp(playerPos.y.toInt() + Settings.RENDER_DISTANCE, 0, env.size - 1)
-			
+
 			for (y in yMin..yMax) {
 				val row = env[y]
 				val xMin = clamp(playerPos.x.toInt() - Settings.RENDER_DISTANCE, 0, row.size - 1)
 				val xMax = clamp(playerPos.x.toInt() + Settings.RENDER_DISTANCE, 0, row.size - 1)
-				
+
 				for (x in xMin..xMax) {
 					val cell = row[x]
 					batch.draw(TextureRegion(BlockCatalog[cell]?.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		operator fun get(x: Int, y: Int) = env[y][x]
-		
+
 	}
-	
+
 	object Overlay {
-		
+
 		private var overlay: MutableList<BlockData> = mutableListOf()
-		
+
 		data class BlockData(
 				var name: String,
 				var posX: Int,
 				var posY: Int,
 				var scale: Float,
 				var rotation: Float)
-		
+
 		fun load(jsonString: String) {
 			val mapJson = JsonReader().parse(jsonString).get("overlay")
-			
+
 			overlay.clear()
-			mapJson.forEach { 
+			mapJson.forEach {
 				overlay.add(BlockData(
 						it["name"].asString(),
 						it["posX"].asInt(),
@@ -91,11 +91,11 @@ object GameMap {
 						it["scale"].asFloat(),
 						it["rotation"].asFloat())
 				)
-				
+
 			}
-			
+
 		}
-		
+
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
 				val texture = BlockCatalog[overlayBlock.name]?.texture
@@ -104,11 +104,11 @@ object GameMap {
 					batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 
 				}
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 	object Entities {
@@ -234,5 +234,5 @@ object GameMap {
 		return false
 
 	}
-	
+
 }

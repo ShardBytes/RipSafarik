@@ -7,20 +7,20 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 
 object Hotbar {
-	
+
 	var hotbarSlots = 4
 	var selectedSlot = 0
-	
+
 	private val itemSlotTexture = TextureRegion(Textures.UI["itemslot"])
 	private val itemSlotTextureSize = 1f
-	
+
 	fun render(dt: Float, batch: SpriteBatch) {
 		drawHotbarSlots(batch)
 		drawSelectedSlot(batch) //Draw that one slot one more time to make it less transparent for now
 								//TODO: you can do better <-- graphics i meant
 
 		drawItems(batch)
-		
+
 	}
 
 	private fun drawSelectedSlot(batch: SpriteBatch) {

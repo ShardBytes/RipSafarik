@@ -64,22 +64,22 @@ class Camera(resizeStrategy: ResizeStrategy,
         FILL_VIEWPORT,
         STRETCH_VIEWPORT
     }
-    
+
     /**
      * Use with caution.
      * @return Wrapped orthographic camera object for further customization.
      */
     var innerCamera: OrthographicCamera
         private set
-    
+
     private var viewport: Viewport? = null
-    
-   // /**
-   //  * Constructs a camera on [0, 0] world position.
-   //  * @param strategy What should camera do when window is resized
-   //  * @param width Width of camera's viewport
-   //  * @param height Height of camera's viewport
-   //  */
+
+    // /**
+    //  * Constructs a camera on [0, 0] world position.
+    //  * @param strategy What should camera do when window is resized
+    //  * @param width Width of camera's viewport
+    //  * @param height Height of camera's viewport
+    //  */
     init {
         if (resizeStrategy == ResizeStrategy.FILL_VIEWPORT) {
             innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
@@ -90,19 +90,19 @@ class Camera(resizeStrategy: ResizeStrategy,
         }
         innerCamera.update()
     }
-    
-    
-  //  /**
-  //   * Unlocks camera from any locked object and sets its position manually.
-  //   * @param pos Camera position
-  //   */
+
+
+    //  /**
+    //   * Unlocks camera from any locked object and sets its position manually.
+    //   * @param pos Camera position
+    //   */
     var position: Vector2
         get() = cameraPosition
         set(pos) {
             lockTarget = null
             cameraPosition = pos
         }
-    
+
 
     /**
      * Sets cameras lockObject to any GameObject.
@@ -122,7 +122,7 @@ class Camera(resizeStrategy: ResizeStrategy,
         viewport!!.update(width, height)
         Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
         update()
-        
+
     }
 
     /**
@@ -139,7 +139,7 @@ class Camera(resizeStrategy: ResizeStrategy,
             innerCamera.position.set(lockTarget!!.position, 0.0f)
         }
         innerCamera.update()
-        
+
     }
 
 }
