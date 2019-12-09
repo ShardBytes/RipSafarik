@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.GameObject
+import com.shardbytes.ripsafarik.map
 import kotlin.math.min
 
 /**
@@ -23,7 +24,7 @@ class Camera(resizeStrategy: ResizeStrategy,
     private var previousZoom = 1f
     private var newZoom = 1f
 
-    private val zoomTime = 2f
+    private val zoomTime = 1f
     private var zoomTimeElapsed = 0f
 
     fun getZoom(): Float = newZoom
@@ -31,15 +32,13 @@ class Camera(resizeStrategy: ResizeStrategy,
     fun setZoom(value: Float) {
         previousZoom = innerCamera.zoom
         newZoom = value
-        zoomTimeElapsed = 0f
 
     }
 
     private fun updateZoom() {
-        println("PZ: $previousZoom, NZ: $newZoom")
         if(newZoom != innerCamera.zoom) {
             val rangeMin = 0f
-            val rangeMax = zoomTime
+            val rangeMax = 1f
 
             val pointMin = previousZoom
             val pointMax = newZoom
@@ -47,9 +46,12 @@ class Camera(resizeStrategy: ResizeStrategy,
             val progress = min(zoomTime, zoomTimeElapsed / zoomTime)
             val alpha = Interpolation.fade.apply(progress)
 
-            innerCamera.zoom = pointMin + (pointMax - pointMin) * (alpha - rangeMin) / (rangeMax - rangeMin)
+            innerCamera.zoom = map(alpha, rangeMin, rangeMax, pointMin, pointMax)
 
             zoomTimeElapsed += Gdx.graphics.deltaTime
+
+        } else {
+            zoomTimeElapsed = 0f
 
         }
 
