@@ -218,10 +218,6 @@ object GameMap {
 			lights.add(light)
 
 		}
-		fun render() {
-
-
-		}
 
 	}
 
