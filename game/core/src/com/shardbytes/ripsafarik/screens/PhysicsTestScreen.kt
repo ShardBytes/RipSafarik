@@ -18,7 +18,7 @@ import kotlin.math.PI
 
 class PhysicsTestScreen : Screen {
 	
-	private val cam = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, 30f, 20f)
+	private val cam = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, 30f, 20f)
 	private val batch = SpriteBatch()
 	
 	private val physWorld = createWorld(gravity = earthGravity)

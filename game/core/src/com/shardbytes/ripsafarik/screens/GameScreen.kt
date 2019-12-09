@@ -12,8 +12,8 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 object GameScreen : Screen {
 
     // rendering
-    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
-    var uiCamera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
+    var camera = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
+    var uiCamera = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
     var batch = SpriteBatch()
 
     // world
@@ -38,20 +38,20 @@ object GameScreen : Screen {
     override fun render(dt: Float) {
         // first act/tick
         world.tick(dt)
-        
+
         // update camera before rendering
         camera.update()
         batch.projectionMatrix.set(camera.innerCamera.combined)
-        
+
         // clear screen
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        
+
         // render stuff
         batch.begin()
         world.render(dt, batch)
         batch.end()
-    
+
         // debug render world physics into camera matrix
         if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
@@ -65,7 +65,7 @@ object GameScreen : Screen {
         batch.begin()
         world.renderUI(dt, batch)
         batch.end()
-        
+
     }
 
     override fun show() {
@@ -88,6 +88,8 @@ object GameScreen : Screen {
 
     override fun dispose() {
         debugRenderer.dispose()
+        GameWorld.physics.dispose()
+        GameWorld.player.dispose()
 
     }
 

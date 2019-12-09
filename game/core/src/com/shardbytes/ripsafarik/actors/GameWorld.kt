@@ -74,7 +74,7 @@ object GameWorld {
 		val rayhandler = RayHandler(physics)
 
 		rayhandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.5f)
-		rayhandler.setBlurNum(3)
+		rayhandler.setBlurNum(2)
 
 		return rayhandler
 

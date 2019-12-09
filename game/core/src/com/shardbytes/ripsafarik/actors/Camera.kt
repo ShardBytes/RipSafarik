@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FillViewport
-import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.GameObject
@@ -61,8 +61,8 @@ class Camera(resizeStrategy: ResizeStrategy,
      * Enum defining what should camera do on window resize.
      */
     enum class ResizeStrategy {
-        KEEP_ZOOM,
-        CHANGE_ZOOM
+        FILL_VIEWPORT,
+        STRETCH_VIEWPORT
     }
     
     /**
@@ -81,12 +81,12 @@ class Camera(resizeStrategy: ResizeStrategy,
    //  * @param height Height of camera's viewport
    //  */
     init {
-        if (resizeStrategy == ResizeStrategy.KEEP_ZOOM) {
+        if (resizeStrategy == ResizeStrategy.FILL_VIEWPORT) {
             innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
-            viewport = FitViewport(viewportWidth, viewportHeight, innerCamera)
+            viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
         } else {
             innerCamera = OrthographicCamera()
-            viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
+            viewport = StretchViewport(viewportWidth, viewportHeight, innerCamera)
         }
         innerCamera.update()
     }
