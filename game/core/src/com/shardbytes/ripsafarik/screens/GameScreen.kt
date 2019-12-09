@@ -55,6 +55,10 @@ object GameScreen : Screen {
         // debug render world physics into camera matrix
         if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
+        //Lighting
+        GameWorld.lights.setCombinedMatrix(camera.innerCamera)
+        GameWorld.lights.updateAndRender()
+
         // render hud at the top
         uiCamera.update()
         batch.projectionMatrix.set(uiCamera.innerCamera.projection)

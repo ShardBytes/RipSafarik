@@ -1,5 +1,6 @@
 package com.shardbytes.ripsafarik.actors
 
+import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.shardbytes.ripsafarik.blocks.Asfalt
 import com.shardbytes.ripsafarik.blocks.Concrete
@@ -16,6 +17,7 @@ import ktx.box2d.createWorld
 object GameWorld {
 	
 	val physics = createWorld()
+	val lights = createLightHandler()
 	val player = Player()
 	
 	init {
@@ -59,7 +61,23 @@ object GameWorld {
 		}
 		//ok here
 		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
+
+		//daylight cycle
+		lights.setAmbientLight(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat(), 0.5f)
 		
+	}
+
+	private fun createLightHandler(): RayHandler {
+		RayHandler.setGammaCorrection(true)
+		RayHandler.useDiffuseLight(true)
+
+		val rayhandler = RayHandler(physics)
+
+		rayhandler.setAmbientLight(0f, 0f, 0.15f, 0.5f)
+		rayhandler.setBlurNum(3)
+
+		return rayhandler
+
 	}
 
 }
