@@ -62,8 +62,8 @@ object GameWorld {
 		//ok here
 		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
 
-		//daylight cycle
-		lights.setAmbientLight(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat(), 0.5f)
+		//"daylight cycle"
+		//lights.setAmbientLight(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat(), 0.5f) //TODO: for party mode easter egg bruh, also hardbass music much :D - Hard Bass school: Opa blia
 		
 	}
 
@@ -73,7 +73,7 @@ object GameWorld {
 
 		val rayhandler = RayHandler(physics)
 
-		rayhandler.setAmbientLight(0f, 0f, 0.15f, 0.5f)
+		rayhandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.5f)
 		rayhandler.setBlurNum(3)
 
 		return rayhandler

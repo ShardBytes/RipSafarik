@@ -1,6 +1,9 @@
 package com.shardbytes.ripsafarik.actors
 
+import box2dLight.ConeLight
+import box2dLight.Light
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils.clamp
@@ -21,6 +24,7 @@ object GameMap {
 		Env.load(jsonString)
 		Overlay.load(jsonString)
 		Entities.load(jsonString)
+		Lights.load()
 		
 	}
 	
@@ -197,6 +201,25 @@ object GameMap {
 		 */
 		fun totalEntities(predicate: (Entity) -> Boolean = { true }): Int {
 			return entities.count(predicate)
+
+		}
+
+	}
+
+	object Lights {
+
+		var lights = arrayListOf<Light>()
+
+		fun load() {
+			//val light = PointLight(GameWorld.lights, 128, Color.WHITE, 10f, 4f, 4f)
+			val light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 40f)
+			light.attachToBody(GameWorld.player.body)
+
+			lights.add(light)
+
+		}
+		fun render() {
+
 
 		}
 
