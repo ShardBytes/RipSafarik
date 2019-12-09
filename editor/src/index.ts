@@ -2,7 +2,7 @@
  * Editor for RipSafarik by @Plasmoxy
  */
 
-import Editor from './Editor'
+import Editor from './editor/Editor'
 import axios from 'axios'
 import p5 = require('p5')
 
