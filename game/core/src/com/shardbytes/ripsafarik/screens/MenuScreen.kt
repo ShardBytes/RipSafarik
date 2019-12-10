@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
@@ -18,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.badlogic.gdx.utils.Scaling
+import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.shardbytes.ripsafarik.MainGame
 import com.shardbytes.ripsafarik.assets.Textures
 
@@ -25,7 +26,10 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 
 	private val uiStage: Stage
 
-	private val texture = TextureRegion()
+	private val buttonHeight = 50
+	private val buttonWidth = 500
+	private val centeredButtonX = Gdx.graphics.width / 2 - buttonWidth / 2
+	private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2
 
 	private fun addUIElements() {
 		val skin = Skin()
@@ -67,7 +71,8 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 		exitButton.setPosition(centeredButtonX.toFloat(), centeredButtonY - 100 - buttonHeight - 30.toFloat())
 
 		loadButton.addListener(object : ChangeListener() {
-			override fun changed(event: ChangeEvent, actor: Actor) { mainScreen.setScreen(GameScreen)
+			override fun changed(event: ChangeEvent, actor: Actor) {
+				mainScreen.screen = GameScreen
 			}
 		})
 		exitButton.addListener(object : ChangeListener() {
@@ -98,7 +103,8 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 	}
 
 	override fun resize(width: Int, height: Int) {
-		uiStage.viewport.update(width, height, true)
+		uiStage.viewport.update(width, height)
+
 	}
 
 	override fun pause() {}
@@ -106,16 +112,9 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 	override fun hide() {}
 	override fun dispose() {}
 
-	companion object {
-		//button size and centered position calculation
-		private const val buttonHeight = 50
-		private const val buttonWidth = 500
-		private val centeredButtonX = Gdx.graphics.width / 2 - buttonWidth / 2
-		private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2
-	}
-
 	init {
-		uiStage = Stage()
+		val viewport = ScalingViewport(Scaling.fit,Gdx.graphics.width.toFloat(),Gdx.graphics.height.toFloat())
+		uiStage = Stage(viewport)
 		Gdx.input.inputProcessor = uiStage
 		addUIElements()
 	}
