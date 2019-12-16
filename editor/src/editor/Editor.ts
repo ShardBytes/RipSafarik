@@ -17,7 +17,7 @@ export default (p: p5): void => {
 
     // map setup
     const textures = new Map<String, p5.Image>()
-    let tileSize = 100  
+    let tsize = 100  // tile size
 
     // custom loader, probably needs rework and doesn't need promises but if it isnt causing trouble then why not its cool
     const loader = async () => {
@@ -36,7 +36,7 @@ export default (p: p5): void => {
             loadState = 1
         })
 
-        renderer = p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
+        renderer = p.createCanvas(p.windowWidth - 20, p.windowHeight - 20)
         // disable image smoothing
         let context = renderer.elt.getContext('2d');
         context.mozImageSmoothingEnabled = false;
@@ -75,7 +75,7 @@ export default (p: p5): void => {
         for ( let yi = 0; yi < worldMap.env.length; yi++ ) {
             for ( let xi = 0; xi < worldMap.env[yi].length; xi++ ) {
                 // manually draw by scale size
-                p.image( Textures.env.get(worldMap.env[yi][xi])!! , xi*tileSize, yi*tileSize, tileSize, tileSize)
+                p.image( Textures.env.get(worldMap.env[yi][xi])!! , xi*tsize, yi*tsize, tsize, tsize)
             }
         }
 
@@ -90,11 +90,19 @@ export default (p: p5): void => {
     p.keyPressed = () => {
         switch (p.key) {
             case "x":
-                tileSize += 10
+                tsize += 10
                 break
             case "y":
-                tileSize -= 10
+                tsize -= 10
                 break
+        }
+    }
+
+    p.mouseWheel = (e: {delta: number}) => {
+        if (e.delta > 0) {
+            tsize -= 10
+        } else {
+            tsize += 10
         }
     }
 
