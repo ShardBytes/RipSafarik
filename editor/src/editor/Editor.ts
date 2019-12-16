@@ -15,11 +15,12 @@ export const loadImg = (ps: p5, imgurl: string) => new Promise<p5.Image>((resolv
 
 export default (p: p5): void => {
 
-    const worldMap = minimap
+    const worldMap = copy_map
 
     // loading
     let loadState = 0
     let loadLog = ""
+    let renderer: p5.Renderer
 
     // map setup
     const textures = new Map<String, p5.Image>()
@@ -34,7 +35,7 @@ export default (p: p5): void => {
             for (let name of row) {
                 try {
                     if ( !textures.has(name) && !missingTextures.includes(name)) {
-                        currentImage = await loadImg(p, `/asset/${name}.png`)
+                        currentImage = await loadImg(p, `/assets/textures/env/${name}.png`)
                         // ... resize or some shit idk
                         textures.set(name, currentImage)
                     }
@@ -64,11 +65,18 @@ export default (p: p5): void => {
         })
 
         p.pixelDensity(1) // fix pixel density
-        p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
+        p.noSmooth()
+        renderer = p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
         p.frameRate(60)
         p.textSize(20)
         p.textStyle("bold")
 
+        // disable image smoothing
+        let context = renderer.elt.getContext('2d');
+        context.mozImageSmoothingEnabled = false;
+        context.webkitImageSmoothingEnabled = false;
+        context.msImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
     }
 
     p.draw = () => {
@@ -98,13 +106,23 @@ export default (p: p5): void => {
             }
         }
 
-        tileSize += 1
-
         // draw cursor at top
         p.stroke(255, 255, 0)
         p.strokeWeight(2)
         p.noFill()
         p.circle(p.mouseX, p.mouseY, 5)
+    }
+
+
+    p.keyPressed = () => {
+        switch (p.key) {
+            case "x":
+                tileSize += 10
+                break
+            case "y":
+                tileSize -= 10
+                break
+        }
     }
 
 }
