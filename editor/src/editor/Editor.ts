@@ -1,16 +1,9 @@
 import p5 = require('p5')
 import { WorldMap } from './types'
+import Textures = require('./Textures')
 
 const copy_map = require('../copy_map.json') as WorldMap
 const minimap = require("../minimap.json") as WorldMap
-
-export const loadImg = (ps: p5, imgurl: string) => new Promise<p5.Image>((resolve, reject) => {
-    ps.loadImage(imgurl, (img) => {
-        resolve(img)
-    }, (e: Event) => {
-        reject("error loading image: " + imgurl)
-    })
-})
 
 
 export default (p: p5): void => {
@@ -28,28 +21,7 @@ export default (p: p5): void => {
 
     // custom loader, probably needs rework and doesn't need promises but if it isnt causing trouble then why not its cool
     const loader = async () => {
-        const missingTextures: string[] = []
-        let currentImage: p5.Image
-
-        for (let row of worldMap.env) {
-            for (let name of row) {
-                try {
-                    if ( !textures.has(name) && !missingTextures.includes(name)) {
-                        currentImage = await loadImg(p, `/assets/textures/env/${name}.png`)
-                        // ... resize or some shit idk
-                        textures.set(name, currentImage)
-                    }
-                } catch {
-                    console.log("Missing: " + name)
-                    loadLog += "\nmissing texture: " + name
-                    missingTextures.push(name)
-                }
-            }
-        }
-
-        if (missingTextures.length > 0) {
-            throw "Missing some textures: " + missingTextures.toString()
-        }
+        await Textures.load(p)
     }
 
     p.setup = () => {
@@ -59,24 +31,25 @@ export default (p: p5): void => {
         loader().then(() => {
             console.log("[Loader] All loaded succesfully")
             loadState = 2
-        }).catch((s: any) => {
-            console.log("[Loader] Error loading: " + s)
+        }).catch((e: any) => {
+            console.log("[Loader] Error loading: " + e)
             loadState = 1
         })
 
-        p.pixelDensity(1) // fix pixel density
-        p.noSmooth()
         renderer = p.createCanvas(p.windowWidth - 30, p.windowHeight- 17)
-        p.frameRate(60)
-        p.textSize(20)
-        p.textStyle("bold")
-
         // disable image smoothing
         let context = renderer.elt.getContext('2d');
         context.mozImageSmoothingEnabled = false;
         context.webkitImageSmoothingEnabled = false;
         context.msImageSmoothingEnabled = false;
         context.imageSmoothingEnabled = false;
+
+        p.pixelDensity(1) // fix pixel density
+        p.frameRate(60)
+        p.textSize(20)
+        p.textStyle("bold")
+        
+        
     }
 
     p.draw = () => {
@@ -102,7 +75,7 @@ export default (p: p5): void => {
         for ( let yi = 0; yi < worldMap.env.length; yi++ ) {
             for ( let xi = 0; xi < worldMap.env[yi].length; xi++ ) {
                 // manually draw by scale size
-                p.image( textures.get(worldMap.env[yi][xi])!! , xi*tileSize, yi*tileSize, tileSize, tileSize)
+                p.image( Textures.env.get(worldMap.env[yi][xi])!! , xi*tileSize, yi*tileSize, tileSize, tileSize)
             }
         }
 
