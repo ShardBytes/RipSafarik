@@ -7,6 +7,8 @@ interface IUsable {
     val maxUses: Int
     var leftUses: Int
 
+    var cooldown: Float
+
     fun use(player: Player)
 
 }

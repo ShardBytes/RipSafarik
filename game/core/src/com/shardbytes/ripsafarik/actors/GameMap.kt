@@ -1,9 +1,7 @@
 package com.shardbytes.ripsafarik.actors
 
-import box2dLight.ConeLight
 import box2dLight.Light
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils.clamp
@@ -13,6 +11,7 @@ import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.entity.ItemDrop
+import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun
 
 object GameMap {
@@ -123,6 +122,7 @@ object GameMap {
 			despawnSchedule.clear()
 
 			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
+			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
 /*
@@ -212,9 +212,14 @@ object GameMap {
 
 		fun load() {
 			//val light = PointLight(GameWorld.lights, 128, Color.WHITE, 10f, 4f, 4f)
-			val light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 40f)
-			light.attachToBody(GameWorld.player.body)
+			//val light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 40f)
+			//light.attachToBody(GameWorld.player.body)
 
+			//lights.add(light)
+
+		}
+
+		fun createNew(light: Light) {
 			lights.add(light)
 
 		}

@@ -58,12 +58,13 @@ object GameWorld {
 		if(GameMap.Entities.totalEntities() < 3) {
 			val zombie = Zombie(this, Zombie.ZombieType.values().random()).apply { setPosition(8.0f, 9.0f) }
 			GameMap.Entities.spawn(zombie)
+
 		}
 		//ok here
 		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
 
 		//"daylight cycle"
-		//lights.setAmbientLight(Math.random().toFloat(), Math.random().toFloat(), Math.random().toFloat(), 0.5f) //TODO: for party mode easter egg bruh, also hardbass music much :D - Hard Bass school: Opa blia
+		//lights.setAmbientLight(0.8f, 0.8f, 0.8f, 0.5f) //TODO: for party mode easter egg bruh, also hardbass music much :D - Hard Bass school: Opa blia
 		
 	}
 

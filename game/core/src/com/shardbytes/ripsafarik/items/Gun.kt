@@ -17,6 +17,7 @@ class Gun : Item, Weapon {
 
     override val maxUses: Int = 100
     override var leftUses: Int = 87
+    override var cooldown = 0.05f
 
     override fun use(player: Player) {
         val playerPos = player.position.cpy()
