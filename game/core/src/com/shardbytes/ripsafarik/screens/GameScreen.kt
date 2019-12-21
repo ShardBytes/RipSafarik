@@ -56,6 +56,7 @@ object GameScreen : Screen {
         if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
         //Lighting
+        GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
         GameWorld.lights.setCombinedMatrix(camera.innerCamera)
         GameWorld.lights.updateAndRender()
 

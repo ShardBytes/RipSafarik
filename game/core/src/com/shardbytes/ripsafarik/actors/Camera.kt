@@ -72,7 +72,7 @@ class Camera(resizeStrategy: ResizeStrategy,
     var innerCamera: OrthographicCamera
         private set
 
-    private var viewport: Viewport? = null
+    var viewport: Viewport? = null
 
     // /**
     //  * Constructs a camera on [0, 0] world position.
