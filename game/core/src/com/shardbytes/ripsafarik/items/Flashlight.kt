@@ -19,7 +19,11 @@ class Flashlight : Item, IUsable {
     override val displayName = "Flashlight"
     override val texture = TextureRegion(Textures.Item["weapon/gunMagazine"])
 
-    var light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 45f).apply { attachToBody(GameWorld.player.body) }
+    var light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 45f).apply {
+        attachToBody(GameWorld.player.body)
+        isActive = false
+
+    }
 
     override fun use(player: Player) {
         light.isActive = !light.isActive
