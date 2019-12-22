@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.components.InputCore
 import com.shardbytes.ripsafarik.ui.Healthbar
 
 object GameScreen : Screen {
@@ -22,6 +23,7 @@ object GameScreen : Screen {
     val debugRenderer = Box2DDebugRenderer()
 
     init {
+        Gdx.input.inputProcessor = InputCore
         camera.lockOn(world.player)
 
     }

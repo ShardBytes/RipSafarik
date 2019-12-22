@@ -73,6 +73,7 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 		loadButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
 				mainScreen.screen = GameScreen
+				uiStage.dispose()
 			}
 		})
 		exitButton.addListener(object : ChangeListener() {
@@ -110,7 +111,9 @@ class MenuScreen(private val mainScreen: MainGame) : Screen {
 	override fun pause() {}
 	override fun resume() {}
 	override fun hide() {}
-	override fun dispose() {}
+	override fun dispose() {
+		uiStage.dispose()
+	}
 
 	init {
 		val viewport = ScalingViewport(Scaling.fit,Gdx.graphics.width.toFloat(),Gdx.graphics.height.toFloat())

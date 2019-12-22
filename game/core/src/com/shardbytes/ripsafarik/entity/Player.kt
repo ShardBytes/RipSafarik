@@ -43,10 +43,6 @@ class Player() : Entity {
         fixedRotation = true
 
     }
-
-    init {
-        input.inputProcessor = InputCore
-    }
     
     override fun tick(dt: Float) {
         handleMovement()
