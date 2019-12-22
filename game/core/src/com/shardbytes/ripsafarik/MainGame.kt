@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
 import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.assets.Textures
-import com.shardbytes.ripsafarik.screens.MenuScreen
+import com.shardbytes.ripsafarik.screens.GameScreen
 
 class MainGame : Game() {
 
@@ -19,7 +19,7 @@ class MainGame : Game() {
 		assetManager.finishLoading()
 
 		GameMap.loadAll("world")
-		setScreen(MenuScreen(this))
+		setScreen(GameScreen)
     
 	}
 
