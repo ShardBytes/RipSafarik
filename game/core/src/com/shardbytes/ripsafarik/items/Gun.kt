@@ -8,6 +8,7 @@ import com.shardbytes.ripsafarik.components.Item
 import com.shardbytes.ripsafarik.components.Weapon
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.ui.Hotbar
 
 class Gun : Item, Weapon {
 
@@ -17,6 +18,7 @@ class Gun : Item, Weapon {
 
     override val maxUses: Int = 100
     override var leftUses: Int = 87
+    override var cooldown = 0.05f
 
     override fun use(player: Player) {
         val playerPos = player.position.cpy()
@@ -28,6 +30,15 @@ class Gun : Item, Weapon {
         }
 
         GameMap.Entities.spawn(bullet)
+        if(--leftUses == 0) {
+            `break`(player)
+
+        }
+
+    }
+
+    override fun `break`(player: Player) {
+        player.inventory.hotbar[Hotbar.selectedSlot] = null
 
     }
 

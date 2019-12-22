@@ -16,7 +16,7 @@ class SebuScreen : Screen {
 	
 	val walls = mutableListOf<Sprite>()
 	
-	val cam = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, 10.0f, 10.0f)
+	val cam = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, 10.0f, 10.0f)
 	
 	init {
 		walls += Sprite(Texture("textures/badlogic.jpg")).apply {

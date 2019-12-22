@@ -31,7 +31,7 @@ class Zombie(private var world: GameWorld,
     //Health stuff
     private val maxHealth = 100f
     private var health = 100f
-    private var regenSpeed = 1f
+    private var regenSpeed = 0.5f
     
     //Animation
     private var isWalking = false

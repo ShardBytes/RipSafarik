@@ -1,11 +1,14 @@
 package com.shardbytes.ripsafarik.actors
 
+import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.utils.Disposable
 import com.shardbytes.ripsafarik.blocks.Asfalt
 import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.blocks.Grass
 import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
+import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Healthbar
@@ -13,9 +16,10 @@ import com.shardbytes.ripsafarik.ui.Hotbar
 import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.createWorld
 
-object GameWorld {
+object GameWorld: Disposable {
 	
 	val physics = createWorld()
+	val lights = createLightHandler()
 	val player = Player()
 	
 	init {
@@ -56,10 +60,33 @@ object GameWorld {
 		if(GameMap.Entities.totalEntities() < 3) {
 			val zombie = Zombie(this, Zombie.ZombieType.values().random()).apply { setPosition(8.0f, 9.0f) }
 			GameMap.Entities.spawn(zombie)
+
 		}
 		//ok here
 		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
-		
+
+		DaylightCycle.tick(dt)
+
+	}
+
+	private fun createLightHandler(): RayHandler {
+		RayHandler.setGammaCorrection(true)
+		RayHandler.useDiffuseLight(true)
+
+		val rayhandler = RayHandler(physics)
+
+		rayhandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.5f)
+		rayhandler.setBlurNum(2)
+
+		return rayhandler
+
+	}
+
+	override fun dispose() {
+		player.dispose()
+		physics.dispose()
+		lights.dispose()
+
 	}
 
 }

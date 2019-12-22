@@ -1,5 +1,6 @@
 package com.shardbytes.ripsafarik.actors
 
+import box2dLight.Light
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -10,6 +11,7 @@ import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.entity.ItemDrop
+import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun
 
 object GameMap {
@@ -17,13 +19,14 @@ object GameMap {
 	//TODO: optimize, do not pass string but already parsed json object
 	fun loadAll(mapName: String) {
 		val jsonString = Gdx.files.internal("world/${mapName}_map.json").readString()
-		
+
 		Env.load(jsonString)
 		Overlay.load(jsonString)
 		Entities.load(jsonString)
-		
+		Lights.load()
+
 	}
-	
+
 	object Env {
 		private var env: MutableList<MutableList<String>> = mutableListOf()
 
@@ -38,48 +41,48 @@ object GameMap {
 			}
 
 		}
-		
+
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			//nice loop
 			//draw only the stuff inside player's render distance
 			val yMin = clamp(playerPos.y.toInt() - Settings.RENDER_DISTANCE, 0, env.size - 1)
 			val yMax = clamp(playerPos.y.toInt() + Settings.RENDER_DISTANCE, 0, env.size - 1)
-			
+
 			for (y in yMin..yMax) {
 				val row = env[y]
 				val xMin = clamp(playerPos.x.toInt() - Settings.RENDER_DISTANCE, 0, row.size - 1)
 				val xMax = clamp(playerPos.x.toInt() + Settings.RENDER_DISTANCE, 0, row.size - 1)
-				
+
 				for (x in xMin..xMax) {
 					val cell = row[x]
 					batch.draw(TextureRegion(BlockCatalog[cell]?.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
-					
+
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		operator fun get(x: Int, y: Int) = env[y][x]
-		
+
 	}
-	
+
 	object Overlay {
-		
+
 		private var overlay: MutableList<BlockData> = mutableListOf()
-		
+
 		data class BlockData(
 				var name: String,
 				var posX: Int,
 				var posY: Int,
 				var scale: Float,
 				var rotation: Float)
-		
+
 		fun load(jsonString: String) {
 			val mapJson = JsonReader().parse(jsonString).get("overlay")
-			
+
 			overlay.clear()
-			mapJson.forEach { 
+			mapJson.forEach {
 				overlay.add(BlockData(
 						it["name"].asString(),
 						it["posX"].asInt(),
@@ -87,11 +90,11 @@ object GameMap {
 						it["scale"].asFloat(),
 						it["rotation"].asFloat())
 				)
-				
+
 			}
-			
+
 		}
-		
+
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
 				val texture = BlockCatalog[overlayBlock.name]?.texture
@@ -100,11 +103,11 @@ object GameMap {
 					batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 
 				}
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 	object Entities {
@@ -119,6 +122,7 @@ object GameMap {
 			despawnSchedule.clear()
 
 			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
+			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
 /*
@@ -202,6 +206,26 @@ object GameMap {
 
 	}
 
+	object Lights {
+
+		var lights = arrayListOf<Light>()
+
+		fun load() {
+			//val light = PointLight(GameWorld.lights, 128, Color.WHITE, 10f, 4f, 4f)
+			//val light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 40f)
+			//light.attachToBody(GameWorld.player.body)
+
+			//lights.add(light)
+
+		}
+
+		fun createNew(light: Light) {
+			lights.add(light)
+
+		}
+
+	}
+
 	fun isInRenderDistance(testPos: Vector2, playerPos: Vector2): Boolean {
 		//if number is in range
 		//nice Kotlin stuff
@@ -215,5 +239,5 @@ object GameMap {
 		return false
 
 	}
-	
+
 }

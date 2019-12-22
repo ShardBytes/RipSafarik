@@ -31,6 +31,10 @@ class Player() : Entity {
     val maxHealth = 100f
     var health = 100f
     var regenSpeed = 1f
+
+    //Item using
+    var itemUseCooldown = 0f
+    var elapsedItemUseCooldown = 0f
     
     val inventory: ItemInventory = ItemInventory()
     
@@ -38,10 +42,6 @@ class Player() : Entity {
         circle(radius = width*0.5f) { userData = this@Player }
         fixedRotation = true
 
-    }
-
-    init {
-        input.inputProcessor = InputCore
     }
     
     override fun tick(dt: Float) {
@@ -52,6 +52,9 @@ class Player() : Entity {
 
         //health regen
         health = min(maxHealth, health + regenSpeed)
+
+        //item use cooldown
+        elapsedItemUseCooldown = min(itemUseCooldown, elapsedItemUseCooldown + dt)
         
     }
     
@@ -93,9 +96,14 @@ class Player() : Entity {
     private fun handleTouches() {
         if(!PlayerInventory.isOpened) {
             if (input.isTouched) {
-                val item = inventory.hotbar[Hotbar.selectedSlot]
-                if (item is IUsable) {
-                    item.use(this)
+                if(elapsedItemUseCooldown == itemUseCooldown) {
+                    val item = inventory.hotbar[Hotbar.selectedSlot]
+                    if (item is IUsable) {
+                        item.use(this)
+                        itemUseCooldown = item.cooldown
+                        elapsedItemUseCooldown = 0f
+
+                    }
 
                 }
 
