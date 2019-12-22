@@ -2,7 +2,8 @@ const express = require("express")
 const getPort = require("get-port")
 const open = require('open')
 
-const STATIC_DIR = (process.argv[2] == "dev") ? "dist" : "build"
+const DEVMODE = (process.argv[2] == "dev")
+const STATIC_DIR = DEVMODE ? "dist" : "build"
 
 console.log("=== RipSafarik Editor ===")
 let server
@@ -11,16 +12,15 @@ let server
     
     const app = express()
     app.use(express.static(STATIC_DIR))
-    
-    app.get("/asset/:assetname", (req, res) => {
-        res.sendFile(__dirname + `/assets/${req.params.assetname}`)
-    })
+    app.use("/assets", express.static("../game/android/assets"))
 
-    app.get("/exit", (req, res) => {
-        console.log("GOT EXIT REQUEST? CLOSING SERVER...")
-        res.send("OK")
-        server.close(() => process.exit(0))
-    })
+    if (!DEVMODE) {
+        app.get("/exit", (req, res) => {
+            console.log("GOT EXIT REQUEST? CLOSING SERVER...")
+            res.send("OK")
+            server.close(() => process.exit(0))
+        })
+    }
 
     const port = await getPort()
     server = app.listen(port, () => {
