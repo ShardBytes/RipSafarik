@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.actors.GameWorld
-import com.shardbytes.ripsafarik.components.InputCore
+import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.Healthbar
 
 object GameScreen : Screen {

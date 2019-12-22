@@ -1,14 +1,15 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.input
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.shardbytes.ripsafarik.screens.GameScreen
+import com.shardbytes.ripsafarik.ui.PlayerInventory
 
 object InputCore: InputProcessor {
 
     var direction = 0b0000
     var newSelectedSlot = 1 //First slot, zero-th slot is invalid
-    var inventoryOpened = false
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
@@ -85,11 +86,17 @@ object InputCore: InputProcessor {
 
     private fun checkOpenInventory(keycode: Int) {
         if(keycode == Input.Keys.E) {
-            inventoryOpened = !inventoryOpened
-
-            direction = 0b0000
+            openInventory()
 
         }
+
+    }
+
+    private fun openInventory() {
+        PlayerInventory.isOpened = true
+        Gdx.input.inputProcessor = InventoryInput
+
+        direction = 0b0000
 
     }
 

@@ -10,12 +10,13 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.InputCore
 import com.shardbytes.ripsafarik.components.ItemInventory
+import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.Hotbar
 import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.body
 import kotlin.math.min
+import kotlin.system.exitProcess
 
 class Player() : Entity {
     
@@ -48,7 +49,6 @@ class Player() : Entity {
         handleMovement()
         handleTouches()
         handleNumbers()
-        handleKeys()
 
         //health regen
         health = min(maxHealth, health + regenSpeed)
@@ -87,7 +87,10 @@ class Player() : Entity {
                     .setLength(maxSpeed)
 
             rotation = if (dir > 0) { movementVector.angle() } else { mouseAngle }
-            body.setLinearVelocity(movementVector)
+            body.linearVelocity = movementVector
+
+        } else {
+            body.linearVelocity = Vector2()
 
         }
 
@@ -126,11 +129,6 @@ class Player() : Entity {
 
     }
 
-    private fun handleKeys() {
-        PlayerInventory.isOpened = InputCore.inventoryOpened
-
-    }
-
     /**
      * Damage the player. If health goes below zero, weelllll that sucks.
      */
@@ -138,7 +136,7 @@ class Player() : Entity {
         health -= amount
 
         if(health <= 0) {
-            System.exit(0)
+            exitProcess(0)
 
         }
 
