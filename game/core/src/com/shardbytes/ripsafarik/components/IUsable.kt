@@ -10,5 +10,6 @@ interface IUsable {
     var cooldown: Float
 
     fun use(player: Player)
+    fun `break`(player: Player)
 
 }

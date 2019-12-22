@@ -30,4 +30,9 @@ class Flashlight : Item, IUsable {
 
     }
 
+    override fun `break`(player: Player) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    }
+
 }

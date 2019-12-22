@@ -2,11 +2,13 @@ package com.shardbytes.ripsafarik.actors
 
 import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.utils.Disposable
 import com.shardbytes.ripsafarik.blocks.Asfalt
 import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.blocks.Grass
 import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.BlockCatalog
+import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Healthbar
@@ -14,7 +16,7 @@ import com.shardbytes.ripsafarik.ui.Hotbar
 import com.shardbytes.ripsafarik.ui.PlayerInventory
 import ktx.box2d.createWorld
 
-object GameWorld {
+object GameWorld: Disposable {
 	
 	val physics = createWorld()
 	val lights = createLightHandler()
@@ -63,9 +65,8 @@ object GameWorld {
 		//ok here
 		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
 
-		//"daylight cycle"
-		//lights.setAmbientLight(0.8f, 0.8f, 0.8f, 0.5f) //TODO: for party mode easter egg bruh, also hardbass music much :D - Hard Bass school: Opa blia
-		
+		DaylightCycle.tick(dt)
+
 	}
 
 	private fun createLightHandler(): RayHandler {
@@ -78,6 +79,13 @@ object GameWorld {
 		rayhandler.setBlurNum(2)
 
 		return rayhandler
+
+	}
+
+	override fun dispose() {
+		player.dispose()
+		physics.dispose()
+		lights.dispose()
 
 	}
 

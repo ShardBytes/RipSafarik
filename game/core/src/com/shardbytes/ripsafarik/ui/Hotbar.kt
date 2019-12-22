@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
+import com.shardbytes.ripsafarik.components.IUsable
 
 object Hotbar {
 
@@ -62,6 +63,28 @@ object Hotbar {
 						itemSlotTextureSize - 0.33f, //Make item sligthly smaller in the inventory
 						itemSlotTextureSize - 0.33f, //TODO: scale is good?
 						0f)
+
+				if(item is IUsable) {
+					if(item.maxUses != 0) {
+						val usesLeft = Healthbar[(item.leftUses.toFloat() / item.maxUses.toFloat() * 100f).toInt()]
+						batch.draw(usesLeft,
+								(itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) {
+									0.0f
+								} else {
+									0.5f
+								}),
+								(Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO,
+								0.5f,
+								0.5f,
+								1f,
+								0.05f,
+								itemSlotTextureSize - 0.33f,
+								itemSlotTextureSize - 0.33f,
+								0f)
+
+					}
+
+				}
 
 			}
 
