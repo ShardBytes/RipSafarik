@@ -61,8 +61,7 @@ class Camera(resizeStrategy: ResizeStrategy,
      * Enum defining what should camera do on window resize.
      */
     enum class ResizeStrategy {
-        FILL_VIEWPORT,
-        STRETCH_VIEWPORT
+        FILL_VIEWPORT
     }
 
     /**
