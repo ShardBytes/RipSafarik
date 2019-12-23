@@ -12,8 +12,8 @@ import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Healthbar
-import com.shardbytes.ripsafarik.ui.Hotbar
-import com.shardbytes.ripsafarik.ui.PlayerInventory
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.createWorld
 
 object GameWorld: Disposable {

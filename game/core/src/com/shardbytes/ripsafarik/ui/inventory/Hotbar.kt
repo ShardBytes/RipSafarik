@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik.ui
+package com.shardbytes.ripsafarik.ui.inventory
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -6,6 +6,7 @@ import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
+import com.shardbytes.ripsafarik.ui.Healthbar
 
 object Hotbar {
 
@@ -13,7 +14,7 @@ object Hotbar {
 	var selectedSlot = 0
 
 	private val itemSlotTexture = TextureRegion(Textures.UI["itemslot"])
-	private val itemSlotTextureSize = 1f
+	private val itemSlotTextureSize = 0.8f
 
 	fun render(dt: Float, batch: SpriteBatch) {
 		drawHotbarSlots(batch)
@@ -60,8 +61,8 @@ object Hotbar {
 						0.5f, //Ah i see
 						1f,
 						1f,
-						itemSlotTextureSize - 0.33f, //Make item sligthly smaller in the inventory
-						itemSlotTextureSize - 0.33f, //TODO: scale is good?
+						itemSlotTextureSize * 0.66f, //Make item sligthly smaller in the inventory
+						itemSlotTextureSize * 0.66f, //TODO: scale is good?
 						0f)
 
 				if(item is IUsable) {
@@ -78,8 +79,8 @@ object Hotbar {
 								0.5f,
 								1f,
 								0.05f,
-								itemSlotTextureSize - 0.33f,
-								itemSlotTextureSize - 0.33f,
+								itemSlotTextureSize * 0.66f,
+								itemSlotTextureSize * 0.66f,
 								0f)
 
 					}

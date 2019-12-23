@@ -12,8 +12,8 @@ import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.ItemInventory
 import com.shardbytes.ripsafarik.components.input.InputCore
-import com.shardbytes.ripsafarik.ui.Hotbar
-import com.shardbytes.ripsafarik.ui.PlayerInventory
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.body
 import kotlin.math.min
 import kotlin.system.exitProcess

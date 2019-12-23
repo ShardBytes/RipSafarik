@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Vector3
 import com.shardbytes.ripsafarik.screens.GameScreen
-import com.shardbytes.ripsafarik.ui.PlayerInventory
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 
 object InventoryInput : InputProcessor {
 

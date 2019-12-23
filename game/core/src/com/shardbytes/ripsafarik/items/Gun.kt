@@ -8,7 +8,7 @@ import com.shardbytes.ripsafarik.components.Item
 import com.shardbytes.ripsafarik.components.Weapon
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.ui.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 
 class Gun : Item, Weapon {
 

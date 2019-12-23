@@ -9,8 +9,8 @@ import com.shardbytes.ripsafarik.Settings
 
 object Healthbar: Disposable {
 
-    var width = 100
-    var height = 1
+    val width = 8f
+    val height = 0.1f
 
     private val textures = arrayOfNulls<TextureRegion>(101)
 
@@ -23,12 +23,12 @@ object Healthbar: Disposable {
     }
 
     private fun getTexture(healthValue: Int): TextureRegion {
-        val pixels = Pixmap(width, height, Pixmap.Format.RGBA8888)
+        val pixels = Pixmap(100, 1, Pixmap.Format.RGBA8888)
         pixels.setColor(1f, 0f, 0f, 1f)
-        pixels.fillRectangle(0, 0, healthValue, height)
+        pixels.fillRectangle(0, 0, healthValue, 1)
 
         pixels.setColor(0.15f, 0.15f, 0.15f, 1f)
-        pixels.fillRectangle(healthValue, 0, width - healthValue, height)
+        pixels.fillRectangle(healthValue, 0, 100 - healthValue, 1)
 
         val texture = TextureRegion(Texture(pixels))
         pixels.dispose()
@@ -39,17 +39,15 @@ object Healthbar: Disposable {
 
     fun render(healthValue: Int, batch: SpriteBatch) {
         val pixels = getTexture(healthValue)
-
-        val screenWidth = Settings.GAME_V_WIDTH * Settings.CURRENT_ASPECT_RATIO
         val screenHeight = Settings.GAME_V_HEIGHT / Settings.CURRENT_ASPECT_RATIO
 
         batch.draw(pixels,
-                -5f, //half the width of the healthbar
+                -width * 0.5f, //half the width of the healthbar
                 screenHeight * -0.5f + 1.1f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
                 0.5f,
                 0.5f,
-                10f,
-                0.3f,
+                width,
+                height,
                 1f,
                 1f,
                 0f)
