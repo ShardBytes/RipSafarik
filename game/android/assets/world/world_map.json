@@ -29,13 +29,20 @@
 	["grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "concrete", "asfalt", "asfalt", "asfalt", "concrete", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "concrete", "asfalt", "asfalt", "asfalt", "concrete", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass", "grass"],
   ],
   "overlay":[
-	{
-	  "name": "safarik",
-	  "posX": 1,
-	  "posY": 1,
-	  "scale": 2,
-	  "rotation": 45
-	}
+	  {
+		  "name": "safarik",
+		  "posX": 1,
+		  "posY": 1,
+		  "scale": 2,
+		  "rotation": 45
+	  },
+	  {
+		  "name": "lamp",
+		  "posX": 13,
+		  "posY": 3,
+		  "scale": 1,
+		  "rotation": 0
+	  }
   ],
 	"entities": [
 		{
