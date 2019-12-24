@@ -3,6 +3,8 @@ package com.shardbytes.ripsafarik.components.input
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.math.MathUtils
+import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 
@@ -18,7 +20,10 @@ object InputCore: InputProcessor {
 
     //Camera zooming
     override fun scrolled(amount: Int): Boolean {
-        GameScreen.camera.setZoom(GameScreen.camera.getZoom() + 0.2f * amount)
+        var newZoom = GameScreen.camera.getZoom() + 0.2f * amount
+        newZoom = MathUtils.clamp(newZoom, 1f, Settings.CURRENT_ASPECT_RATIO)
+        
+        GameScreen.camera.setZoom(newZoom)
 
         return false
 
