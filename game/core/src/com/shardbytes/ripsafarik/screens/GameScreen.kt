@@ -14,8 +14,8 @@ import com.shardbytes.ripsafarik.ui.Healthbar
 object GameScreen : Screen {
 
     // rendering
-    var camera = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
-    var uiCamera = Camera(Camera.ResizeStrategy.FILL_VIEWPORT, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
+    var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT).apply { tweenZoom = true }
+    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
     var batch = SpriteBatch()
 
     // world

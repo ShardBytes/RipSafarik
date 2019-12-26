@@ -15,8 +15,7 @@ import kotlin.math.min
 /**
  * Simple ortographic camera that can be locked onto an object and will follow it.
  */
-class Camera(resizeStrategy: ResizeStrategy,
-             viewportWidth: Float = 0f,
+class Camera(viewportWidth: Float = 0f,
              viewportHeight: Float = 0f,
              private var cameraPosition: Vector2 = Vector2(),
              private var lockTarget: GameObject? = null) {
@@ -26,12 +25,22 @@ class Camera(resizeStrategy: ResizeStrategy,
 
     private val zoomTime = 1f
     private var zoomTimeElapsed = 0f
+    
+    var tweenZoom = false
 
-    fun getZoom(): Float = newZoom
+    fun getZoom(): Float = if(tweenZoom) newZoom else innerCamera.zoom
 
     fun setZoom(value: Float) {
-        previousZoom = innerCamera.zoom
-        newZoom = value
+        if(tweenZoom) {
+            previousZoom = innerCamera.zoom
+            newZoom = value
+
+            if(zoomTimeElapsed > 0) zoomTimeElapsed *= 0.5f
+            
+        } else {
+            innerCamera.zoom = value
+            
+        }
 
     }
 
@@ -58,13 +67,6 @@ class Camera(resizeStrategy: ResizeStrategy,
     }
 
     /**
-     * Enum defining what should camera do on window resize.
-     */
-    enum class ResizeStrategy {
-        FILL_VIEWPORT
-    }
-
-    /**
      * Use with caution.
      * @return Wrapped orthographic camera object for further customization.
      */
@@ -73,28 +75,13 @@ class Camera(resizeStrategy: ResizeStrategy,
 
     var viewport: Viewport? = null
 
-    // /**
-    //  * Constructs a camera on [0, 0] world position.
-    //  * @param strategy What should camera do when window is resized
-    //  * @param width Width of camera's viewport
-    //  * @param height Height of camera's viewport
-    //  */
     init {
-        if (resizeStrategy == ResizeStrategy.FILL_VIEWPORT) {
-            innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
-            viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
-        } else {
-            innerCamera = OrthographicCamera()
-            viewport = StretchViewport(viewportWidth, viewportHeight, innerCamera)
-        }
+        innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
+        viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
         innerCamera.update()
+        
     }
-
-
-    //  /**
-    //   * Unlocks camera from any locked object and sets its position manually.
-    //   * @param pos Camera position
-    //   */
+    
     var position: Vector2
         get() = cameraPosition
         set(pos) {
@@ -130,7 +117,7 @@ class Camera(resizeStrategy: ResizeStrategy,
      * @see OrthographicCamera.update
      */
     fun update() {
-        updateZoom()
+        if(tweenZoom) updateZoom()
 
         if (lockTarget == null) {
             innerCamera.position.set(cameraPosition, 0.0f)

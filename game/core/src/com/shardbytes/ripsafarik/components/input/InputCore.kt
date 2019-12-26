@@ -21,9 +21,12 @@ object InputCore: InputProcessor {
     //Camera zooming
     override fun scrolled(amount: Int): Boolean {
         var newZoom = GameScreen.camera.getZoom() + 0.2f * amount
-        newZoom = MathUtils.clamp(newZoom, 1f, Settings.CURRENT_ASPECT_RATIO)
-        
-        GameScreen.camera.setZoom(newZoom)
+
+        if(newZoom >= 1f && newZoom <= Settings.CURRENT_ASPECT_RATIO) {
+            newZoom = MathUtils.clamp(newZoom, 1f, Settings.CURRENT_ASPECT_RATIO)
+            GameScreen.camera.setZoom(newZoom)
+
+        }
 
         return false
 
