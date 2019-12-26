@@ -19,10 +19,12 @@ object PlayerInventory {
 
     fun render(dt: Float, batch: SpriteBatch) {
         if(isOpened) {
-            drawBackground(batch)
+            //drawBackground(batch)
             drawSlots(batch)
 
         }
+        
+        batch.draw(inventoryTexture, 0f, 0f, 0f, 0f, 1f, 1f, 1f, 1f, 0f)
 
     }
 
@@ -45,7 +47,7 @@ object PlayerInventory {
     }
 
     private fun createSlots(): Array<ItemSlot> {
-        var slots = arrayListOf<ItemSlot>()
+        val slots = arrayListOf<ItemSlot>()
         for (i in -1..1) {
             for (j in -1..1) {
                 slots.add(ItemSlot().apply { screenPosition = Vector2(j.toFloat(), i.toFloat()) })

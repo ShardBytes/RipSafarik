@@ -120,7 +120,7 @@ class Player() : Entity {
         if(!PlayerInventory.isOpened) {
             val newSlot = InputCore.newSelectedSlot.dec()
 
-            if(Hotbar.hotbarSlots > newSlot) {
+            if(Hotbar.slotCount > newSlot) {
                 Hotbar.selectedSlot = newSlot
 
             }

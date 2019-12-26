@@ -1,5 +1,6 @@
 package com.shardbytes.ripsafarik
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 
@@ -48,4 +49,16 @@ inline fun <reified T> Contact.dataType(block: (T, Fixture) -> Unit): T? {
 fun map(value: Float, fromLow: Float, fromHigh: Float, toLow: Float, toHigh: Float): Float {
 	return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow
 
+}
+
+fun Vector2.inRange(start: Vector2, end: Vector2): Boolean {
+	if(this.x >= start.x && this.x <= end.x) {
+		if(this.y >= start.y && this.y <= end.y) {
+			return true
+			
+		}
+		
+	}
+	return false
+	
 }

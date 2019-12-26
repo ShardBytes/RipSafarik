@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik.ui.inventory
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
@@ -10,26 +11,25 @@ import com.shardbytes.ripsafarik.ui.Healthbar
 
 object Hotbar {
 
-	var hotbarSlots = 4
+	var slotCount = 4
 	var selectedSlot = 0
-
-	private val itemSlotTexture = TextureRegion(Textures.UI["itemslot"])
-	private val itemSlotTextureSize = 0.8f
+	
+	val hotbarSlots = createSlots()
 
 	fun render(dt: Float, batch: SpriteBatch) {
 		drawHotbarSlots(batch)
-		drawSelectedSlot(batch) //Draw that one slot one more time to make it less transparent for now
+		//drawSelectedSlot(batch) //Draw that one slot one more time to make it less transparent for now
 								//TODO: you can do better <-- graphics i meant
 
-		drawItems(batch)
+		//drawItems(batch)
 
 	}
-
+/*
 	private fun drawSelectedSlot(batch: SpriteBatch) {
-		val slotNumber = selectedSlot - Math.round(hotbarSlots / 2f)
+		val slotNumber = selectedSlot - Math.round(slotCount / 2f)
 
 		batch.draw(itemSlotTexture,
-				(itemSlotTextureSize * slotNumber) - (if (hotbarSlots % 2 == 0) {
+				(itemSlotTextureSize * slotNumber) - (if (slotCount % 2 == 0) {
 					0.0f
 				} else {
 					0.5f
@@ -46,12 +46,12 @@ object Hotbar {
 	}
 
 	private fun drawItems(batch: SpriteBatch) {
-		for (i in Math.round(-(hotbarSlots / 2f)) until Math.round((hotbarSlots / 2f))) {
-			val item = GameWorld.player.inventory.hotbar[i + Math.round(hotbarSlots / 2f)]
+		for (i in Math.round(-(slotCount / 2f)) until Math.round((slotCount / 2f))) {
+			val item = GameWorld.player.inventory.hotbar[i + Math.round(slotCount / 2f)]
 
 			if (item != null) {
 				batch.draw(item.texture,
-						(itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) {
+						(itemSlotTextureSize * i) - (if (slotCount % 2 == 0) {
 							0.0f
 						} else {
 							0.5f
@@ -69,7 +69,7 @@ object Hotbar {
 					if(item.maxUses != 0) {
 						val usesLeft = Healthbar[(item.leftUses.toFloat() / item.maxUses.toFloat() * 100f).toInt()]
 						batch.draw(usesLeft,
-								(itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) {
+								(itemSlotTextureSize * i) - (if (slotCount % 2 == 0) {
 									0.0f
 								} else {
 									0.5f
@@ -92,26 +92,24 @@ object Hotbar {
 		}
 
 	}
-
+*/
 	private fun drawHotbarSlots(batch: SpriteBatch) {
-		for (i in Math.round(-(hotbarSlots / 2f)) until Math.round((hotbarSlots / 2f))) {
-			//Draw itemSlotTexture; at center minus offset when total slot count is even; at bottom
-			batch.draw(itemSlotTexture,
-					(itemSlotTextureSize * i) - (if (hotbarSlots % 2 == 0) {
-						0.0f
-					} else {
-						0.5f
-					}),
-					(Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO,
-					0.5f,
-					0.5f,
-					1f,
-					1f,
-					itemSlotTextureSize,
-					itemSlotTextureSize,
-					0f)
+		hotbarSlots.forEach { it.render(batch) }
 
+	}
+
+	private fun createSlots(): Array<ItemSlot> {
+		val slots = arrayListOf<ItemSlot>()
+		for (i in Math.round(-(slotCount / 2f)) until Math.round((slotCount / 2f))) {
+			slots.add(ItemSlot().apply { 
+				screenPosition = Vector2(
+						((slotSize * i) - if (slotCount % 2 == 0) 0f else 0.5f) + slotSize * 0.5f,
+						((Settings.GAME_V_HEIGHT * -0.5f) / Settings.CURRENT_ASPECT_RATIO) + slotSize * 0.5f)
+				
+			})
+			
 		}
+		return slots.toArray(arrayOfNulls(slotCount))
 
 	}
 
