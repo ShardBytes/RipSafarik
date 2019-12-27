@@ -15,9 +15,30 @@ class ItemSlot {
     var screenPosition = Vector2()
 
     val slotTexture = TextureRegion(Textures.UI["itemslot"])
+    val slotMarkerTexture = TextureRegion(Textures.UI["itemslotmarker"])
     val slotSize = 1f
 
     fun render(batch: SpriteBatch) {
+        drawSlotTexture(batch)
+        drawItem(batch)
+
+    }
+    
+    fun drawSlotMarker(batch: SpriteBatch) {
+        batch.draw(slotMarkerTexture,
+                screenPosition.x - slotSize * 0.5f,
+                screenPosition.y - slotSize * 0.5f,
+                0.5f,
+                0.5f,
+                1f,
+                1f,
+                slotSize,
+                slotSize,
+                0f)
+        
+    }
+
+    private fun drawSlotTexture(batch: SpriteBatch) {
         batch.draw(slotTexture,
                 screenPosition.x - slotSize * 0.5f,
                 screenPosition.y - slotSize * 0.5f,
@@ -28,8 +49,10 @@ class ItemSlot {
                 slotSize,
                 slotSize,
                 0f)
+    }
 
-        if(item != null) {
+    private fun drawItem(batch: SpriteBatch) {
+        if (item != null) {
             batch.draw(item!!.texture,
                     screenPosition.x - slotSize * 0.5f,
                     screenPosition.y - slotSize * 0.5f,
@@ -42,8 +65,8 @@ class ItemSlot {
                     0f)
 
             val usableItem = item as? IUsable
-            if(usableItem != null) {
-                if(usableItem.maxUses != 0) {
+            if (usableItem != null) {
+                if (usableItem.maxUses != 0) {
                     val usesLeft = Healthbar[(usableItem.leftUses.toFloat() / usableItem.maxUses.toFloat() * 100f).toInt()]
                     batch.draw(usesLeft,
                             screenPosition.x - slotSize * 0.5f,
@@ -61,7 +84,6 @@ class ItemSlot {
             }
 
         }
-
     }
 
     fun isCoordinateInsideSlot(coordinate: Vector2): Boolean {
@@ -84,6 +106,8 @@ class ItemSlot {
                 PlayerInventory.floatingItem = null
                 
             } else {
+                //if there is already something in the slot player is trying to put item into
+                //replace and pick up the other item
                 val buffer = item
                 item = PlayerInventory.floatingItem
                 PlayerInventory.floatingItem = buffer

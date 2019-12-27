@@ -18,8 +18,13 @@ object Hotbar {
 
 	fun render(dt: Float, batch: SpriteBatch) {
 		drawHotbarSlots(batch)
-		//drawSelectedSlot(batch)
+		drawSelectedSlot(batch)
 
+	}
+	
+	private fun drawSelectedSlot(batch: SpriteBatch) {
+		hotbarSlots[selectedSlot].drawSlotMarker(batch)
+		
 	}
 	
 	private fun drawHotbarSlots(batch: SpriteBatch) {
