@@ -39,11 +39,10 @@ object Healthbar: Disposable {
 
     fun render(healthValue: Int, batch: SpriteBatch) {
         val pixels = getTexture(healthValue)
-        val screenHeight = Settings.GAME_V_HEIGHT / Settings.CURRENT_ASPECT_RATIO
 
         batch.draw(pixels,
                 -width * 0.5f, //half the width of the healthbar
-                screenHeight * -0.5f + 1.1f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
+                Settings.VISIBLE_SCREEN_HEIGHT_GUI * -0.5f + 1.1f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
                 0.5f,
                 0.5f,
                 width,

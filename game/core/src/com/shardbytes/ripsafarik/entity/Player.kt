@@ -10,7 +10,7 @@ import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.Entity
 import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.ItemInventory
+import com.shardbytes.ripsafarik.components.Item
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -36,8 +36,6 @@ class Player() : Entity {
     //Item using
     var itemUseCooldown = 0f
     var elapsedItemUseCooldown = 0f
-    
-    val inventory: ItemInventory = ItemInventory()
     
     override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(radius = width*0.5f) { userData = this@Player }
@@ -100,8 +98,8 @@ class Player() : Entity {
         if(!PlayerInventory.isOpened) {
             if (input.isTouched) {
                 if(elapsedItemUseCooldown == itemUseCooldown) {
-                    val item = inventory.hotbar[Hotbar.selectedSlot]
-                    if (item is IUsable) {
+                    val item = Hotbar.hotbarSlots[Hotbar.selectedSlot].item
+                    if (item is IUsable) { //item can be null, but null is not IUsable, so good
                         item.use(this)
                         itemUseCooldown = item.cooldown
                         elapsedItemUseCooldown = 0f
@@ -140,6 +138,21 @@ class Player() : Entity {
 
         }
 
+    }
+    
+    fun pickUp(item: Item): Boolean {
+        var emptySlot = Hotbar.hotbarSlots.find { it.item == null }
+        if(emptySlot == null) {
+            emptySlot = PlayerInventory.slots.find { it.item == null }
+            
+        }
+        if(emptySlot == null) {
+            return false
+            
+        }
+        emptySlot.item = item
+        return true
+        
     }
     
     override fun dispose() {

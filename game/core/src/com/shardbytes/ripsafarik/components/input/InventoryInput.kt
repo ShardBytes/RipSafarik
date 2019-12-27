@@ -1,9 +1,6 @@
 package com.shardbytes.ripsafarik.components.input
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
-import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.Screen
+import com.badlogic.gdx.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.shardbytes.ripsafarik.Settings
@@ -21,7 +18,12 @@ object InventoryInput : InputProcessor {
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean = false
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        val screenCoords = GameScreen.uiCamera.innerCamera.unproject(Vector3(screenX.toFloat(), screenY.toFloat(), 0f))
+        val screenCoords = GameScreen.uiCamera.innerCamera.unproject(
+                Vector3(screenX.toFloat(), screenY.toFloat(), 0f),
+                GameScreen.uiCamera.viewport!!.screenX.toFloat(),
+                GameScreen.uiCamera.viewport!!.screenY.toFloat(),
+                GameScreen.uiCamera.viewport!!.screenWidth.toFloat(),
+                GameScreen.uiCamera.viewport!!.screenHeight.toFloat())
         
         println(screenCoords)
         slotClicked(screenCoords)

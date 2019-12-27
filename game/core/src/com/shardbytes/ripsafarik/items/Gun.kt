@@ -38,8 +38,9 @@ class Gun : Item, Weapon {
     }
 
     override fun `break`(player: Player) {
-        player.inventory.hotbar[Hotbar.selectedSlot] = null
-
+        //TODO: maybe a better way of doing this?
+        Hotbar.hotbarSlots[Hotbar.selectedSlot].item = null
+        
     }
 
 }

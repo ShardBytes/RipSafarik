@@ -10,12 +10,13 @@ import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.Healthbar
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 
 object GameScreen : Screen {
 
     // rendering
-    var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT).apply { tweenZoom = true }
-    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
+    var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
+    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
     var batch = SpriteBatch()
 
     // world
@@ -87,6 +88,9 @@ object GameScreen : Screen {
     override fun resize(width: Int, height: Int) {
         camera.windowResized(width, height)
         uiCamera.windowResized(width, height)
+
+        Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
+        Hotbar.updateSlotPositions()
         
     }
 

@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.FillViewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.shardbytes.ripsafarik.Settings
@@ -17,6 +19,7 @@ import kotlin.math.min
  */
 class Camera(viewportWidth: Float = 0f,
              viewportHeight: Float = 0f,
+             private var tweenZoom: Boolean = false,
              private var cameraPosition: Vector2 = Vector2(),
              private var lockTarget: GameObject? = null) {
 
@@ -25,8 +28,6 @@ class Camera(viewportWidth: Float = 0f,
 
     private val zoomTime = 1f
     private var zoomTimeElapsed = 0f
-    
-    var tweenZoom = false
 
     fun getZoom(): Float = if(tweenZoom) newZoom else innerCamera.zoom
 
@@ -106,7 +107,6 @@ class Camera(viewportWidth: Float = 0f,
      */
     fun windowResized(width: Int, height: Int) {
         viewport!!.update(width, height)
-        Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
         update()
 
     }
@@ -126,6 +126,18 @@ class Camera(viewportWidth: Float = 0f,
         }
         innerCamera.update()
 
+    }
+    
+    fun unproject(mouseX: Int, mouseY: Int): Vector2 {
+        val unprojectedVector = innerCamera.unproject(
+                Vector3(mouseX.toFloat(), mouseY.toFloat(), 0.0f),
+                viewport!!.screenX.toFloat(),
+                viewport!!.screenY.toFloat(),
+                viewport!!.screenWidth.toFloat(),
+                viewport!!.screenHeight.toFloat())
+        
+        return Vector2(unprojectedVector.x, unprojectedVector.y)
+        
     }
 
 }

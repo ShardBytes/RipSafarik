@@ -1,9 +1,14 @@
 package com.shardbytes.ripsafarik.ui.inventory
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.assets.Textures
+import com.shardbytes.ripsafarik.components.IUsable
+import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.screens.GameScreen
+import com.shardbytes.ripsafarik.ui.Healthbar
 
 /**
  * Visual player inventory object. Contains rendering and stuff. Uses ItemInventory
@@ -11,6 +16,8 @@ import com.shardbytes.ripsafarik.assets.Textures
  * @see ItemInventory
  */
 object PlayerInventory {
+    
+    var floatingItem: Item? = null
 
     var isOpened = false
     val slots = createSlots()
@@ -19,13 +26,51 @@ object PlayerInventory {
 
     fun render(dt: Float, batch: SpriteBatch) {
         if(isOpened) {
-            //drawBackground(batch)
+            drawBackground(batch)
             drawSlots(batch)
+            
+            drawFloatingItem(batch)
 
         }
         
-        batch.draw(inventoryTexture, 0f, 0f, 0f, 0f, 1f, 1f, 1f, 1f, 0f)
+    }
+    
+    private fun drawFloatingItem(batch: SpriteBatch) {
+        val item = floatingItem
+        if(item != null) {
+            val mouseCoords = GameScreen.uiCamera.unproject(Gdx.input.x, Gdx.input.y)
+            
+            //item is drawn 1.1 unit big
+            batch.draw(item.texture,
+                    mouseCoords.x - 0.5f,
+                    mouseCoords.y - 0.5f,
+                    0f,
+                    0f,
+                    1f,
+                    1f,
+                    1.1f,
+                    1.1f,
+                    0f)
+            
+            if(item is IUsable) {
+                if(item.maxUses > 0) {
+                    batch.draw(Healthbar[item.leftUses],
+                            mouseCoords.x - 0.5f,
+                            mouseCoords.y - 0.5f,
+                            0f,
+                            0f,
+                            1f,
+                            0.05f,
+                            1.1f,
+                            1.1f,
+                            0f)
 
+                }
+                
+            }
+            
+        }
+        
     }
 
     private fun drawBackground(batch: SpriteBatch) {

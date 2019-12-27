@@ -7,12 +7,11 @@ import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.Item
 import com.shardbytes.ripsafarik.inRange
-import com.shardbytes.ripsafarik.items.Gun
 import com.shardbytes.ripsafarik.ui.Healthbar
 
 class ItemSlot {
 
-    var item: Item? = Gun()
+    var item: Item? = null
     var screenPosition = Vector2()
 
     val slotTexture = TextureRegion(Textures.UI["itemslot"])
@@ -74,13 +73,16 @@ class ItemSlot {
     }
     
     fun clicked() {
-        val start = screenPosition.cpy().sub(slotSize * 0.5f, slotSize * 0.5f)
-        val end = screenPosition.cpy().add(slotSize * 0.5f, slotSize * 0.5f)
-
-        screenPosition = Vector2(-3f, 0f)
-        
-        println("$start .. $end")
-        println(this)
+        //insert item into or out of the "floating" buffer
+        if(PlayerInventory.floatingItem == null) {
+            PlayerInventory.floatingItem = item
+            item = null
+            
+        } else {
+            item = PlayerInventory.floatingItem
+            PlayerInventory.floatingItem = null
+            
+        }
         
     }
 
