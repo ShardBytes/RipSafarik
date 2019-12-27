@@ -34,10 +34,10 @@ object Hotbar {
 
 	private fun createSlots(): Array<ItemSlot> {
 		val slots = arrayListOf<ItemSlot>()
-		for (i in Math.round(-(slotCount / 2f)) until Math.round((slotCount / 2f))) {
+		for (i in Math.round(-(slotCount / 2f)) until Math.round(slotCount / 2f)) {
 			slots.add(ItemSlot().apply {
 				screenPosition = Vector2(
-						((slotSize * i) - if (slotCount % 2 == 0) 0f else 0.5f) + slotSize * 0.5f,
+						(slotSize * i - if (slotCount % 2 == 0) 0f else 0.5f) + slotSize * 0.5f,
 						Settings.VISIBLE_SCREEN_HEIGHT_GUI * -0.5f + slotSize * 0.5f)
 
 			})
