@@ -79,8 +79,16 @@ class ItemSlot {
             item = null
             
         } else {
-            item = PlayerInventory.floatingItem
-            PlayerInventory.floatingItem = null
+            if(item == null) {
+                item = PlayerInventory.floatingItem
+                PlayerInventory.floatingItem = null
+                
+            } else {
+                val buffer = item
+                item = PlayerInventory.floatingItem
+                PlayerInventory.floatingItem = buffer
+                
+            }
             
         }
         
