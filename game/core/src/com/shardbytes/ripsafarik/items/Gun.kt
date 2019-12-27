@@ -12,35 +12,35 @@ import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 
 class Gun : Item, Weapon {
 
-    override val name = "gun"
-    override val displayName = "Gun"
-    override val texture = TextureRegion(Textures.Item["weapon/gun"])
+	override val name = "gun"
+	override val displayName = "Gun"
+	override val texture = TextureRegion(Textures.Item["weapon/gun"])
 
-    override val maxUses: Int = 100
-    override var leftUses: Int = 87
-    override var cooldown = 0.05f
+	override val maxUses: Int = 100
+	override var leftUses: Int = 87
+	override var cooldown = 0.05f
 
-    override fun use(player: Player) {
-        val playerPos = player.position.cpy()
-        val playerRotation = player.rotation
-        val bullet = Bullet().apply {
-            setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
-            body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
+	override fun use(player: Player) {
+		val playerPos = player.position.cpy()
+		val playerRotation = player.rotation
+		val bullet = Bullet().apply {
+			setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
+			body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
 
-        }
+		}
 
-        GameMap.Entities.spawn(bullet)
-        if(--leftUses == 0) {
-            `break`(player)
+		GameMap.Entities.spawn(bullet)
+		if (--leftUses == 0) {
+			`break`(player)
 
-        }
+		}
 
-    }
+	}
 
-    override fun `break`(player: Player) {
-        //TODO: maybe a better way of doing this?
-        Hotbar.hotbarSlots[Hotbar.selectedSlot].item = null
-        
-    }
+	override fun `break`(player: Player) {
+		//TODO: maybe a better way of doing this?
+		Hotbar.hotbarSlots[Hotbar.selectedSlot].item = null
+
+	}
 
 }

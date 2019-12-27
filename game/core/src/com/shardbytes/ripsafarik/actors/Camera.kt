@@ -37,10 +37,10 @@ class Camera(viewportWidth: Float = 0f,
             newZoom = value
 
             if(zoomTimeElapsed > 0) zoomTimeElapsed *= 0.5f
-            
+
         } else {
             innerCamera.zoom = value
-            
+
         }
 
     }
@@ -80,9 +80,9 @@ class Camera(viewportWidth: Float = 0f,
         innerCamera = OrthographicCamera(viewportWidth, viewportHeight)
         viewport = FillViewport(viewportWidth, viewportHeight, innerCamera)
         innerCamera.update()
-        
+
     }
-    
+
     var position: Vector2
         get() = cameraPosition
         set(pos) {
@@ -127,7 +127,7 @@ class Camera(viewportWidth: Float = 0f,
         innerCamera.update()
 
     }
-    
+
     fun unproject(mouseX: Int, mouseY: Int): Vector2 {
         val unprojectedVector = innerCamera.unproject(
                 Vector3(mouseX.toFloat(), mouseY.toFloat(), 0.0f),
@@ -135,9 +135,9 @@ class Camera(viewportWidth: Float = 0f,
                 viewport!!.screenY.toFloat(),
                 viewport!!.screenWidth.toFloat(),
                 viewport!!.screenHeight.toFloat())
-        
+
         return Vector2(unprojectedVector.x, unprojectedVector.y)
-        
+
     }
 
 }
