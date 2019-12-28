@@ -3,7 +3,6 @@ package com.shardbytes.ripsafarik.components.input
 import com.badlogic.gdx.*
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -25,7 +24,6 @@ object InventoryInput : InputProcessor {
 				GameScreen.uiCamera.viewport!!.screenWidth.toFloat(),
 				GameScreen.uiCamera.viewport!!.screenHeight.toFloat())
 
-		println(screenCoords)
 		slotClicked(screenCoords)
 
 		return false
