@@ -36,7 +36,7 @@ class MenuScreen : Screen {
 
 	)
 
-	private val buttonHeight = 50f
+	private val buttonHeight = uiStage.viewport.screenHeight / 9f
 	private val buttonWidth = 500f
 	private val centeredButtonX = Gdx.graphics.width / 2 - buttonWidth / 2
 	private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2

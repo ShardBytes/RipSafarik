@@ -14,6 +14,8 @@ import com.shardbytes.ripsafarik.MainGame
 import com.shardbytes.ripsafarik.components.input.InputCore
 
 //TODO: Šimon plz finish
+//no u
+
 class PauseScreen : Screen {
 
 	private val uiStage = Stage(
@@ -25,10 +27,10 @@ class PauseScreen : Screen {
 
 	)
 
-	private val buttonHeight = 50f
-	private val buttonWidth = 500f / 3f
-	private val centeredButtonX = (Gdx.graphics.width / 2 - buttonWidth / 2) / 3
-	private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2
+	private val buttonHeight = uiStage.viewport.screenHeight / 9f
+	private val buttonWidth = uiStage.viewport.screenWidth / 5f
+	private val centeredButtonX = uiStage.viewport.screenWidth / 3 / 2 - buttonWidth / 2
+	private val centeredButtonY = uiStage.viewport.screenHeight / 2 - buttonHeight / 2
 
 	init {
 		Gdx.input.inputProcessor = uiStage
@@ -68,12 +70,12 @@ class PauseScreen : Screen {
 		val loadButton = TextButton("Resume", skin)
 		loadButton.height = buttonHeight
 		loadButton.width = buttonWidth
-		loadButton.setPosition(centeredButtonX, centeredButtonY - 100)
+		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
 
 		val exitButton = TextButton("Exit", skin)
 		exitButton.height = buttonHeight
 		exitButton.width = buttonWidth
-		exitButton.setPosition(centeredButtonX, centeredButtonY - 100 - buttonHeight - 30)
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
 
 		loadButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
@@ -94,7 +96,7 @@ class PauseScreen : Screen {
 		})
 
 		val label = Label("Paused", skin)
-		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 200)
+		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
 
 		uiStage.addActor(loadButton)
 		uiStage.addActor(exitButton)
