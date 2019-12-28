@@ -6,7 +6,7 @@ import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.screens.MenuScreen
 
-class MainGame : Game() {
+object MainGame : Game() {
 
 	val assetManager = AssetManager()
 
@@ -19,8 +19,8 @@ class MainGame : Game() {
 		assetManager.finishLoading()
 
 		GameMap.loadAll("world")
-		setScreen(MenuScreen(this))
-    
+		setScreen(MenuScreen())
+
 	}
 
 	override fun dispose() {

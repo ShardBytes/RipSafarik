@@ -2,30 +2,19 @@ package com.shardbytes.ripsafarik.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.shardbytes.ripsafarik.MainGame
-import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.input.InputCore
-import javax.swing.event.ChangeEvent
 
-class MenuScreen : Screen {
+//TODO: Šimon plz finish
+class PauseScreen : Screen {
 
 	private val uiStage = Stage(
 			ScalingViewport(
@@ -37,8 +26,8 @@ class MenuScreen : Screen {
 	)
 
 	private val buttonHeight = 50f
-	private val buttonWidth = 500f
-	private val centeredButtonX = Gdx.graphics.width / 2 - buttonWidth / 2
+	private val buttonWidth = 500f / 3f
+	private val centeredButtonX = (Gdx.graphics.width / 2 - buttonWidth / 2) / 3
 	private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2
 
 	init {
@@ -57,7 +46,7 @@ class MenuScreen : Screen {
 		skin.add("defaultFont", BitmapFont())
 		skin.add("whiteColour", Color.WHITE)
 
-		val style = TextButtonStyle()
+		val style = TextButton.TextButtonStyle()
 		style.font = skin.getFont("defaultFont")
 		style.up = skin.newDrawable("white", Color.DARK_GRAY)
 		style.down = skin.newDrawable("white", Color.DARK_GRAY)
@@ -65,18 +54,18 @@ class MenuScreen : Screen {
 		style.over = skin.newDrawable("white", Color.LIGHT_GRAY)
 		skin.add("default", style)
 
-		val style1 = LabelStyle()
+		val style1 = Label.LabelStyle()
 		style1.font = skin.getFont("defaultFont")
 		style1.fontColor = skin.getColor("whiteColour")
 		skin.add("default", style1)
-		val style2 = ScrollPaneStyle()
+		val style2 = ScrollPane.ScrollPaneStyle()
 
 		style2.background = skin.newDrawable("white", Color.DARK_GRAY)
 		style2.corner = skin.newDrawable("white", Color.CYAN)
 		style2.vScrollKnob = skin.newDrawable("white", Color.WHITE)
 		skin.add("default", style2)
 
-		val loadButton = TextButton("Play", skin)
+		val loadButton = TextButton("Resume", skin)
 		loadButton.height = buttonHeight
 		loadButton.width = buttonWidth
 		loadButton.setPosition(centeredButtonX, centeredButtonY - 100)
@@ -104,26 +93,28 @@ class MenuScreen : Screen {
 
 		})
 
-		val label = Label("RipSafarik", skin)
+		val label = Label("Paused", skin)
 		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 200)
-
-		val safarik = Image(Textures.Overlay["safarik"])
-		safarik.width = 100F
-		safarik.height = 100F
-		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + 90)
 
 		uiStage.addActor(loadButton)
 		uiStage.addActor(exitButton)
-		uiStage.addActor(safarik)
 		uiStage.addActor(label)
+
 	}
 
 	override fun show() {}
 
 	override fun render(delta: Float) {
+		//OpenGL magic to limit modifiable screen size to 1/3
+		//requires OpenGL 3.0 tho
+		Gdx.gl.glEnable(GL30.GL_SCISSOR_TEST)
+		Gdx.gl.glScissor(0, 0, uiStage.viewport.screenWidth / 3, uiStage.viewport.screenHeight)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
 		uiStage.act(delta)
 		uiStage.draw()
+
+		Gdx.gl.glDisable(GL30.GL_SCISSOR_TEST)
 
 	}
 
