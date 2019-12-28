@@ -3,17 +3,14 @@ package com.shardbytes.ripsafarik.actors
 import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Disposable
-import com.shardbytes.ripsafarik.blocks.Asfalt
-import com.shardbytes.ripsafarik.blocks.Concrete
-import com.shardbytes.ripsafarik.blocks.Grass
-import com.shardbytes.ripsafarik.blocks.Safarik
+import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.Zombie
 import com.shardbytes.ripsafarik.ui.Healthbar
-import com.shardbytes.ripsafarik.ui.Hotbar
-import com.shardbytes.ripsafarik.ui.PlayerInventory
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.createWorld
 
 object GameWorld: Disposable {
@@ -31,6 +28,7 @@ object GameWorld: Disposable {
 		BlockCatalog.registerBlock(Asfalt())
 		BlockCatalog.registerBlock(Safarik())
 		BlockCatalog.registerBlock(Concrete())
+		BlockCatalog.registerBlock(Lamp())
 		
 		player.position.set(1f, 1f)
 		

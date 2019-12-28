@@ -1,14 +1,17 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.input
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.math.MathUtils
+import com.shardbytes.ripsafarik.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 
 object InputCore: InputProcessor {
 
     var direction = 0b0000
     var newSelectedSlot = 1 //First slot, zero-th slot is invalid
-    var inventoryOpened = false
 
     override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
@@ -17,7 +20,13 @@ object InputCore: InputProcessor {
 
     //Camera zooming
     override fun scrolled(amount: Int): Boolean {
-        GameScreen.camera.setZoom(GameScreen.camera.getZoom() + 0.2f * amount)
+        var newZoom = GameScreen.camera.getZoom() + 0.2f * amount
+
+        if(newZoom >= 1f && newZoom <= Settings.CURRENT_ASPECT_RATIO) {
+            newZoom = MathUtils.clamp(newZoom, 1f, Settings.CURRENT_ASPECT_RATIO)
+            GameScreen.camera.setZoom(newZoom)
+
+        }
 
         return false
 
@@ -85,11 +94,17 @@ object InputCore: InputProcessor {
 
     private fun checkOpenInventory(keycode: Int) {
         if(keycode == Input.Keys.E) {
-            inventoryOpened = !inventoryOpened
-
-            direction = 0b0000
+            openInventory()
 
         }
+
+    }
+
+    private fun openInventory() {
+        PlayerInventory.isOpened = true
+        Gdx.input.inputProcessor = InventoryInput
+
+        direction = 0b0000
 
     }
 

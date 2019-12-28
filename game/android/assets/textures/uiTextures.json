@@ -1,6 +1,7 @@
 {
   "textures": [
 	"itemslot",
-    "inventorybackground"
+    "inventorybackground",
+	"itemslotmarker"
   ]
 }

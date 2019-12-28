@@ -48,7 +48,7 @@ class ItemDrop(private val item: Item) : Entity {
         //And actually try to pick up, if key is pressed
         if(availableForPickup) {
             if(Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-                val successful = GameWorld.player.inventory.pickUpItem(item)
+                val successful = GameWorld.player.pickUp(item)
                 if(successful) {
                     GameMap.Entities.despawn(this)
 
