@@ -31,5 +31,5 @@ class ZombieRunner : GenericZombie() {
 	override var maxHealth: Float = 100f
 	override var health: Float = 100f
 	override var regenSpeed: Float = 0f
-	
+
 }

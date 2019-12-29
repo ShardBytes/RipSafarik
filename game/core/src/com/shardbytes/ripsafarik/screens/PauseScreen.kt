@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.*
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
@@ -31,7 +34,7 @@ class PauseScreen : Screen {
 	private var buttonWidth = uiStage.viewport.screenWidth / 5f
 	private var centeredButtonX = uiStage.viewport.screenWidth / 3 / 2 - buttonWidth / 2
 	private var centeredButtonY = uiStage.viewport.screenHeight / 2 - buttonHeight / 2
-	
+
 	private var label: Label
 	private var loadButton: TextButton
 	private var exitButton: TextButton
@@ -53,11 +56,11 @@ class PauseScreen : Screen {
 			}
 
 		})
-		
+
 		exitButton = TextButton("Exit", skin)
 		exitButton.height = buttonHeight
 		exitButton.width = buttonWidth
-		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight * 2.5f)
 		exitButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
 				Gdx.app.exit()
@@ -72,7 +75,7 @@ class PauseScreen : Screen {
 		uiStage.addActor(loadButton)
 		uiStage.addActor(exitButton)
 		uiStage.addActor(label)
-		
+
 	}
 
 	private fun createSkin(): Skin {
@@ -103,9 +106,9 @@ class PauseScreen : Screen {
 		style2.corner = skin.newDrawable("white", Color.CYAN)
 		style2.vScrollKnob = skin.newDrawable("white", Color.WHITE)
 		skin.add("default", style2)
-		
+
 		return skin
-		
+
 	}
 
 	override fun show() {}
@@ -133,7 +136,7 @@ class PauseScreen : Screen {
 		centeredButtonY = height / 2 - buttonHeight / 2
 
 		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
-		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight * 2.5f)
 
 		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
 

@@ -14,7 +14,7 @@ abstract class GenericZombie : Entity {
 
 	protected abstract var textureWidth: Float
 	protected abstract var textureHeight: Float
-	
+
 	protected abstract var maxSpeed: Float
 	protected abstract var followRange: Float
 	abstract var knockbackForce: Float
@@ -47,7 +47,7 @@ abstract class GenericZombie : Entity {
 
 		//set animation to walking
 		isWalking = isInFollowRadius
-		
+
 		//health regen
 		health = min(maxHealth, health + regenSpeed)
 

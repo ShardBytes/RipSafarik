@@ -6,8 +6,8 @@ import com.shardbytes.ripsafarik.components.Block
 
 class Lamp : Block {
 
-    override val name = "lamp"
-    override val displayName = "Street lamp"
-    override val texture = TextureRegion(Textures.Overlay["lamp"])
+	override val name = "lamp"
+	override val displayName = "Street lamp"
+	override val texture = TextureRegion(Textures.Overlay["lamp"])
 
 }

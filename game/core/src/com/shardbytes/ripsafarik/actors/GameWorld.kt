@@ -7,18 +7,21 @@ import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.entity.zombie.*
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
+import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
+import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.createWorld
 
-object GameWorld: Disposable {
-	
+object GameWorld : Disposable {
+
 	val physics = createWorld()
 	val lights = createLightHandler()
 	val player = Player()
-	
+
 	init {
 		//Set physics collider
 		physics.setContactListener(CollisionListener())
@@ -29,33 +32,33 @@ object GameWorld: Disposable {
 		BlockCatalog.registerBlock(Safarik())
 		BlockCatalog.registerBlock(Concrete())
 		BlockCatalog.registerBlock(Lamp())
-		
+
 		player.position.set(1f, 1f)
-		
+
 	}
-	
+
 	fun render(dt: Float, batch: SpriteBatch) {
 		//Draw the world and everything
 		GameMap.Env.render(dt, batch, player.position)
 		GameMap.Overlay.render(dt, batch, player.position)
 		GameMap.Entities.render(dt, batch, player.position)
 		player.render(dt, batch)
-		
+
 	}
-	
+
 	fun renderUI(dt: Float, batch: SpriteBatch) {
 		//Draw the UI
 		Hotbar.render(dt, batch)
 		Healthbar.render(player.health.toInt(), batch)
 		PlayerInventory.render(dt, batch)
-		
+
 	}
 
 	fun tick(dt: Float) {
 		player.tick(dt)
 		GameMap.Entities.tick(dt)
 		//BADBADBAD
-		if(GameMap.Entities.totalEntities() < 1) {
+		if (GameMap.Entities.totalEntities() < 1) {
 			val zombie1 = ZombieNoHand().apply { setPosition(8.0f, 9.0f) }
 			val zombie2 = ZombieNoHandWithBlood().apply { setPosition(8.0f, 10.0f) }
 			val zombie3 = ZombieWithHandWithBlood().apply { setPosition(8.0f, 11.0f) }

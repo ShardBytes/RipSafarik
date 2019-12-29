@@ -152,7 +152,7 @@ class Player : Entity {
 		}
 		emptySlot.item = item
 		return true
-        
+
 	}
 
 	override fun dispose() {
