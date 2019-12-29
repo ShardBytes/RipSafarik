@@ -27,18 +27,55 @@ class PauseScreen : Screen {
 
 	)
 
-	private val buttonHeight = uiStage.viewport.screenHeight / 9f
-	private val buttonWidth = uiStage.viewport.screenWidth / 5f
-	private val centeredButtonX = uiStage.viewport.screenWidth / 3 / 2 - buttonWidth / 2
-	private val centeredButtonY = uiStage.viewport.screenHeight / 2 - buttonHeight / 2
+	private var buttonHeight = uiStage.viewport.screenHeight / 9f
+	private var buttonWidth = uiStage.viewport.screenWidth / 5f
+	private var centeredButtonX = uiStage.viewport.screenWidth / 3 / 2 - buttonWidth / 2
+	private var centeredButtonY = uiStage.viewport.screenHeight / 2 - buttonHeight / 2
+	
+	private var label: Label
+	private var loadButton: TextButton
+	private var exitButton: TextButton
 
 	init {
 		Gdx.input.inputProcessor = uiStage
-		addUIElements()
+		val skin = createSkin()
 
+		loadButton = TextButton("Resume", skin)
+		loadButton.height = buttonHeight
+		loadButton.width = buttonWidth
+		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
+		loadButton.addListener(object : ChangeListener() {
+			override fun changed(event: ChangeEvent, actor: Actor) {
+				Gdx.input.inputProcessor = InputCore.reset()
+				MainGame.screen = GameScreen
+				uiStage.dispose()
+
+			}
+
+		})
+		
+		exitButton = TextButton("Exit", skin)
+		exitButton.height = buttonHeight
+		exitButton.width = buttonWidth
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
+		exitButton.addListener(object : ChangeListener() {
+			override fun changed(event: ChangeEvent, actor: Actor) {
+				Gdx.app.exit()
+
+			}
+
+		})
+
+		label = Label("Paused", skin)
+		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
+
+		uiStage.addActor(loadButton)
+		uiStage.addActor(exitButton)
+		uiStage.addActor(label)
+		
 	}
 
-	private fun addUIElements() {
+	private fun createSkin(): Skin {
 		val skin = Skin()
 		val pixmap = Pixmap(1, 1, Pixmap.Format.RGBA8888)
 		pixmap.setColor(Color.WHITE)
@@ -66,42 +103,9 @@ class PauseScreen : Screen {
 		style2.corner = skin.newDrawable("white", Color.CYAN)
 		style2.vScrollKnob = skin.newDrawable("white", Color.WHITE)
 		skin.add("default", style2)
-
-		val loadButton = TextButton("Resume", skin)
-		loadButton.height = buttonHeight
-		loadButton.width = buttonWidth
-		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
-
-		val exitButton = TextButton("Exit", skin)
-		exitButton.height = buttonHeight
-		exitButton.width = buttonWidth
-		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
-
-		loadButton.addListener(object : ChangeListener() {
-			override fun changed(event: ChangeEvent, actor: Actor) {
-				Gdx.input.inputProcessor = InputCore.reset()
-				MainGame.screen = GameScreen
-				uiStage.dispose()
-
-			}
-
-		})
-
-		exitButton.addListener(object : ChangeListener() {
-			override fun changed(event: ChangeEvent, actor: Actor) {
-				Gdx.app.exit()
-
-			}
-
-		})
-
-		val label = Label("Paused", skin)
-		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
-
-		uiStage.addActor(loadButton)
-		uiStage.addActor(exitButton)
-		uiStage.addActor(label)
-
+		
+		return skin
+		
 	}
 
 	override fun show() {}
@@ -122,6 +126,16 @@ class PauseScreen : Screen {
 
 	override fun resize(width: Int, height: Int) {
 		uiStage.viewport.update(width, height)
+
+		buttonHeight = height / 9f
+		buttonWidth = width / 5f
+		centeredButtonX = width / 3 / 2 - buttonWidth / 2
+		centeredButtonY = height / 2 - buttonHeight / 2
+
+		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*2.5f)
+
+		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
 
 	}
 

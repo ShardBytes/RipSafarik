@@ -23,7 +23,6 @@ object GameMap {
 		Env.load(jsonString)
 		Overlay.load(jsonString)
 		Entities.load(jsonString)
-		Lights.load()
 
 	}
 
@@ -99,7 +98,7 @@ object GameMap {
 			for (overlayBlock in overlay) {
 				val texture = BlockCatalog[overlayBlock.name]?.texture
 
-				if(isInRenderDistance(Vector2(overlayBlock.posX.toFloat(), overlayBlock.posY.toFloat()), playerPos)) {
+				if (isInRenderDistance(Vector2(overlayBlock.posX.toFloat(), overlayBlock.posY.toFloat()), playerPos)) {
 					batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 
 				}
@@ -125,31 +124,32 @@ object GameMap {
 			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
-/*
+			//this uses Java reflection, probably not the best solution there is
+			//pretty sure not the best solution there is
+			//NOPE NOT AT ALL
 			mapJson.forEach {
 				val obj = Class.forName(it["className"].asString())
 				val instance = obj.newInstance()
 				it.forEach {
-					if(it.name != "className") {
+					if (it.name != "className") {
 						val field = obj.getDeclaredField(it.name)
 						field.isAccessible = true
-						field.set(instance, it.asString())
+						field.set(instance, it.asFloat())
 
 					}
 
 				}
-
 				spawn(instance as Entity)
 
 			}
-*/
+
 		}
 
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (entity in entities) {
 				//if entity is in player's render distance
 				//draw it
-				if(isInRenderDistance(entity.position, playerPos)) {
+				if (isInRenderDistance(entity.position, playerPos)) {
 					entity.render(dt, batch)
 
 				}
@@ -163,8 +163,8 @@ object GameMap {
 			//time flows in this game everywhere, no chunk loading or similar crap magic
 
 			//despawn all entities that are marked for despawn
-			if(despawnSchedule.isNotEmpty()) {
-				for(entity in despawnSchedule) {
+			if (despawnSchedule.isNotEmpty()) {
+				for (entity in despawnSchedule) {
 					GameWorld.physics.destroyBody(entity.body)
 					entities.remove(entity)
 
@@ -173,20 +173,20 @@ object GameMap {
 
 			}
 
-			for(entity in entities) {
+			for (entity in entities) {
 				entity.tick(dt)
 
 			}
 
 		}
 
-		fun spawn(entity: Entity) {
-			entities.add(entity)
+		fun spawn(vararg entity: Entity) {
+			entity.forEach { entities.add(it) }
 
 		}
 
 		fun despawn(entity: Entity) {
-			if(!despawnSchedule.contains(entity)) {
+			if (!despawnSchedule.contains(entity)) {
 				despawnSchedule.add(entity)
 
 			}
@@ -229,8 +229,8 @@ object GameMap {
 	fun isInRenderDistance(testPos: Vector2, playerPos: Vector2): Boolean {
 		//if number is in range
 		//nice Kotlin stuff
-		if(testPos.x.toInt() in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
-			if(testPos.y.toInt() in (playerPos.y.toInt() - Settings.RENDER_DISTANCE)..(playerPos.y.toInt() + Settings.RENDER_DISTANCE)) {
+		if (testPos.x.toInt() in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
+			if (testPos.y.toInt() in (playerPos.y.toInt() - Settings.RENDER_DISTANCE)..(playerPos.y.toInt() + Settings.RENDER_DISTANCE)) {
 				return true
 
 			}

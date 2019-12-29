@@ -2,6 +2,8 @@ package com.shardbytes.ripsafarik.components
 
 import com.badlogic.gdx.math.MathUtils
 import com.shardbytes.ripsafarik.actors.GameWorld
+import kotlin.math.max
+import kotlin.math.min
 
 object DaylightCycle {
 
@@ -16,7 +18,16 @@ object DaylightCycle {
         //set ambient light to reflect day/night
 
         //begins at 0.55f, continues to 1f, then 0.1f and at the end of the day (morning of the next day) it's back at 0.55f
-        val daylightValue = MathUtils.sin(currentTime / (dayLength / MathUtils.PI2)) * 0.45f + 0.55f
+        
+        //val daylightValue = MathUtils.sin(currentTime / (dayLength / MathUtils.PI2)) * 0.45f + 0.55f
+        val daylightValue = max(
+                0.1f,
+                min(
+                        1.0f,
+                        MathUtils.sin(currentTime / (dayLength / MathUtils.PI2)) * 0.55f + 0.50f
+                )
+        )
+        
         GameWorld.lights.setAmbientLight(daylightValue, daylightValue, daylightValue, 0.5f)
 
     }

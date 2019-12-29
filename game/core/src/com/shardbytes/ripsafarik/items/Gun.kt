@@ -21,11 +21,10 @@ class Gun : Item, Weapon {
 	override var cooldown = 0.05f
 
 	override fun use(player: Player) {
-		val playerPos = player.position.cpy()
 		val playerRotation = player.rotation
 		val bullet = Bullet().apply {
-			setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
-			body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
+			setPosition(player.position.cpy().add(Vector2.X.cpy().rotate(rotation).setLength(0.65f)))
+			body.linearVelocity = Vector2.X.setLength(1200f).setAngle(playerRotation)
 
 		}
 

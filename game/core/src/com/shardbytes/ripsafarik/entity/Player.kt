@@ -18,7 +18,7 @@ import ktx.box2d.body
 import kotlin.math.min
 import kotlin.system.exitProcess
 
-class Player() : Entity {
+class Player : Entity {
 
 	private val width = 1f
 	private val height = 1f
@@ -29,9 +29,9 @@ class Player() : Entity {
 	private val animatedPlayer = Animations["animatedPlayer"]
 
 	//Health stuff
-	val maxHealth = 100f
-	var health = 100f
-	var regenSpeed = 1f
+	override var maxHealth = 100f
+	override var health = 100f
+	override var regenSpeed = 1f
 
 	//Item using
 	var itemUseCooldown = 0f
@@ -84,11 +84,7 @@ class Player() : Entity {
 					.sub((dir shr 1 and 1) * maxSpeed, (dir shr 2 and 1) * maxSpeed)
 					.setLength(maxSpeed)
 
-			rotation = if (dir > 0) {
-				movementVector.angle()
-			} else {
-				mouseAngle
-			}
+			rotation = if (dir > 0) movementVector.angle() else mouseAngle
 			body.linearVelocity = movementVector
 
 		} else {

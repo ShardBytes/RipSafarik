@@ -9,6 +9,7 @@ import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.Entity
+import ktx.assets.disposeSafely
 import ktx.box2d.body
 
 class Bullet : Entity {
@@ -16,12 +17,15 @@ class Bullet : Entity {
     private val texture = TextureRegion(Textures.Entity["bullet"])
     private val width = 0.1f
     private val height = 0.1f
-
-    private val maximumLifetime = 3f //seconds before despawn
-    private var currentLifetime = 0f
+    
+    //seconds before despawn
+    override var maxHealth: Float = 3f
+    override var health: Float = 3f
+    override var regenSpeed: Float = 0f
 
     override val body: Body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
         circle(0.1f) { userData = this@Bullet }
+        bullet = true
 
     }
 
@@ -36,14 +40,18 @@ class Bullet : Entity {
     }
 
     override fun tick(dt: Float) {
-        currentLifetime += dt
-        if(currentLifetime > maximumLifetime) {
+        health -= dt
+        if(health <= 0f) {
             GameMap.Entities.despawn(this)
 
         }
 
     }
 
-    override fun dispose() {}
+    override fun dispose() {
+        //TODO: check if this has an effect or not
+        texture.texture.disposeSafely()
+        
+    }
 
 }

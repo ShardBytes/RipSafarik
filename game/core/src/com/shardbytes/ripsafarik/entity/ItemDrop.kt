@@ -15,9 +15,10 @@ import com.shardbytes.ripsafarik.components.Item
 import ktx.box2d.body
 
 class ItemDrop(private val item: Item) : Entity {
-
-    private val maximumLifetime = 10f //seconds before despawn
-    private var currentLifetime = 0f
+    
+    override var maxHealth = 1f
+    override var health = 1f
+    override var regenSpeed = 0f
 
     private val font = BitmapFont().apply { data.setScale(0.1f) } //TODO: font scale fucks shit up, fix asap
     private var availableForPickup = false
@@ -55,14 +56,6 @@ class ItemDrop(private val item: Item) : Entity {
                 }
 
             }
-
-        }
-
-        //Despawn logic
-        currentLifetime += dt
-
-        if(currentLifetime > maximumLifetime) {
-            GameMap.Entities.despawn(this)
 
         }
 

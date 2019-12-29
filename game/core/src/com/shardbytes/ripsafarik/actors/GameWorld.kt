@@ -7,7 +7,7 @@ import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.BlockCatalog
 import com.shardbytes.ripsafarik.components.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.entity.Zombie
+import com.shardbytes.ripsafarik.entity.zombie.*
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -55,9 +55,12 @@ object GameWorld: Disposable {
 		player.tick(dt)
 		GameMap.Entities.tick(dt)
 		//BADBADBAD
-		if(GameMap.Entities.totalEntities() < 3) {
-			val zombie = Zombie(this, Zombie.ZombieType.values().random()).apply { setPosition(8.0f, 9.0f) }
-			GameMap.Entities.spawn(zombie)
+		if(GameMap.Entities.totalEntities() < 1) {
+			val zombie1 = ZombieNoHand().apply { setPosition(8.0f, 9.0f) }
+			val zombie2 = ZombieNoHandWithBlood().apply { setPosition(8.0f, 10.0f) }
+			val zombie3 = ZombieWithHandWithBlood().apply { setPosition(8.0f, 11.0f) }
+			val zombie4 = ZombieRunner().apply { setPosition(8.0f, 12.0f) }
+			GameMap.Entities.spawn(zombie1, zombie2, zombie3, zombie4)
 
 		}
 		//ok here
