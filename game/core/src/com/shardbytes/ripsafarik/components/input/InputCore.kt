@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.MathUtils
-import com.shardbytes.ripsafarik.MainGame
-import com.shardbytes.ripsafarik.Settings
+import com.shardbytes.ripsafarik.game.MainGame
+import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
-import com.shardbytes.ripsafarik.screens.MenuScreen
 import com.shardbytes.ripsafarik.screens.PauseScreen
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 

@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
-import com.shardbytes.ripsafarik.MainGame
+import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.components.input.InputCore
 
 //TODO: Šimon plz finish

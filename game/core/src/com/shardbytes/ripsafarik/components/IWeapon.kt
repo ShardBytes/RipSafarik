@@ -1,5 +1,3 @@
 package com.shardbytes.ripsafarik.components
 
-interface Weapon: IUsable {
-
-}
+interface IWeapon: IUsable

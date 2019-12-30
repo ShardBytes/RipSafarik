@@ -10,6 +10,7 @@ import com.shardbytes.ripsafarik.dataType
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.zombie.GenericZombie
+import com.shardbytes.ripsafarik.game.GameMap
 
 class CollisionListener : ContactListener {
 

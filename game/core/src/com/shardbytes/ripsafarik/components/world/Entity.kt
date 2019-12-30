@@ -1,9 +1,11 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.world
 
 import com.badlogic.gdx.math.MathUtils.degRad
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.shardbytes.ripsafarik.components.technical.GameObject
+import com.shardbytes.ripsafarik.components.IHealth
 
 /**
  * Represents a game object that can be located in the world as physical entity.

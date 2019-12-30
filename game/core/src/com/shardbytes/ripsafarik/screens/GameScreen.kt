@@ -5,10 +5,9 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.shardbytes.ripsafarik.Settings
+import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.actors.Camera
-import com.shardbytes.ripsafarik.actors.GameWorld
-import com.shardbytes.ripsafarik.components.input.InputCore
+import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 

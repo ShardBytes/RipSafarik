@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.EventListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -20,10 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
-import com.shardbytes.ripsafarik.MainGame
+import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.input.InputCore
-import javax.swing.event.ChangeEvent
 
 class MenuScreen : Screen {
 

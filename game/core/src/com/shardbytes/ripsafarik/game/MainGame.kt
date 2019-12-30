@@ -1,8 +1,7 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.game
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
-import com.shardbytes.ripsafarik.actors.GameMap
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.screens.MenuScreen
 

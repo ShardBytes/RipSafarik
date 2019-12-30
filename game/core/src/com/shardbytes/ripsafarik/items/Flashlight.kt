@@ -3,10 +3,10 @@ package com.shardbytes.ripsafarik.items
 import box2dLight.ConeLight
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.Player
 
 class Flashlight : Item, IUsable {

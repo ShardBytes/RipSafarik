@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.world
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 

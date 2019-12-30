@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
-import com.shardbytes.ripsafarik.components.Entity
+import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory

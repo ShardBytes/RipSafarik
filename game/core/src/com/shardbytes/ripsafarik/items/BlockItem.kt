@@ -1,7 +1,7 @@
 package com.shardbytes.ripsafarik.items
 
-import com.shardbytes.ripsafarik.components.Block
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.components.world.Block
+import com.shardbytes.ripsafarik.components.world.Item
 
 class BlockItem(block: Block) : Item {
 	

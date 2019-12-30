@@ -1,4 +1,6 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.technical
+
+import com.shardbytes.ripsafarik.components.world.Block
 
 object BlockCatalog {
 	

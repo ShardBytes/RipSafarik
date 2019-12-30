@@ -1,13 +1,8 @@
 package com.shardbytes.ripsafarik.ui.inventory
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
-import com.shardbytes.ripsafarik.Settings
-import com.shardbytes.ripsafarik.actors.GameWorld
-import com.shardbytes.ripsafarik.assets.Textures
-import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.ui.Healthbar
+import com.shardbytes.ripsafarik.game.Settings
 
 object Hotbar {
 

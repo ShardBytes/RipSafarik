@@ -1,7 +1,7 @@
-package com.shardbytes.ripsafarik.components
+package com.shardbytes.ripsafarik.components.world
 
 import com.badlogic.gdx.math.MathUtils
-import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.game.GameWorld
 import kotlin.math.max
 import kotlin.math.min
 

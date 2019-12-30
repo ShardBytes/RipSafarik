@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.Disposable
-import com.shardbytes.ripsafarik.Settings
+import com.shardbytes.ripsafarik.game.Settings
 
 object Healthbar: Disposable {
 

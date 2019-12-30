@@ -1,11 +1,12 @@
-package com.shardbytes.ripsafarik.actors
+package com.shardbytes.ripsafarik.game
 
 import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Disposable
+import com.shardbytes.ripsafarik.actors.CollisionListener
 import com.shardbytes.ripsafarik.blocks.*
-import com.shardbytes.ripsafarik.components.BlockCatalog
-import com.shardbytes.ripsafarik.components.DaylightCycle
+import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
 import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood

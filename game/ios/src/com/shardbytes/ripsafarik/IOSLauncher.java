@@ -1,5 +1,6 @@
 package com.shardbytes.ripsafarik;
 
+import com.shardbytes.ripsafarik.game.MainGame;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 

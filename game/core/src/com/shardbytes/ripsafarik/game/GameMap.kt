@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik.actors
+package com.shardbytes.ripsafarik.game
 
 import box2dLight.Light
 import com.badlogic.gdx.Gdx
@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.JsonReader
-import com.shardbytes.ripsafarik.Settings
-import com.shardbytes.ripsafarik.components.BlockCatalog
-import com.shardbytes.ripsafarik.components.Entity
+import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun

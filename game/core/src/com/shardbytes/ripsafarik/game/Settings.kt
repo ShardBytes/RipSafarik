@@ -1,4 +1,4 @@
-package com.shardbytes.ripsafarik
+package com.shardbytes.ripsafarik.game
 
 object Settings {
 

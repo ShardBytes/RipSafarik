@@ -2,7 +2,7 @@ package com.shardbytes.ripsafarik.items
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.shardbytes.ripsafarik.assets.Textures
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.components.world.Item
 
 class GunMagazine: Item {
 

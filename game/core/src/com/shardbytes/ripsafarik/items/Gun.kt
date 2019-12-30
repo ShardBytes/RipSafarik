@@ -2,15 +2,15 @@ package com.shardbytes.ripsafarik.items
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
-import com.shardbytes.ripsafarik.actors.GameMap
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.assets.Textures
-import com.shardbytes.ripsafarik.components.Item
-import com.shardbytes.ripsafarik.components.Weapon
+import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.components.IWeapon
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 
-class Gun : Item, Weapon {
+class Gun : Item, IWeapon {
 
 	override val name = "gun"
 	override val displayName = "Gun"

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.inRange
 import com.shardbytes.ripsafarik.ui.Healthbar
 

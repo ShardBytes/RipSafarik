@@ -8,10 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.actors.GameMap
-import com.shardbytes.ripsafarik.actors.GameWorld
-import com.shardbytes.ripsafarik.components.Entity
-import com.shardbytes.ripsafarik.components.Item
+import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.components.world.Entity
+import com.shardbytes.ripsafarik.components.world.Item
 import ktx.box2d.body
 
 class ItemDrop(private val item: Item) : Entity {

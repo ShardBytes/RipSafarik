@@ -6,11 +6,8 @@ import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.FillViewport
-import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.shardbytes.ripsafarik.Settings
-import com.shardbytes.ripsafarik.components.GameObject
+import com.shardbytes.ripsafarik.components.technical.GameObject
 import com.shardbytes.ripsafarik.map
 import kotlin.math.min
 
