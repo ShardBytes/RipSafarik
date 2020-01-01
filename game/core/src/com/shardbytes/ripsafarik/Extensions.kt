@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
-import kotlinx.serialization.internal.StringDescriptor
 
 /**
  * Get entity of fixture contact by user data, if not found -> return null.
@@ -73,9 +72,9 @@ object Vector2Serializer : KSerializer<Vector2> {
 		init {
 			addElement("x")
 			addElement("y")
-			
+
 		}
-		
+
 	}
 
 	override fun serialize(encoder: Encoder, obj: Vector2) {
@@ -83,32 +82,32 @@ object Vector2Serializer : KSerializer<Vector2> {
 		compositeOutput.encodeFloatElement(descriptor, 0, obj.x)
 		compositeOutput.encodeFloatElement(descriptor, 1, obj.y)
 		compositeOutput.endStructure(descriptor)
-		
+
 	}
 
 	override fun deserialize(decoder: Decoder): Vector2 {
 		val decoder2 = decoder.beginStructure(descriptor)
 		var x: Float? = null
 		var y: Float? = null
-		
-		loop@while(true) {
-			when(val i = decoder2.decodeElementIndex(descriptor)) {
+
+		loop@ while (true) {
+			when (val i = decoder2.decodeElementIndex(descriptor)) {
 				CompositeDecoder.READ_DONE -> break@loop
 				0 -> x = decoder2.decodeFloatElement(descriptor, i)
 				1 -> y = decoder2.decodeFloatElement(descriptor, i)
 				else -> throw SerializationException("Unknown index $i")
-				
+
 			}
-			
+
 		}
-		
+
 		decoder2.endStructure(descriptor)
-		
+
 		return Vector2(
 				x ?: throw MissingFieldException("x"),
 				y ?: throw MissingFieldException("y")
 		)
-		
+
 	}
-	
+
 }
