@@ -8,20 +8,24 @@ import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.inRange
 import com.shardbytes.ripsafarik.ui.Healthbar
+import kotlinx.serialization.*
 
+@Serializable
 class ItemSlot {
-
+	
 	var item: Item? = null
+	
+	@ContextualSerialization
 	var screenPosition = Vector2()
-
-	val slotTexture = TextureRegion(Textures.UI["itemslot"])
-	val slotMarkerTexture = TextureRegion(Textures.UI["itemslotmarker"])
-	val slotSize = 1f
+	
+	@Transient val slotTexture = TextureRegion(Textures.UI["itemslot"])
+	@Transient val slotMarkerTexture = TextureRegion(Textures.UI["itemslotmarker"])
+	@Transient val slotSize = 1f
 
 	fun render(batch: SpriteBatch) {
 		drawSlotTexture(batch)
 		drawItem(batch)
-
+		
 	}
 
 	fun drawSlotMarker(batch: SpriteBatch) {

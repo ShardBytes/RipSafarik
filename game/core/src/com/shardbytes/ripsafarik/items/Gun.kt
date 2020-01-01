@@ -9,12 +9,15 @@ import com.shardbytes.ripsafarik.components.IWeapon
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 class Gun : Item, IWeapon {
 
-	override val name = "gun"
+	@Transient override val name = "gun"
 	override val displayName = "Gun"
-	override val texture = TextureRegion(Textures.Item["weapon/gun"])
+	@Transient override val texture = TextureRegion(Textures.Item["weapon/gun"])
 
 	override val maxUses: Int = 100
 	override var leftUses: Int = 87
