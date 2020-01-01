@@ -24,7 +24,7 @@ object PlayerInventory {
 
 	private val inventoryTexture = TextureRegion(Textures.UI["inventorybackground"])
 
-	fun render(dt: Float, batch: SpriteBatch) {
+	fun render(batch: SpriteBatch) {
 		if (isOpened) {
 			drawBackground(batch)
 			drawSlots(batch)

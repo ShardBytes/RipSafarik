@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.JsonReader
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.items.Flashlight
@@ -26,7 +27,7 @@ object GameMap {
 	}
 
 	object Env {
-		private var env: MutableList<MutableList<String>> = mutableListOf()
+		private var env: MutableList<MutableList<Block>> = mutableListOf()
 
 		fun load(jsonString: String) {
 			val mapJson = JsonReader().parse(jsonString).get("env")
@@ -34,7 +35,12 @@ object GameMap {
 			env.clear()
 			mapJson.forEach {
 				val arr = it.asStringArray()
-				env.add(arr.toMutableList())
+				val arr2 = mutableListOf<Block>()
+				arr.forEachIndexed { index, s -> 
+					arr2.add(BlockCatalog.getBlockCopy(s))
+					
+				}
+				env.add(arr2)
 
 			}
 
@@ -52,8 +58,8 @@ object GameMap {
 				val xMax = clamp(playerPos.x.toInt() + Settings.RENDER_DISTANCE, 0, row.size - 1)
 
 				for (x in xMin..xMax) {
-					val cell = row[x]
-					batch.draw(TextureRegion(BlockCatalog[cell]?.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
+					val block = row[x]
+					batch.draw(TextureRegion(block.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
 
 				}
 
@@ -71,8 +77,8 @@ object GameMap {
 
 		data class BlockData(
 				var name: String,
-				var posX: Int,
-				var posY: Int,
+				var posX: Float,
+				var posY: Float,
 				var scale: Float,
 				var rotation: Float)
 
@@ -81,13 +87,18 @@ object GameMap {
 
 			overlay.clear()
 			mapJson.forEach {
-				overlay.add(BlockData(
+				val data = BlockData(
 						it["name"].asString(),
-						it["posX"].asInt(),
-						it["posY"].asInt(),
+						it["posX"].asFloat(),
+						it["posY"].asFloat(),
 						it["scale"].asFloat(),
-						it["rotation"].asFloat())
+						it["rotation"].asFloat()
 				)
+				overlay.add(data)
+				
+				val pos = Vector2(data.posX, data.posY)
+				BlockCatalog.getBlockCopy(data.name).createCollider(pos)
+				BlockCatalog.getBlockCopy(data.name).onCreate(pos)
 
 			}
 
@@ -95,11 +106,17 @@ object GameMap {
 
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
-				val texture = BlockCatalog[overlayBlock.name]?.texture
+				val texture = BlockCatalog.getBlockCopy(overlayBlock.name).texture
 
-				if (isInRenderDistance(Vector2(overlayBlock.posX.toFloat(), overlayBlock.posY.toFloat()), playerPos)) {
-					batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
+				if (isInRenderDistance(Vector2(overlayBlock.posX, overlayBlock.posY), playerPos)) {
+					if(overlayBlock.name == "lamp") {
+						batch.draw(TextureRegion(texture), overlayBlock.posX - 2.5f, overlayBlock.posY - 0.5f, 2.5f, 0.5f, 3f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
+						
+					} else {
+						batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 
+					}
+					
 				}
 
 			}

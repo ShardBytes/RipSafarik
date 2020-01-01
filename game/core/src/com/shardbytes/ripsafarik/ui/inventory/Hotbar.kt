@@ -11,7 +11,7 @@ object Hotbar {
 
 	val hotbarSlots = createSlots()
 
-	fun render(dt: Float, batch: SpriteBatch) {
+	fun render(batch: SpriteBatch) {
 		drawHotbarSlots(batch)
 		drawSelectedSlot(batch)
 

@@ -16,8 +16,7 @@ object MainGame : Game() {
 
 		//Load sounds and other assets if required
 		assetManager.finishLoading()
-
-		GameMap.loadAll("world")
+		
 		setScreen(MenuScreen())
 
 	}

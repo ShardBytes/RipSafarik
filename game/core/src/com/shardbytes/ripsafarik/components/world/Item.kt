@@ -20,5 +20,5 @@ interface Item {
 	 * TextureRegion for better performance when not animated.
 	 */
 	val texture: TextureRegion
-	
+
 }

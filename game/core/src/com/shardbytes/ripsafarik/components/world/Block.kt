@@ -1,6 +1,7 @@
 package com.shardbytes.ripsafarik.components.world
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector2
 
 interface Block {
 
@@ -21,5 +22,9 @@ interface Block {
 	 * @see com.shardbytes.ripsafarik.assets.Textures
 	 */
 	val texture: TextureRegion
+	
+	fun onCreate(coords: Vector2) {}
+	fun onDestroy(coords: Vector2) {}
+	fun createCollider(coords: Vector2) {}
 	
 }

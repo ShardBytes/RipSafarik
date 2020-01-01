@@ -1,4 +1,4 @@
 package com.shardbytes.ripsafarik.components.world
 
-interface TileEntity {
+interface TileEntity : Block, Entity {
 }

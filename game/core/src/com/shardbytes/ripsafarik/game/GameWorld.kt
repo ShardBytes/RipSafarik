@@ -34,6 +34,8 @@ object GameWorld : Disposable {
 		BlockCatalog.registerBlock(Concrete())
 		BlockCatalog.registerBlock(Lamp())
 
+		GameMap.loadAll("world")
+
 		player.position.set(1f, 1f)
 
 	}
@@ -49,9 +51,9 @@ object GameWorld : Disposable {
 
 	fun renderUI(dt: Float, batch: SpriteBatch) {
 		//Draw the UI
-		Hotbar.render(dt, batch)
+		Hotbar.render(batch)
 		Healthbar.render(player.health.toInt(), batch)
-		PlayerInventory.render(dt, batch)
+		PlayerInventory.render(batch)
 
 	}
 
