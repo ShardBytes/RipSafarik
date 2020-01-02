@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.input.InputCore
+import com.shardbytes.ripsafarik.game.GameWorld
 
 class MenuScreen : Screen {
 
@@ -35,7 +36,7 @@ class MenuScreen : Screen {
 	)
 
 	private val buttonHeight = uiStage.viewport.screenHeight / 9f
-	private val buttonWidth = 500f
+	private val buttonWidth = uiStage.viewport.screenWidth / 1.5f
 	private val centeredButtonX = Gdx.graphics.width / 2 - buttonWidth / 2
 	private val centeredButtonY = Gdx.graphics.height / 2 - buttonHeight / 2
 
@@ -74,17 +75,22 @@ class MenuScreen : Screen {
 		style2.vScrollKnob = skin.newDrawable("white", Color.WHITE)
 		skin.add("default", style2)
 
-		val loadButton = TextButton("Play", skin)
+		val playButton = TextButton("New game", skin)
+		playButton.height = buttonHeight
+		playButton.width = buttonWidth
+		playButton.setPosition(centeredButtonX, centeredButtonY)
+
+		val loadButton = TextButton("Load game", skin)
 		loadButton.height = buttonHeight
 		loadButton.width = buttonWidth
-		loadButton.setPosition(centeredButtonX, centeredButtonY - 100)
+		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*1.5f)
 
 		val exitButton = TextButton("Exit", skin)
 		exitButton.height = buttonHeight
 		exitButton.width = buttonWidth
-		exitButton.setPosition(centeredButtonX, centeredButtonY - 100 - buttonHeight - 30)
+		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*3f)
 
-		loadButton.addListener(object : ChangeListener() {
+		playButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
 				Gdx.input.inputProcessor = InputCore.reset()
 				MainGame.screen = GameScreen
@@ -102,14 +108,26 @@ class MenuScreen : Screen {
 
 		})
 
+		loadButton.addListener(object : ChangeListener() {
+			override fun changed(event: ChangeEvent, actor: Actor) {
+				Gdx.input.inputProcessor = InputCore.reset()
+				GameWorld.load = true
+				MainGame.screen = GameScreen
+				uiStage.dispose()
+
+			}
+
+		})
+
 		val label = Label("RipSafarik", skin)
-		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 200)
+		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 250)
 
 		val safarik = Image(Textures.Overlay["safarik"])
 		safarik.width = 100F
 		safarik.height = 100F
-		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + 90)
+		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + 150)
 
+		uiStage.addActor(playButton)
 		uiStage.addActor(loadButton)
 		uiStage.addActor(exitButton)
 		uiStage.addActor(safarik)

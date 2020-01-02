@@ -2,6 +2,7 @@ package com.shardbytes.ripsafarik.game
 
 import box2dLight.RayHandler
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.shardbytes.ripsafarik.actors.CollisionListener
 import com.shardbytes.ripsafarik.blocks.*
@@ -12,6 +13,7 @@ import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
 import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
 import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
 import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
+import com.shardbytes.ripsafarik.tools.SaveManager
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -22,6 +24,8 @@ object GameWorld : Disposable {
 	val physics = createWorld()
 	val lights = createLightHandler()
 	val player = Player()
+
+	var load = false
 
 	init {
 		//Set physics collider
@@ -36,7 +40,11 @@ object GameWorld : Disposable {
 
 		GameMap.loadAll("world")
 
-		player.position.set(1f, 1f)
+		if(load){
+			//player.position.set(SaveManager.savefile.readString())
+		} else {
+			player.position.set(1f, 1f)
+		}
 
 	}
 

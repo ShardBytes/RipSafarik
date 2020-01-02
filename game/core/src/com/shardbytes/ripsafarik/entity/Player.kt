@@ -2,7 +2,9 @@ package com.shardbytes.ripsafarik.entity
 
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
@@ -14,30 +16,34 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
+import kotlinx.serialization.ContextualSerialization
+import kotlinx.serialization.Serializable
 import ktx.box2d.body
 import kotlin.math.min
 import kotlin.system.exitProcess
 
+@Serializable
 class Player : Entity {
 
-	private val width = 1f
-	private val height = 1f
-	private val maxSpeed = 4f //TODO: What unit?
+	@kotlinx.serialization.Transient private val width = 1f
+	@kotlinx.serialization.Transient private val height = 1f
+	@kotlinx.serialization.Transient private val maxSpeed = 4f //TODO: What unit?
 
-	private var isWalking = false
-	private var elapsedTime = 0f
-	private val animatedPlayer = Animations["animatedPlayer"]
+	@kotlinx.serialization.Transient private var isWalking = false
+	@kotlinx.serialization.Transient private var elapsedTime = 0f
+
+	@kotlinx.serialization.Transient private val animatedPlayer = Animations["animatedPlayer"]
 
 	//Health stuff
-	override var maxHealth = 100f
+	@kotlinx.serialization.Transient override var maxHealth = 100f
 	override var health = 100f
-	override var regenSpeed = 1f
+	@kotlinx.serialization.Transient override var regenSpeed = 1f
 
 	//Item using
-	var itemUseCooldown = 0f
-	var elapsedItemUseCooldown = 0f
+	@kotlinx.serialization.Transient var itemUseCooldown = 0f
+	@kotlinx.serialization.Transient var elapsedItemUseCooldown = 0f
 
-	override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
+	@kotlinx.serialization.Transient override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
 		circle(radius = width * 0.5f) { userData = this@Player }
 		fixedRotation = true
 

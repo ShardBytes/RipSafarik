@@ -15,6 +15,11 @@ import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.components.input.InputCore
+import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.tools.SaveManager
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
+import kotlinx.serialization.stringify
 
 //TODO: Šimon plz finish
 //no u
@@ -37,6 +42,7 @@ class PauseScreen : Screen {
 
 	private var label: Label
 	private var loadButton: TextButton
+	private var saveButton: TextButton
 	private var exitButton: TextButton
 
 	init {
@@ -46,9 +52,24 @@ class PauseScreen : Screen {
 		loadButton = TextButton("Resume", skin)
 		loadButton.height = buttonHeight
 		loadButton.width = buttonWidth
-		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
+		loadButton.setPosition(centeredButtonX, centeredButtonY)
 		loadButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
+				Gdx.input.inputProcessor = InputCore.reset()
+				MainGame.screen = GameScreen
+				uiStage.dispose()
+
+			}
+
+		})
+
+		saveButton = TextButton("Save", skin)
+		saveButton.height = buttonHeight
+		saveButton.width = buttonWidth
+		saveButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight * 1.25f)
+		saveButton.addListener(object : ChangeListener() {
+			override fun changed(event: ChangeEvent, actor: Actor) {
+				SaveManager.save()
 				Gdx.input.inputProcessor = InputCore.reset()
 				MainGame.screen = GameScreen
 				uiStage.dispose()
@@ -73,6 +94,7 @@ class PauseScreen : Screen {
 		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
 
 		uiStage.addActor(loadButton)
+		uiStage.addActor(saveButton)
 		uiStage.addActor(exitButton)
 		uiStage.addActor(label)
 
@@ -135,7 +157,7 @@ class PauseScreen : Screen {
 		centeredButtonX = width / 3 / 2 - buttonWidth / 2
 		centeredButtonY = height / 2 - buttonHeight / 2
 
-		loadButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight)
+		loadButton.setPosition(centeredButtonX, centeredButtonY)
 		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight * 2.5f)
 
 		label.setPosition(Gdx.graphics.width / 3 / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + Gdx.graphics.height / 5)
