@@ -4,7 +4,8 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.SerialClassDescImpl
+import kotlinx.serialization.internal.*
+import kotlinx.serialization.internal.IntArraySerializer
 
 /**
  * Get entity of fixture contact by user data, if not found -> return null.
@@ -100,7 +101,6 @@ object Vector2Serializer : KSerializer<Vector2> {
 			}
 
 		}
-
 		decoder2.endStructure(descriptor)
 
 		return Vector2(

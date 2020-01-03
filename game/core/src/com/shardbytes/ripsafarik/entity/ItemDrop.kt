@@ -8,21 +8,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameMap
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameWorld
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import ktx.box2d.body
 
-class ItemDrop(private val item: Item) : Entity {
+@Serializable
+class ItemDrop(@Polymorphic private val item: Item) : Entity {
 
 	override var maxHealth = 1f
 	override var health = 1f
 	override var regenSpeed = 0f
 
+	@Transient
 	private val font = BitmapFont().apply { data.setScale(0.1f) } //TODO: font scale fucks shit up, fix asap
+
+	@Transient
 	private var availableForPickup = false
 
+	@Transient
 	override val body: Body = GameWorld.physics.body(BodyDef.BodyType.StaticBody)
 
 	override fun render(dt: Float, batch: SpriteBatch) {

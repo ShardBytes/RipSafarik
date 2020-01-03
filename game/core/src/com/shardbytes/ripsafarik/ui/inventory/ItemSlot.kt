@@ -3,21 +3,21 @@ package com.shardbytes.ripsafarik.ui.inventory
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
+import com.shardbytes.ripsafarik.Vector2Serializer
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.inRange
 import com.shardbytes.ripsafarik.ui.Healthbar
-import kotlinx.serialization.ContextualSerialization
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import kotlinx.serialization.*
 
 @Serializable
 class ItemSlot {
 
+	@Polymorphic
 	var item: Item? = null
 
-	@ContextualSerialization
+	@Serializable(with = Vector2Serializer::class)
 	var screenPosition = Vector2()
 
 	@Transient

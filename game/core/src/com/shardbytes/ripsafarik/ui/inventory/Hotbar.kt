@@ -3,12 +3,14 @@ package com.shardbytes.ripsafarik.ui.inventory
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.game.Settings
+import kotlinx.serialization.Serializable
+import kotlin.math.roundToInt
 
 object Hotbar {
 
 	var slotCount = 4
 	var selectedSlot = 0
-
+	
 	val hotbarSlots = createSlots()
 
 	fun render(batch: SpriteBatch) {
@@ -29,7 +31,7 @@ object Hotbar {
 
 	private fun createSlots(): Array<ItemSlot> {
 		val slots = arrayListOf<ItemSlot>()
-		for (i in Math.round(-(slotCount / 2f)) until Math.round(slotCount / 2f)) {
+		for (i in (-(slotCount / 2f)).roundToInt() until (slotCount / 2f).roundToInt()) {
 			slots.add(ItemSlot().apply {
 				screenPosition = Vector2(
 						slotSize * i - if (slotCount % 2 == 0) 0f else 0.5f + slotSize * 0.5f,
