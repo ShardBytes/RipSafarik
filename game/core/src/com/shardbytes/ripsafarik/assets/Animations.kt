@@ -2,10 +2,24 @@ package com.shardbytes.ripsafarik.assets
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.shardbytes.ripsafarik.tools.GifDecoder
 
 object Animations {
+	
+	private var buffer = mutableMapOf(
+			"animatedMonster" to load("animatedMonster"),
+			"animatedMonster2" to load("animatedMonster2"),
+			"animatedMonster3" to load("animatedMonster3"),
+			"animatedPlayer" to load("animatedPlayer"),
+			"animatedExplosion" to load("animatedExplosion")
+	)
+	
+	private fun load(animation: String): Animation<TextureRegion> {
+		return GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/animated/$animation.gif").read())
+		
+	}
 
-	operator fun get(animation: String) = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("textures/animated/$animation.gif").read())
+	operator fun get(animation: String) = buffer.getValue(animation)
 
 }
