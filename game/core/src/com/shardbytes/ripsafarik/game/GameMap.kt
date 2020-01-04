@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.JsonReader
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
+import com.shardbytes.ripsafarik.entity.Explosion
 import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.items.DestroyTool
 import com.shardbytes.ripsafarik.items.Flashlight
@@ -141,8 +142,8 @@ object GameMap {
 				val block = BlockCatalog.getBlockCopy(data.name)
 				block.onDestroy(roundedCoords)
 				
-				val success = overlay.remove(data)
-				return success
+				overlay.remove(data)
+				return true
 				
 			}
 			return false
@@ -165,6 +166,8 @@ object GameMap {
 			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
 			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
 			spawn(ItemDrop(DestroyTool()).apply { setPosition(2f, -2f) })
+			
+			spawn(Explosion(4f).apply { setPosition(4f, 4f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
 			//this uses Java reflection, probably not the best solution there is

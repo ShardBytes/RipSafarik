@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector3
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.copyAndround
+import com.shardbytes.ripsafarik.entity.Explosion
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.screens.GameScreen
@@ -34,11 +36,23 @@ class DestroyTool : Item, IUsable {
 		
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y)
 		
+		//TODO: remove this terrific explosion effect
 		//remove overlay first, then try removing env
-		if(!GameMap.Overlay.remove(mapCoords)){
-			GameMap.Env.remove(mapCoords)
+		val overlaySuccessful = GameMap.Overlay.remove(mapCoords)
+		if(overlaySuccessful) {
+			GameMap.Entities.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
+
+		}
+		
+		if(!overlaySuccessful) {
+			val envSuccessful = GameMap.Env.remove(mapCoords)
+			if(envSuccessful) {
+				GameMap.Entities.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
+
+			}
 			
 		}
+		
 		
 	}
 

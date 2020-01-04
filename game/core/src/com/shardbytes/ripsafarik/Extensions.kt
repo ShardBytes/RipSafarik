@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.*
+import kotlin.math.round
 
 /**
  * Get entity of fixture contact by user data, if not found -> return null.
@@ -63,6 +64,11 @@ fun Vector2.inRange(start: Vector2, end: Vector2): Boolean {
 	}
 	return false
 
+}
+
+fun Vector2.copyAndround(): Vector2 {
+	return Vector2(round(this.x), round(this.y))
+	
 }
 
 @Serializer(forClass = Vector2::class)
