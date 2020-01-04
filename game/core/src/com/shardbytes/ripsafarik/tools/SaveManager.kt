@@ -14,33 +14,38 @@ import kotlinx.serialization.modules.SerializersModule
 object SaveManager {
 
 	//save path
-	val savefile = Gdx.files.local("test.sav")
+	private val savefile = Gdx.files.local("test.sav")
 
-	fun save() {
-		//specifies which classes can be (de)serialized with polymorphic serializer
-		val polymorphicModule = SerializersModule {
-			polymorphic(Item::class) {
-				//class - its serializer
-				//serializer is auto-generated when @Serializable annotation is found
-				Gun::class with Gun.serializer()
-				Flashlight::class with Flashlight.serializer()
-				GunMagazine::class with GunMagazine.serializer()
-
-			}
+	private val polymorphicModule = SerializersModule {
+		polymorphic(Item::class) {
+			//class - its serializer
+			//serializer is auto-generated when @Serializable annotation is found
+			Gun::class with Gun.serializer()
+			Flashlight::class with Flashlight.serializer()
+			GunMagazine::class with GunMagazine.serializer()
 
 		}
 
-		//json processor
-		val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
-		
+	}
+
+	//json processor
+	private val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
+
+	fun save() {
+		serializeHotbarItems()
+
+	}
+
+	fun serializeHotbarItems(){
+
 		val hotbarItems = arrayListOf<JsonElement>()
-		
+
 		//loop over each itemslot
 		Hotbar.hotbarSlots.forEach {
 			//and use different serializers to serialize it
 			//eg. polymorphic (because Item can be any class specified above)
 			val item = json.toJson(PolymorphicSerializer(Item::class), it.item ?: GunMagazine())
-			
+
 			//or other specified serializers (IntSerializer, FloatSerializer, ...)
 			val position = json.toJson(Vector2Serializer, it.screenPosition)
 
@@ -56,7 +61,7 @@ object SaveManager {
 		//make an array of all the slots (which are now JSON objects)
 		//and put it to string
 		val string = JsonArray(hotbarItems).toString()
-		
+
 		//save JSON string to file
 		savefile.writeString(string, false, "UTF-8")
 
