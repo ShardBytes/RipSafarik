@@ -20,7 +20,7 @@ class Flashlight : Item, IUsable {
 
     override var name = "flashlight"
     override val displayName = "Flashlight"
-    @Transient override val texture = TextureRegion(Textures.Item["weapon/gunMagazine"])
+    @Transient override val texture = TextureRegion(Textures.Item["tool/flashlight"])
 
     @Transient var light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 45f).apply {
         attachToBody(GameWorld.player.body)

@@ -1,6 +1,10 @@
 {
   "textures": [
 	"safarik",
-    "lamp"
+    "lamp",
+	"unknown",
+	"wall_R",
+	"wall_U",
+	"wall_LT"
   ]
 }

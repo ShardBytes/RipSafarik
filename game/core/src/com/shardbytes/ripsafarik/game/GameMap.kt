@@ -11,8 +11,11 @@ import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.entity.ItemDrop
+import com.shardbytes.ripsafarik.items.DestroyTool
 import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 object GameMap {
 
@@ -27,7 +30,7 @@ object GameMap {
 	}
 
 	object Env {
-		private var env: MutableList<MutableList<Block>> = mutableListOf()
+		private var env: MutableList<MutableList<Block?>> = mutableListOf()
 
 		fun load(jsonString: String) {
 			val mapJson = JsonReader().parse(jsonString).get("env")
@@ -35,7 +38,7 @@ object GameMap {
 			env.clear()
 			mapJson.forEach {
 				val arr = it.asStringArray()
-				val arr2 = mutableListOf<Block>()
+				val arr2 = mutableListOf<Block?>()
 				arr.forEachIndexed { index, s -> 
 					arr2.add(BlockCatalog.getBlockCopy(s))
 					
@@ -59,11 +62,25 @@ object GameMap {
 
 				for (x in xMin..xMax) {
 					val block = row[x]
-					batch.draw(TextureRegion(block.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
+					block?.render(batch, x.toFloat(), y.toFloat())
 
 				}
 
 			}
+
+		}
+
+		fun remove(coords: Vector2): Boolean {
+			if((coords.y < 0 || coords.x < 0) || (coords.y > env.size - 1 || coords.x > env[coords.y.roundToInt()].size - 1)) {
+				return false
+				
+			}
+			
+			val block = env[coords.y.roundToInt()][coords.x.roundToInt()]
+			block?.onDestroy(coords)
+
+			env[coords.y.roundToInt()][coords.x.roundToInt()] = null
+			return block != null
 
 		}
 
@@ -106,21 +123,30 @@ object GameMap {
 
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
-				val texture = BlockCatalog.getBlockCopy(overlayBlock.name).texture
+				val block = BlockCatalog.getBlockCopy(overlayBlock.name)
 
 				if (isInRenderDistance(Vector2(overlayBlock.posX, overlayBlock.posY), playerPos)) {
-					if(overlayBlock.name == "lamp") {
-						batch.draw(TextureRegion(texture), overlayBlock.posX - 2.5f, overlayBlock.posY - 0.5f, 2.5f, 0.5f, 3f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
-						
-					} else {
-						batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
-
-					}
+					block.render(batch, overlayBlock.posX, overlayBlock.posY, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
 					
 				}
 
 			}
 
+		}
+		
+		fun remove(coords: Vector2): Boolean {
+			val roundedCoords = Vector2(round(coords.x), round(coords.y))
+			val data = overlay.find { it.posX == roundedCoords.x && it.posY == roundedCoords.y }
+			if(data != null) {
+				val block = BlockCatalog.getBlockCopy(data.name)
+				block.onDestroy(roundedCoords)
+				
+				val success = overlay.remove(data)
+				return success
+				
+			}
+			return false
+			
 		}
 
 	}
@@ -138,6 +164,7 @@ object GameMap {
 
 			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
 			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
+			spawn(ItemDrop(DestroyTool()).apply { setPosition(2f, -2f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
 			//this uses Java reflection, probably not the best solution there is

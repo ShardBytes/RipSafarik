@@ -16,9 +16,10 @@ object InputCore : InputProcessor {
 	var newSelectedSlot = 1 //First slot, zero-th slot is invalid
 
 	override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
+	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
+	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean = false
 	override fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
 	override fun keyTyped(character: Char): Boolean = false
-	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
 
 	fun reset(): InputCore {
 		direction = 0b0000
@@ -36,12 +37,7 @@ object InputCore : InputProcessor {
 
 		}
 
-		return false
-
-	}
-
-	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-		return false
+		return true
 
 	}
 
@@ -49,7 +45,7 @@ object InputCore : InputProcessor {
 	override fun keyUp(keycode: Int): Boolean {
 		turnOffDirection(keycode)
 
-		return false
+		return true
 
 	}
 
@@ -60,7 +56,7 @@ object InputCore : InputProcessor {
 		checkOpenInventory(keycode)
 		checkEscapeKey(keycode)
 
-		return false
+		return true
 
 	}
 

@@ -8,6 +8,6 @@ class EmptyBlock : Block {
 
 	override val name = "default"
 	override val displayName = "default"
-	override val texture = TextureRegion(Textures.Overlay["lamp"]) //TODO: change texture to unknown
+	override val texture = TextureRegion(Textures.Overlay["unknown"])
 	
 }

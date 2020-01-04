@@ -15,7 +15,6 @@ object SaveManager {
 
 	//save path
 	private val savefile = Gdx.files.local("test.sav")
-
 	private val polymorphicModule = SerializersModule {
 		polymorphic(Item::class) {
 			//class - its serializer
@@ -27,7 +26,6 @@ object SaveManager {
 		}
 
 	}
-
 	//json processor
 	private val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
 
@@ -36,8 +34,7 @@ object SaveManager {
 
 	}
 
-	fun serializeHotbarItems(){
-
+	private fun serializeHotbarItems(){
 		val hotbarItems = arrayListOf<JsonElement>()
 
 		//loop over each itemslot
