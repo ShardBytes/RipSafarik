@@ -5,89 +5,105 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.shardbytes.ripsafarik.Settings
+import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.actors.Camera
-import com.shardbytes.ripsafarik.actors.GameWorld
+import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.ui.Healthbar
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 
 object GameScreen : Screen {
 
-    // rendering
-    var camera = Camera(Camera.ResizeStrategy.CHANGE_ZOOM, Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT)
-    var batch = SpriteBatch()
-    
-    // world
-    val world = GameWorld
-    val debugRenderer = Box2DDebugRenderer()
-    
-    
-    init {
-        camera.lockOn(world.player)
+	// rendering
+	var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
+	var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
+	var batch = SpriteBatch()
 
-    }
-    
-    
-    /*
-    ==== update oredr ====
-    It's easiest to think of your order in a single frame, think of it as a series of dependencies.
+	// world
+	val world = GameWorld
+	val debugRenderer = Box2DDebugRenderer()
 
-    User input depends on nothing, so it goes first.
-    Objects being updated depend on the user input, so they go second.
-    Physics depend on the new updated objects, so it goes third.
-    Rendering depends on the latest physics state and object updates, so it goes fourth.
-    UI depends on the scene to already be rendered, so it goes fifth.
-     */
-    override fun render(dt: Float) {
-        // first act/tick
-        world.tick(dt)
-        
-        // update camera before rendering
-        camera.update()
-        batch.projectionMatrix.set(camera.innerCamera.combined)
-        
-        // clear screen
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-        
-        // render stuff
-        batch.begin()
-        world.render(dt, batch)
-        batch.end()
-    
-        // debug render world physics into camera matrix
-        if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
+	init {
+		camera.lockOn(world.player)
 
-        // render hud at the top
-        batch.projectionMatrix.set(camera.innerCamera.projection)
-        batch.begin()
-        world.renderUI(dt, batch)
-        batch.end()
-        
-    }
+	}
 
-    override fun show() {
+	/*
+	==== update oredr ====
+	It's easiest to think of your order in a single frame, think of it as a series of dependencies.
 
-    }
+	User input depends on nothing, so it goes first.
+	Objects being updated depend on the user input, so they go second.
+	Physics depend on the new updated objects, so it goes third.
+	Rendering depends on the latest physics state and object updates, so it goes fourth.
+	UI depends on the scene to already be rendered, so it goes fifth.
+	 */
+	override fun render(dt: Float) {
+		// first act/tick
+		world.tick(dt)
 
-    override fun pause() {
+		// update camera before rendering
+		camera.update()
+		batch.projectionMatrix.set(camera.innerCamera.combined)
 
-    }
+		// clear screen
+		Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-    override fun resume() {
+		// render stuff
+		batch.begin()
+		world.render(dt, batch)
+		batch.end()
 
-    }
+		// debug render world physics into camera matrix
+		if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
-    override fun resize(width: Int, height: Int) {
-        camera.windowResized(width, height)
-        
-    }
+		//Lighting
+		GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
+		GameWorld.lights.setCombinedMatrix(camera.innerCamera)
+		GameWorld.lights.updateAndRender()
 
-    override fun dispose() {
-        debugRenderer.dispose()
+		// render hud at the top
+		uiCamera.update()
+		batch.projectionMatrix.set(uiCamera.innerCamera.projection)
+		batch.begin()
+		world.renderUI(dt, batch)
+		batch.end()
 
-    }
+	}
 
-    override fun hide() {
+	override fun show() {
 
-    }
+	}
+
+	override fun pause() {
+
+	}
+
+	override fun resume() {
+
+	}
+
+	override fun resize(width: Int, height: Int) {
+		camera.windowResized(width, height)
+		uiCamera.windowResized(width, height)
+
+		Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
+		Hotbar.updateSlotPositions()
+
+	}
+
+	override fun dispose() {
+		debugRenderer.dispose()
+		batch.dispose()
+		world.dispose()
+
+		Healthbar.dispose()
+
+	}
+
+	override fun hide() {
+
+	}
 
 }

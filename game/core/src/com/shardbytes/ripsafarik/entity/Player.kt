@@ -2,178 +2,163 @@ package com.shardbytes.ripsafarik.entity
 
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.actors.GameMap
-import com.shardbytes.ripsafarik.actors.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
-import com.shardbytes.ripsafarik.components.Entity
-import com.shardbytes.ripsafarik.components.ItemInventory
-import com.shardbytes.ripsafarik.ui.Healthbar
+import com.shardbytes.ripsafarik.components.IUsable
+import com.shardbytes.ripsafarik.components.input.InputCore
+import com.shardbytes.ripsafarik.components.world.Entity
+import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.body
 import kotlin.math.min
-import kotlin.math.sqrt
+import kotlin.system.exitProcess
 
-class Player() : Entity {
-    
-    private val width = 1f
-    private val height = 1f
-    private val maxSpeed = 4f //TODO: What unit?
-    
-    private var isWalking = false
-    private var elapsedTime = 0f 
-    private val animatedPlayer = Animations["animatedPlayer"]
+class Player : Entity {
 
-    //Health stuff
-    private val healthbar = Healthbar()
-    private val maxHealth = 100f
-    private var health = 100f
-    private var regenSpeed = 1f
-    
-    val inventory: ItemInventory = ItemInventory()
-    
-    override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
-        circle(radius = width*0.5f) { userData = this@Player }
-        fixedRotation = true
+	private val width = 1f
+	private val height = 1f
+	private val maxSpeed = 4f //TODO: What unit?
 
-    }
-    
-    override fun tick(dt: Float) {
-        handleInput()
+	private var isWalking = false
+	private var elapsedTime = 0f
 
-        //health regen
-        health = min(maxHealth, health + regenSpeed)
-        
-    }
-    
-    override fun render(dt: Float, batch: SpriteBatch) {
-        val originX = width * 0.5f
-        val originY = height * 0.5f
-        val originBasedPositionX = position.x - originX
-        val originBasedPositionY = position.y - originY
+	private val animatedPlayer = Animations["animatedPlayer"]
 
-        if(isWalking) {
-            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
+	//Health stuff
+	override var maxHealth = 100f
+	override var health = 100f
+	override var regenSpeed = 1f
 
-        } else {
-            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
+	//Item using
+	var itemUseCooldown = 0f
+	var elapsedItemUseCooldown = 0f
 
-        }
-        elapsedTime += dt
-        elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
+	override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
+		circle(radius = width * 0.5f) { userData = this@Player }
+		fixedRotation = true
 
-        healthbar.render(health.toInt(), position, batch)
-        
-    }
+	}
 
-    private fun handleInput() {
-        val invsqrt2 = 1f / sqrt(2f)
-        val dir = getKeyboardDirection()
-        isWalking = (dir != "  ")
-        
-        when(dir) {
-            "W " -> body.setLinearVelocity(0f, maxSpeed)
-            
-            "S " -> body.setLinearVelocity(0f, -maxSpeed)
-            
-            "A " -> body.setLinearVelocity(-maxSpeed, 0f)
-            
-            "D " -> body.setLinearVelocity(maxSpeed, 0f)
-            
-            "WA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
-            
-            "WD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, invsqrt2 * maxSpeed)
-            
-            "SA" -> body.setLinearVelocity(-invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
-            
-            "SD" -> body.setLinearVelocity(invsqrt2 * maxSpeed, -invsqrt2 * maxSpeed)
-            
-            else -> body.setLinearVelocity(0f, 0f)
-            
-        }
-        
-        val vecToMouse = Vector2()
-        when(dir) {
-            "W " -> rotation = 90f
-            
-            "S " -> rotation = 270f
-            
-            "A " -> rotation = 180f
-            
-            "D " -> rotation = 0f
-            
-            "WA" -> rotation = 135f
-            
-            "WD" -> rotation = 45f
-            
-            "SA" -> rotation = 225f
-            
-            "SD" -> rotation = 315f
-            
-            else -> rotation = 360f - vecToMouse.set(input.x - graphics.width*0.5f, input.y - graphics.height*0.5f).nor().angle()
-            
-        }
-        
-        if(input.isTouched) {
-            val playerPos = position.cpy()
-            val playerRotation = rotation
-            val bullet = Bullet().apply {
-                setPosition(playerPos.add(Vector2.X.rotate(rotation).setLength(0.65f)))
-                body.linearVelocity = Vector2.X.setLength(30f).setAngle(playerRotation)
+	override fun tick(dt: Float) {
+		handleMovement()
+		handleTouches()
+		handleNumbers()
 
-            }
+		//health regen
+		health = min(maxHealth, health + regenSpeed)
 
-            GameMap.Entities.spawn(bullet)
+		//item use cooldown
+		elapsedItemUseCooldown = min(itemUseCooldown, elapsedItemUseCooldown + dt)
 
-        }
+	}
 
-    }
+	override fun render(dt: Float, batch: SpriteBatch) {
+		val originX = width * 0.5f
+		val originY = height * 0.5f
+		val originBasedPositionX = position.x - originX
+		val originBasedPositionY = position.y - originY
 
-    private fun getKeyboardDirection() : String {
-        val dir = charArrayOf(' ', ' ')
-        var primaryDirectionSet = false
-        
-        if(input.isKeyPressed(Input.Keys.W)) {
-            dir[0] = 'W'
-            primaryDirectionSet = true
-            
-        } else if(input.isKeyPressed(Input.Keys.S)) {
-            dir[0] = 'S'
-            primaryDirectionSet = true
-            
-        }
-        
-        if(input.isKeyPressed(Input.Keys.A)) {
-            dir[if (primaryDirectionSet) 1 else 0] = 'A'
-            
-        } else if (input.isKeyPressed(Input.Keys.D)) {
-            dir[if (primaryDirectionSet) 1 else 0] = 'D'
-            
-        }
-        
-        return String(dir)
-        
-    }
+		if (isWalking) {
+			batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
 
-    /**
-     * Damage the player. If health goes below zero, weelllll that sucks.
-     */
-    fun takeDamage(amount: Float) {
-        health -= amount
+		} else {
+			batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
 
-        if(health <= 0) {
-            System.exit(0)
+		}
+		elapsedTime += dt
+		elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
 
-        }
+	}
 
-    }
-    
-    override fun dispose() {
-        //y tho
-        
-    }
+	private fun handleMovement() {
+		if (!PlayerInventory.isOpened) {
+			val dir = InputCore.direction
+			isWalking = dir > 0
+
+			val mouseAngle = 360f - Vector2(input.x - graphics.width * 0.5f, input.y - graphics.height * 0.5f).nor().angle()
+			val movementVector = Vector2((dir shr 0 and 1) * maxSpeed, (dir shr 3 and 1) * maxSpeed)
+					.sub((dir shr 1 and 1) * maxSpeed, (dir shr 2 and 1) * maxSpeed)
+					.setLength(maxSpeed)
+
+			rotation = if (dir > 0) movementVector.angle() else mouseAngle
+			body.linearVelocity = movementVector
+
+		} else {
+			body.linearVelocity = Vector2()
+
+		}
+
+	}
+
+	private fun handleTouches() {
+		if (!PlayerInventory.isOpened) {
+			if (input.isTouched) {
+				if (elapsedItemUseCooldown == itemUseCooldown) {
+					val item = Hotbar.hotbarSlots[Hotbar.selectedSlot].item
+					if (item is IUsable) { //item can be null, but null is not IUsable, so good
+						item.use(this)
+						itemUseCooldown = item.cooldown
+						elapsedItemUseCooldown = 0f
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	private fun handleNumbers() {
+		if (!PlayerInventory.isOpened) {
+			val newSlot = InputCore.newSelectedSlot.dec()
+
+			if (Hotbar.slotCount > newSlot) {
+				Hotbar.selectedSlot = newSlot
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Damage the player. If health goes below zero, weelllll that sucks.
+	 */
+	fun takeDamage(amount: Float) {
+		health -= amount
+
+		if (health <= 0) {
+			exitProcess(0)
+
+		}
+
+	}
+
+	fun pickUp(item: Item): Boolean {
+		var emptySlot = Hotbar.hotbarSlots.find { it.item == null }
+		if (emptySlot == null) {
+			emptySlot = PlayerInventory.slots.find { it.item == null }
+
+		}
+		if (emptySlot == null) {
+			return false
+
+		}
+		emptySlot.item = item
+		return true
+
+	}
+
+	override fun dispose() {
+		//y tho
+
+	}
 
 }

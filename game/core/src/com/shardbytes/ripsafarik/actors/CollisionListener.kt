@@ -9,14 +9,15 @@ import com.badlogic.gdx.physics.box2d.Manifold
 import com.shardbytes.ripsafarik.dataType
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.entity.Zombie
+import com.shardbytes.ripsafarik.entity.zombie.GenericZombie
+import com.shardbytes.ripsafarik.game.GameMap
 
 class CollisionListener : ContactListener {
 
     override fun beginContact(contact: Contact?) {
         if(contact == null) return
         contact.dataType<Player> { player, _ ->
-            contact.dataType<Zombie> { zombie, _ ->
+            contact.dataType<GenericZombie> { zombie, _ ->
                 val knockbackVector = Vector2(MathUtils.cosDeg(zombie.rotation), MathUtils.sinDeg(zombie.rotation)).setLength(zombie.knockbackForce)
 
                 //player.body.applyForceToCenter(knockbackVector, true)
@@ -32,7 +33,7 @@ class CollisionListener : ContactListener {
         }
 
         contact.dataType<Bullet> { bullet, _ ->
-            contact.dataType<Zombie> { zombie, _ ->
+            contact.dataType<GenericZombie> { zombie, _ ->
                 GameMap.Entities.despawn(bullet)
                 zombie.takeDamage(5f)
 

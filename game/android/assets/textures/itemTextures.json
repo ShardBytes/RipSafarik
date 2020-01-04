@@ -1,0 +1,9 @@
+{
+  "categories": ["weapon"],
+
+  "weapon": [
+    "gun",
+    "gunMagazine"
+  ]
+
+}
