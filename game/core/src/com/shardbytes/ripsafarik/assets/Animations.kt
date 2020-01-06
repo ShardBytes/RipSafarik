@@ -14,6 +14,7 @@ object Animations {
 				"animatedMonster" to load("animatedMonster"),
 				"animatedMonster2" to load("animatedMonster2"),
 				"animatedMonster3" to load("animatedMonster3"),
+				"animatedFastMonster" to load("animatedFastMonster"),
 				"animatedPlayer" to load("animatedPlayer"),
 				"animatedExplosion" to load("animatedExplosion")
 		)
@@ -25,6 +26,6 @@ object Animations {
 		
 	}
 
-	operator fun get(animation: String): Animation<TextureRegion> = buffer[animation] ?: throw IllegalStateException("not loaded")
+	operator fun get(animation: String): Animation<TextureRegion> = buffer[animation] ?: throw IllegalStateException("\"$animation\" not loaded")
 
 }

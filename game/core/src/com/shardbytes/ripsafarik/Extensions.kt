@@ -1,11 +1,7 @@
 package com.shardbytes.ripsafarik
 
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.Fixture
-import kotlinx.serialization.*
-import kotlinx.serialization.internal.*
-import kotlin.math.round
 
 /**
  * Get entity of fixture contact by user data, if not found -> return null.
@@ -51,68 +47,5 @@ inline fun <reified T> Contact.dataType(block: (T, Fixture) -> Unit): T? {
  */
 fun map(value: Float, fromLow: Float, fromHigh: Float, toLow: Float, toHigh: Float): Float {
 	return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow
-
-}
-
-fun Vector2.inRange(start: Vector2, end: Vector2): Boolean {
-	if (this.x >= start.x && this.x <= end.x) {
-		if (this.y >= start.y && this.y <= end.y) {
-			return true
-
-		}
-
-	}
-	return false
-
-}
-
-fun Vector2.copyAndround(): Vector2 {
-	return Vector2(round(this.x), round(this.y))
-	
-}
-
-@Serializer(forClass = Vector2::class)
-object Vector2Serializer : KSerializer<Vector2> {
-
-	override val descriptor: SerialDescriptor = object : SerialClassDescImpl("Vector2") {
-		init {
-			addElement("x")
-			addElement("y")
-
-		}
-
-	}
-
-	override fun serialize(encoder: Encoder, obj: Vector2) {
-		val compositeOutput = encoder.beginStructure(descriptor)
-		compositeOutput.encodeFloatElement(descriptor, 0, obj.x)
-		compositeOutput.encodeFloatElement(descriptor, 1, obj.y)
-		compositeOutput.endStructure(descriptor)
-
-	}
-
-	override fun deserialize(decoder: Decoder): Vector2 {
-		val decoder2 = decoder.beginStructure(descriptor)
-		var x: Float? = null
-		var y: Float? = null
-
-		loop@ while (true) {
-			when (val i = decoder2.decodeElementIndex(descriptor)) {
-				CompositeDecoder.READ_DONE -> break@loop
-				0 -> x = decoder2.decodeFloatElement(descriptor, i)
-				1 -> y = decoder2.decodeFloatElement(descriptor, i)
-				else -> throw SerializationException("Unknown index $i")
-
-			}
-
-		}
-		decoder2.endStructure(descriptor)
-
-		return Vector2(
-				x ?: throw MissingFieldException("x"),
-				y ?: throw MissingFieldException("y")
-		)
-
-	}
 
 }

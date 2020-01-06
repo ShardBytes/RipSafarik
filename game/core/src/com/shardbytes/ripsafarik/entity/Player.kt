@@ -11,7 +11,10 @@ import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
+import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.body
@@ -44,7 +47,7 @@ class Player : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
+	override fun tick() {
 		handleMovement()
 		handleTouches()
 		handleNumbers()
@@ -53,7 +56,7 @@ class Player : Entity {
 		health = min(maxHealth, health + regenSpeed)
 
 		//item use cooldown
-		elapsedItemUseCooldown = min(itemUseCooldown, elapsedItemUseCooldown + dt)
+		elapsedItemUseCooldown = min(itemUseCooldown, elapsedItemUseCooldown + 1f / 50f)
 
 	}
 
@@ -108,6 +111,10 @@ class Player : Entity {
 					}
 
 				}
+				val pos = GameScreen.camera.unproject(input.x, input.y)
+				println(pos)
+				GameMap_new.spawn(ZombieNoHandWithBlood().apply { setPosition(pos) })
+				Thread.sleep(100)
 
 			}
 

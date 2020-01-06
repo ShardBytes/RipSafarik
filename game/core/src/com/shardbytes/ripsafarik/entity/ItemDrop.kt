@@ -50,7 +50,7 @@ class ItemDrop(@Polymorphic private val item: Item) : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
+	override fun tick() {
 		//If close enough to the player, set available for picking up
 		availableForPickup = position.dst(GameWorld.player.position) < 1
 

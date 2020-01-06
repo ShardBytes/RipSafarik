@@ -28,7 +28,7 @@ abstract class GenericZombie : Entity {
 	protected abstract var frames: Int
 	protected abstract var frameTime: Int
 
-	override fun tick(dt: Float) {
+	override fun tick() {
 		//vecToPlayer.set(world.player.position.x - position.x, world.player.position.y - position.y).nor().setLength(80f)
 		//rotation = vecToPlayer.angle()
 		//body.applyForceToCenter(vecToPlayer, true)

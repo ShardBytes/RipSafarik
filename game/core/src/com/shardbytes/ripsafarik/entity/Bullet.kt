@@ -39,8 +39,8 @@ class Bullet : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
-		health -= dt
+	override fun tick() {
+		health -= 1f / 20f
 		if (health <= 0f) {
 			GameMap.Entities.despawn(this)
 

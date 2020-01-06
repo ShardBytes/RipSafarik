@@ -31,7 +31,7 @@ class Explosion(private val strength: Float) : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
+	override fun tick() {
 		//6 frames @ 100ms each
 		if (elapsedTime >= 0.6f) {
 			GameMap.Entities.despawn(this)

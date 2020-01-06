@@ -111,7 +111,6 @@ class MenuScreen : Screen {
 		loadButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
 				Gdx.input.inputProcessor = InputCore.reset()
-				GameWorld.load = true
 				MainGame.screen = GameScreen
 				uiStage.dispose()
 

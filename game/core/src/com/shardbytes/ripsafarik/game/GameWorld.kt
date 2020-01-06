@@ -8,10 +8,6 @@ import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
-import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
-import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
-import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -22,8 +18,6 @@ object GameWorld : Disposable {
 	val physics = createWorld()
 	val lights = createLightHandler()
 	val player = Player()
-
-	var load = false
 
 	init {
 		//Set physics collider
@@ -36,22 +30,16 @@ object GameWorld : Disposable {
 		BlockCatalog.registerBlock(Concrete())
 		BlockCatalog.registerBlock(Lamp())
 		BlockCatalog.registerBlock(Wall())
+		
+		GameMap_new.loadMap("world")
 
-		GameMap.loadAll("world")
-
-		if (load) {
-			//player.position.set(SaveManager.savefile.readString())
-		} else {
-			player.position.set(1f, 1f)
-		}
+		player.position.set(1f, 1f)
 
 	}
 
 	fun render(dt: Float, batch: SpriteBatch) {
 		//Draw the world and everything
-		GameMap.Env.render(dt, batch, player.position)
-		GameMap.Overlay.render(dt, batch, player.position)
-		GameMap.Entities.render(dt, batch, player.position)
+		GameMap_new.render(dt, batch)
 		player.render(dt, batch)
 
 	}
@@ -65,21 +53,11 @@ object GameWorld : Disposable {
 	}
 
 	fun tick(dt: Float) {
-		player.tick(dt)
-		GameMap.Entities.tick(dt)
-		//BADBADBAD
-		if (GameMap.Entities.totalEntities() < 1) {
-			val zombie1 = ZombieNoHand().apply { setPosition(8.0f, 9.0f) }
-			val zombie2 = ZombieNoHandWithBlood().apply { setPosition(8.0f, 10.0f) }
-			val zombie3 = ZombieWithHandWithBlood().apply { setPosition(8.0f, 11.0f) }
-			val zombie4 = ZombieRunner().apply { setPosition(8.0f, 12.0f) }
-			GameMap.Entities.spawn(zombie1, zombie2, zombie3, zombie4)
-
-		}
-		//ok here
-		physics.step(dt, 8, 3) //TODO: the amount of time to simulate - dt or 1/20s?
-
+		player.tick()
+		GameMap_new.tick()
 		DaylightCycle.tick(dt)
+
+		physics.step(dt, 8, 3)
 
 	}
 

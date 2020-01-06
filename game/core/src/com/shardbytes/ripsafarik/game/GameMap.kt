@@ -3,8 +3,6 @@ package com.shardbytes.ripsafarik.game
 import box2dLight.Light
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.JsonReader
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
@@ -40,9 +38,9 @@ object GameMap {
 			mapJson.forEach {
 				val arr = it.asStringArray()
 				val arr2 = mutableListOf<Block?>()
-				arr.forEachIndexed { index, s -> 
-					arr2.add(BlockCatalog.getBlockCopy(s))
-					
+				arr.forEachIndexed { index, s ->
+					arr2.add(BlockCatalog.getBlock(s))
+
 				}
 				env.add(arr2)
 
@@ -50,7 +48,7 @@ object GameMap {
 
 		}
 
-		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
+		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {/*
 			//nice loop
 			//draw only the stuff inside player's render distance
 			val yMin = clamp(playerPos.y.toInt() - Settings.RENDER_DISTANCE, 0, env.size - 1)
@@ -67,16 +65,16 @@ object GameMap {
 
 				}
 
-			}
+			}*/
 
 		}
 
 		fun remove(coords: Vector2): Boolean {
-			if((coords.y < 0 || coords.x < 0) || (coords.y > env.size - 1 || coords.x > env[coords.y.roundToInt()].size - 1)) {
+			if ((coords.y < 0 || coords.x < 0) || (coords.y > env.size - 1 || coords.x > env[coords.y.roundToInt()].size - 1)) {
 				return false
-				
+
 			}
-			
+
 			val block = env[coords.y.roundToInt()][coords.x.roundToInt()]
 			block?.onDestroy(coords)
 
@@ -113,10 +111,10 @@ object GameMap {
 						it["rotation"].asFloat()
 				)
 				overlay.add(data)
-				
+
 				val pos = Vector2(data.posX, data.posY)
-				BlockCatalog.getBlockCopy(data.name).createCollider(pos)
-				BlockCatalog.getBlockCopy(data.name).onCreate(pos)
+				BlockCatalog.getBlock(data.name).createCollider(pos)
+				BlockCatalog.getBlock(data.name).onCreate(pos)
 
 			}
 
@@ -124,30 +122,30 @@ object GameMap {
 
 		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
 			for (overlayBlock in overlay) {
-				val block = BlockCatalog.getBlockCopy(overlayBlock.name)
+				val block = BlockCatalog.getBlock(overlayBlock.name)
 
 				if (isInRenderDistance(Vector2(overlayBlock.posX, overlayBlock.posY), playerPos)) {
 					block.render(batch, overlayBlock.posX, overlayBlock.posY, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
-					
+
 				}
 
 			}
 
 		}
-		
+
 		fun remove(coords: Vector2): Boolean {
 			val roundedCoords = Vector2(round(coords.x), round(coords.y))
 			val data = overlay.find { it.posX == roundedCoords.x && it.posY == roundedCoords.y }
-			if(data != null) {
-				val block = BlockCatalog.getBlockCopy(data.name)
+			if (data != null) {
+				val block = BlockCatalog.getBlock(data.name)
 				block.onDestroy(roundedCoords)
-				
+
 				overlay.remove(data)
 				return true
-				
+
 			}
 			return false
-			
+
 		}
 
 	}
@@ -166,7 +164,7 @@ object GameMap {
 			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
 			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
 			spawn(ItemDrop(DestroyTool()).apply { setPosition(2f, -2f) })
-			
+
 			spawn(Explosion(4f).apply { setPosition(4f, 4f) })
 
 			//TODO: LOADING ENTITIES FROM WORLD
@@ -220,7 +218,7 @@ object GameMap {
 			}
 
 			for (entity in entities) {
-				entity.tick(dt)
+				entity.tick()
 
 			}
 
@@ -275,13 +273,13 @@ object GameMap {
 	fun isInRenderDistance(testPos: Vector2, playerPos: Vector2): Boolean {
 		//if number is in range
 		//nice Kotlin stuff
-		if (testPos.x.toInt() in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
+		/*if (testPos.x.toInt() in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
 			if (testPos.y.toInt() in (playerPos.y.toInt() - Settings.RENDER_DISTANCE)..(playerPos.y.toInt() + Settings.RENDER_DISTANCE)) {
 				return true
 
 			}
 
-		}
+		}*/
 		return false
 
 	}

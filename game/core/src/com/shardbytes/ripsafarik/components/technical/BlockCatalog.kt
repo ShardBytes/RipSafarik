@@ -7,7 +7,7 @@ object BlockCatalog {
 	
 	private var blocks: MutableMap<String, Block> = mutableMapOf(Pair("default", EmptyBlock()))
 	
-	fun getBlockCopy(blockId: String): Block {
+	fun getBlock(blockId: String): Block {
 		return blocks[blockId] ?: blocks["default"]!!
 		
 	}

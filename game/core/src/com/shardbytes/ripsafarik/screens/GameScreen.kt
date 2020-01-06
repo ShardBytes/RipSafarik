@@ -11,6 +11,9 @@ import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 object GameScreen : Screen {
 
@@ -39,9 +42,9 @@ object GameScreen : Screen {
 	UI depends on the scene to already be rendered, so it goes fifth.
 	 */
 	override fun render(dt: Float) {
-		// first act/tick
+		// tick the world first
 		world.tick(dt)
-
+		
 		// update camera before rendering
 		camera.update()
 		batch.projectionMatrix.set(camera.innerCamera.combined)
