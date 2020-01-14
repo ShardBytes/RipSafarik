@@ -3,10 +3,10 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.Vector2Serializer
+import com.shardbytes.ripsafarik.blockPosToChunkPos
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
 import com.shardbytes.ripsafarik.identifier
 import com.shardbytes.ripsafarik.toVector
 import kotlinx.serialization.Serializable
@@ -52,7 +52,7 @@ class Chunk(
 		entitiesToSpawn.clear()
 		
 		entities.forEach {
-			//passEntityToOtherChunkIfOutsideTheBounds(it)
+			passEntityToOtherChunkIfOutsideTheBounds(it)
 			it.tick()
 
 		}
@@ -63,26 +63,19 @@ class Chunk(
 	}
 
 	private fun passEntityToOtherChunkIfOutsideTheBounds(entity: Entity) {
-		//TODO: wtf
-		//i had enough
-		//bb
-		var outsideSideX = 0
-		var outsideSideY = 0
-		if(entity.position.x < chunkBlockLocation.x) outsideSideX = -1 else
-		if(entity.position.x > chunkBlockLocation.x) outsideSideX =  1
-		if(entity.position.y < chunkBlockLocation.y) outsideSideY = -1 else
-		if(entity.position.y > chunkBlockLocation.y) outsideSideY =  1
+		val entityChunk = blockPosToChunkPos(entity.position)
 		
-		if(outsideSideX != 0 || outsideSideY != 0) {
-			println("Transfering entity $entity to $outsideSideX, $outsideSideY")
-			putEntityIntoNearbyChunk(entity, outsideSideX, outsideSideY)
+		//if entity isn't inside this chunk
+		if(!entityChunk.epsilonEquals(chunkLocation)) {
+			println("Transfering entity $entity to $entityChunk")
+			putEntityIntoNearbyChunk(entity, entityChunk)
 			
 		}
 
 	}
-	
-	private fun putEntityIntoNearbyChunk(entity: Entity, x: Int, y: Int) {
-		GameMap_new.getChunk(chunkLocation.cpy().add(x.toFloat(), y.toFloat()).identifier()).entities.add(entity)
+
+	private fun putEntityIntoNearbyChunk(entity: Entity, intoChunk: Vector2) {
+		GameMap_new.getChunk(intoChunk.identifier()).entities.add(entity)
 		entitiesToRemove.add(entity)
 		
 	}
