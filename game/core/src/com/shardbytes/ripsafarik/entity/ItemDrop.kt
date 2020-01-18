@@ -13,6 +13,7 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import ktx.box2d.body
@@ -59,7 +60,7 @@ class ItemDrop(@Polymorphic private val item: Item) : Entity {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
 				val successful = GameWorld.player.pickUp(item)
 				if (successful) {
-					GameMap.Entities.despawn(this)
+					GameMap.Entities.despawn(this) //TODO: this.despawn() with default interface impl
 
 				}
 

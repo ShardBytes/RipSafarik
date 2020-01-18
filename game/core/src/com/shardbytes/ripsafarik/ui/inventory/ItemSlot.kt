@@ -13,7 +13,7 @@ import kotlinx.serialization.*
 
 @Serializable
 class ItemSlot {
-
+	
 	@Polymorphic
 	var item: Item? = null
 

@@ -1,21 +1,27 @@
 package com.shardbytes.ripsafarik.tools
 
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.shardbytes.ripsafarik.Vector2Serializer
+import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
-import com.shardbytes.ripsafarik.game.Chunk
+import com.shardbytes.ripsafarik.entity.ItemDrop
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
+import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
+import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
 import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.identifier
 import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun
 import com.shardbytes.ripsafarik.items.GunMagazine
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import com.shardbytes.ripsafarik.ui.inventory.ItemSlot
 import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.internal.MapEntrySerializer
-import kotlinx.serialization.internal.MapLikeSerializer
+import kotlinx.serialization.internal.nullable
 import kotlinx.serialization.json.*
+import kotlinx.serialization.list
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.serializer
+import kotlinx.serialization.set
 
 object SaveManager {
 
@@ -31,33 +37,60 @@ object SaveManager {
 
 		}
 
+		polymorphic(Entity::class) {
+			ZombieNoHand::class with ZombieNoHand.serializer()
+			ZombieNoHandWithBlood::class with ZombieNoHandWithBlood.serializer()
+			ZombieRunner::class with ZombieRunner.serializer()
+			ZombieWithHandWithBlood::class with ZombieWithHandWithBlood.serializer()
+			
+			ItemDrop::class with ItemDrop.serializer()
+
+		}
+
 	}
 	//json processor
 	private val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
 
 	fun save() {
-		serializeMap()
-		//serializeHotbarItems()
+		//serializeMap()
+		serializeHotbarItems()
+
+	}
+
+	private fun serializeMap() {
+		val chunks = arrayListOf<JsonElement>()
+
+		GameMap_new.chunks.forEach {
+			//chunk info
+			val chunkLocation = it.value.chunkLocation.identifier()
+			
+			//serialize tiles
+			
+			//serialize entities
+			val entities = serializePolymorphicList(it.value.entities)
+			val entitiesToSpawn = serializePolymorphicList(it.value.entitiesToSpawn)
+			val entitiesToRemove = serializePolymorphicList(it.value.entitiesToRemove)
+			
+			val jsonObj = JsonObject(mapOf(
+					"entities" to JsonArray(entities),
+					"entitiesToSpawn" to JsonArray(entitiesToSpawn),
+					"entitiesToRemove" to JsonArray(entitiesToRemove)
+			))
+			
+			chunks.add(jsonObj)
+
+		}
+
+		val string = JsonArray(chunks).toString()
+		savefile.writeString(string, false, "UTF-8")
 
 	}
 	
-	private fun serializeMap() {
-		//TODO: move to GameMap_new.saveMap()
-		val chunks = arrayListOf<JsonElement>()
-		
-		GameMap_new.chunks.forEach {
-			chunks.add(json.toJson(Chunk.serializer(), it.value))
-			
-		}
-		
-		val string = JsonArray(chunks).toString()
-		savefile.writeString(string, false, "UTF-8")
-		
-	}
 
-	private fun serializeHotbarItems(){
+
+	private fun serializeHotbarItems() {
 		val hotbarItems = arrayListOf<JsonElement>()
-
+/*
 		//loop over each itemslot
 		Hotbar.hotbarSlots.forEach {
 			//and use different serializers to serialize it
@@ -75,14 +108,30 @@ object SaveManager {
 			hotbarItems.add(jsonObj)
 
 		}
+		*/
+		val jsonnnn = JsonArray(serializePolymorphicList(Hotbar.hotbarSlots.toList()))
+		hotbarItems.add(jsonnnn)
 
 		//make an array of all the slots (which are now JSON objects)
 		//and put it to string
-		val string = JsonArray(hotbarItems).toString()
+		val string = hotbarItems.toString()
 
 		//save JSON string to file
 		savefile.writeString(string, false, "UTF-8")
 
 	}
+	
+	private inline fun <reified T : Any> serializePolymorphicList(list: List<T>): ArrayList<JsonElement> {
+		val jsonList = arrayListOf<JsonElement>()
+		list.forEach {
+			val listElement = json.toJson(PolymorphicSerializer(T::class), it)
+			jsonList.add(listElement)
 
+		}
+		return jsonList
+
+	}
+	
+	
+	
 }

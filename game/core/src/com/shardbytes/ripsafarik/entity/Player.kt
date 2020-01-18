@@ -14,6 +14,7 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
 import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -112,9 +113,8 @@ class Player : Entity {
 
 				}
 				val pos = GameScreen.camera.unproject(input.x, input.y)
-				println(pos)
-				GameMap_new.spawn(ZombieNoHandWithBlood().apply { setPosition(pos) })
-				Thread.sleep(100)
+				GameMap_new.spawn(ItemDrop(Flashlight()).apply { setPosition(pos) })
+				Thread.sleep(1000)
 
 			}
 

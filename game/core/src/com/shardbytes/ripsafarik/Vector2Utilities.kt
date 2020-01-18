@@ -3,6 +3,7 @@ package com.shardbytes.ripsafarik
 import com.badlogic.gdx.math.Vector2
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
+import kotlin.math.floor
 import kotlin.math.round
 
 fun Vector2.inRange(start: Vector2, end: Vector2): Boolean {
@@ -44,9 +45,12 @@ fun Long.toVector(): Vector2 {
 
 }
 
+fun Long.vectorXComponent() = Float.fromBits((this ushr 32).toInt())
+fun Long.vectorYComponent() = Float.fromBits(toInt())
+
 fun Vector2.floor(): Vector2 {
-	x = kotlin.math.floor(x)
-	y = kotlin.math.floor(y)
+	x = floor(x)
+	y = floor(y)
 
 	return this
 
