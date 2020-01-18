@@ -1,7 +1,6 @@
 package com.shardbytes.ripsafarik.tools
 
 import com.badlogic.gdx.Gdx
-import com.shardbytes.ripsafarik.Vector2Serializer
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.ItemDrop
@@ -21,7 +20,6 @@ import kotlinx.serialization.internal.nullable
 import kotlinx.serialization.json.*
 import kotlinx.serialization.list
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.set
 
 object SaveManager {
 
@@ -42,7 +40,7 @@ object SaveManager {
 			ZombieNoHandWithBlood::class with ZombieNoHandWithBlood.serializer()
 			ZombieRunner::class with ZombieRunner.serializer()
 			ZombieWithHandWithBlood::class with ZombieWithHandWithBlood.serializer()
-			
+
 			ItemDrop::class with ItemDrop.serializer()
 
 		}
@@ -63,20 +61,20 @@ object SaveManager {
 		GameMap_new.chunks.forEach {
 			//chunk info
 			val chunkLocation = it.value.chunkLocation.identifier()
-			
+
 			//serialize tiles
-			
+
 			//serialize entities
 			val entities = serializePolymorphicList(it.value.entities)
 			val entitiesToSpawn = serializePolymorphicList(it.value.entitiesToSpawn)
 			val entitiesToRemove = serializePolymorphicList(it.value.entitiesToRemove)
-			
+
 			val jsonObj = JsonObject(mapOf(
 					"entities" to JsonArray(entities),
 					"entitiesToSpawn" to JsonArray(entitiesToSpawn),
 					"entitiesToRemove" to JsonArray(entitiesToRemove)
 			))
-			
+
 			chunks.add(jsonObj)
 
 		}
@@ -85,7 +83,6 @@ object SaveManager {
 		savefile.writeString(string, false, "UTF-8")
 
 	}
-	
 
 
 	private fun serializeHotbarItems() {
@@ -109,7 +106,7 @@ object SaveManager {
 
 		}
 		*/
-		val jsonnnn = JsonArray(serializePolymorphicList(Hotbar.hotbarSlots.toList()))
+		val jsonnnn = json.toJson(ItemSlot.serializer().nullable.list, Hotbar.hotbarSlots.toList())
 		hotbarItems.add(jsonnnn)
 
 		//make an array of all the slots (which are now JSON objects)
@@ -120,7 +117,7 @@ object SaveManager {
 		savefile.writeString(string, false, "UTF-8")
 
 	}
-	
+
 	private inline fun <reified T : Any> serializePolymorphicList(list: List<T>): ArrayList<JsonElement> {
 		val jsonList = arrayListOf<JsonElement>()
 		list.forEach {
@@ -131,7 +128,6 @@ object SaveManager {
 		return jsonList
 
 	}
-	
-	
-	
+
+
 }
