@@ -3,10 +3,16 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.blockPosToChunkPos
+import com.shardbytes.ripsafarik.blocks.Asfalt
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
+import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.identifier
+import com.shardbytes.ripsafarik.items.BlockItem
+import com.shardbytes.ripsafarik.items.Flashlight
+import com.shardbytes.ripsafarik.items.Gun
+import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.vectorXComponent
 import com.shardbytes.ripsafarik.vectorYComponent
 
@@ -20,7 +26,11 @@ class Chunk(val chunkLocation: Vector2) {
 	)
 
 	var entities: MutableList<Entity> = mutableListOf()
-	var entitiesToSpawn: MutableList<Entity> = mutableListOf()
+	var entitiesToSpawn: MutableList<Entity> = mutableListOf(
+			ItemDrop(ItemStack(Flashlight(), 1)).apply { setPosition(3f, 3f) },
+			ItemDrop(ItemStack(Gun(), 1)).apply { setPosition(4f, 3f) },
+			ItemDrop(ItemStack(BlockItem(Asfalt()), 7)).apply { setPosition(5f, 3f) }
+	)
 	var entitiesToRemove: MutableList<Entity> = mutableListOf()
 
 	fun render(dt: Float, batch: SpriteBatch) {

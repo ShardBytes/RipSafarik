@@ -10,7 +10,7 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.copyAndround
 import com.shardbytes.ripsafarik.entity.Explosion
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.screens.GameScreen
 
 class DestroyTool : Item, IUsable {
@@ -27,15 +27,10 @@ class DestroyTool : Item, IUsable {
 		val screenX = Gdx.input.x
 		val screenY = Gdx.input.y
 		
-		val screenCoords = GameScreen.camera.innerCamera.unproject(
-				Vector3(screenX.toFloat(), screenY.toFloat(), 0f),
-				GameScreen.camera.viewport!!.screenX.toFloat(),
-				GameScreen.camera.viewport!!.screenY.toFloat(),
-				GameScreen.camera.viewport!!.screenWidth.toFloat(),
-				GameScreen.camera.viewport!!.screenHeight.toFloat())
+		val screenCoords = GameScreen.camera.unproject(screenX, screenY)
 		
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y)
-		
+		/*
 		//TODO: remove this terrific explosion effect
 		//remove overlay first, then try removing env
 		val overlaySuccessful = GameMap.Overlay.remove(mapCoords)
@@ -52,7 +47,8 @@ class DestroyTool : Item, IUsable {
 			}
 			
 		}
-		
+		*/
+		GameMap_new.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
 		
 	}
 

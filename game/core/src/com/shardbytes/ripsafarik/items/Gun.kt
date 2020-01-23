@@ -7,9 +7,8 @@ import com.shardbytes.ripsafarik.components.IWeapon
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
@@ -34,7 +33,7 @@ class Gun : Item, IWeapon {
 
 		}
 
-		GameMap.Entities.spawn(bullet)
+		GameMap_new.spawn(bullet)
 		if (--leftUses == 0) {
 			`break`(player)
 
@@ -44,7 +43,7 @@ class Gun : Item, IWeapon {
 
 	override fun `break`(player: Player) {
 		//TODO: maybe a better way of doing this?
-		Hotbar.hotbarSlots[Hotbar.selectedSlot].item = null
+		Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack = null
 
 	}
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
+import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.Healthbar
 
@@ -17,7 +18,7 @@ import com.shardbytes.ripsafarik.ui.Healthbar
  */
 object PlayerInventory {
 
-	var floatingItem: Item? = null
+	var floatingItemStack: ItemStack? = null
 
 	var isOpened = false
 	val slots = createSlots()
@@ -36,12 +37,12 @@ object PlayerInventory {
 	}
 
 	private fun drawFloatingItem(batch: SpriteBatch) {
-		val item = floatingItem
-		if (item != null) {
+		val itemStack = floatingItemStack
+		if (itemStack != null) {
 			val mouseCoords = GameScreen.uiCamera.unproject(Gdx.input.x, Gdx.input.y)
 
 			//item is drawn 1.1 unit big
-			batch.draw(item.texture,
+			batch.draw(itemStack.item.texture,
 					mouseCoords.x - 0.5f,
 					mouseCoords.y - 0.5f,
 					0f,
@@ -52,9 +53,10 @@ object PlayerInventory {
 					1.1f,
 					0f)
 
-			if (item is IUsable) {
-				if (item.maxUses > 0) {
-					batch.draw(Healthbar[item.leftUses],
+			val usableItem = itemStack.item as? IUsable
+			if (usableItem is IUsable) {
+				if (usableItem.maxUses > 0) {
+					batch.draw(Healthbar[usableItem.leftUses],
 							mouseCoords.x - 0.5f,
 							mouseCoords.y - 0.5f,
 							0f,

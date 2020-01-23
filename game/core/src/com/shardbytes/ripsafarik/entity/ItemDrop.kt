@@ -9,17 +9,14 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.components.world.Item
-import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
-import kotlinx.serialization.Polymorphic
-import kotlinx.serialization.PolymorphicSerializer
+import com.shardbytes.ripsafarik.items.ItemStack
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import ktx.box2d.body
 
 @Serializable
-class ItemDrop(@Polymorphic private val item: Item) : Entity {
+class ItemDrop(private val itemStack: ItemStack) : Entity {
 
 	override var maxHealth = 1f
 	override var health = 1f
@@ -41,7 +38,7 @@ class ItemDrop(@Polymorphic private val item: Item) : Entity {
 		val originBasedPositionY = position.y - originY
 
 		//Draw the item
-		batch.draw(TextureRegion(item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
+		batch.draw(TextureRegion(itemStack.item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
 
 		//Pickup notice
 		if (availableForPickup) {
@@ -58,9 +55,9 @@ class ItemDrop(@Polymorphic private val item: Item) : Entity {
 		//And actually try to pick up, if key is pressed
 		if (availableForPickup) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-				val successful = GameWorld.player.pickUp(item)
+				val successful = GameWorld.player.pickUp(itemStack)
 				if (successful) {
-					GameMap.Entities.despawn(this) //TODO: this.despawn() with default interface impl
+					despawn()
 
 				}
 

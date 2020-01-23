@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import ktx.box2d.body
 
@@ -34,7 +33,7 @@ class Explosion(private val strength: Float) : Entity {
 	override fun tick() {
 		//6 frames @ 100ms each
 		if (elapsedTime >= 0.6f) {
-			GameMap.Entities.despawn(this)
+			despawn()
 
 		}
 

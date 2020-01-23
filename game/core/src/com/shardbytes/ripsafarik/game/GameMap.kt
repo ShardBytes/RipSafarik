@@ -1,5 +1,5 @@
 package com.shardbytes.ripsafarik.game
-
+/*
 import box2dLight.Light
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -285,3 +285,4 @@ object GameMap {
 	}
 
 }
+		*/

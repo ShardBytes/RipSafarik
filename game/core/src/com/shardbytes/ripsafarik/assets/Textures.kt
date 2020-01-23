@@ -3,6 +3,8 @@ package com.shardbytes.ripsafarik.assets
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache
 import com.badlogic.gdx.utils.JsonReader
 import ktx.assets.getAsset
 import ktx.assets.load
@@ -119,6 +121,11 @@ object Textures {
 
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/entity/$texture.png")
 
+	}
+	
+	object Font {
+		val bitmapFont = BitmapFontCache(BitmapFont().apply { data.setScale(1f / 10f) }).font
+		
 	}
 	
 }

@@ -5,15 +5,11 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.actors.Camera
-import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 
 object GameScreen : Screen {
 
@@ -44,7 +40,7 @@ object GameScreen : Screen {
 	override fun render(dt: Float) {
 		// tick the world first
 		world.tick(dt)
-		
+
 		// update camera before rendering
 		camera.update()
 		batch.projectionMatrix.set(camera.innerCamera.combined)

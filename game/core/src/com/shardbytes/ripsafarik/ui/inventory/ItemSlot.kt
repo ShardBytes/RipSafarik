@@ -5,17 +5,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.Vector2Serializer
 import com.shardbytes.ripsafarik.assets.Textures
-import com.shardbytes.ripsafarik.components.IUsable
-import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.inRange
-import com.shardbytes.ripsafarik.ui.Healthbar
-import kotlinx.serialization.*
+import com.shardbytes.ripsafarik.items.ItemStack
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class ItemSlot {
-	
-	@Polymorphic
-	var item: Item? = null
+
+	var itemStack: ItemStack? = null
 
 	@Serializable(with = Vector2Serializer::class)
 	var screenPosition = Vector2()
@@ -61,38 +59,8 @@ class ItemSlot {
 	}
 
 	private fun drawItem(batch: SpriteBatch) {
-		if (item != null) {
-			batch.draw(item!!.texture,
-					screenPosition.x - slotSize * 0.5f,
-					screenPosition.y - slotSize * 0.5f,
-					0.5f,
-					0.5f,
-					1f,
-					1f,
-					slotSize * 0.66f,
-					slotSize * 0.66f,
-					0f)
+		itemStack?.render(batch, screenPosition, slotSize)
 
-			val usableItem = item as? IUsable
-			if (usableItem != null) {
-				if (usableItem.maxUses != 0) {
-					val usesLeft = Healthbar[(usableItem.leftUses.toFloat() / usableItem.maxUses.toFloat() * 100f).toInt()]
-					batch.draw(usesLeft,
-							screenPosition.x - slotSize * 0.5f,
-							screenPosition.y - slotSize * 0.5f,
-							0.5f,
-							0.5f,
-							1f,
-							0.05f, // 1/20th
-							slotSize * 0.66f,
-							slotSize * 0.66f,
-							0f)
-
-				}
-
-			}
-
-		}
 	}
 
 	fun isCoordinateInsideSlot(coordinate: Vector2): Boolean {
@@ -103,23 +71,37 @@ class ItemSlot {
 
 	}
 
-	fun clicked() {
-		//insert item into or out of the "floating" buffer
-		if (PlayerInventory.floatingItem == null) {
-			PlayerInventory.floatingItem = item
-			item = null
-
-		} else {
-			if (item == null) {
-				item = PlayerInventory.floatingItem
-				PlayerInventory.floatingItem = null
+	/*
+	 * oh jeez
+	 * works exactly like Minecraft inventory
+	 * mission successful
+	 */
+	fun clicked(rightClick: Boolean) {
+		if (!rightClick) {
+			if (itemStack?.hasTheSameItemAs(PlayerInventory.floatingItemStack) ?: false) {
+				itemStack!!.amount += PlayerInventory.floatingItemStack?.amount ?: 0
+				PlayerInventory.floatingItemStack = null
 
 			} else {
-				//if there is already something in the slot player is trying to put item into
-				//replace and pick up the other item
-				val buffer = item
-				item = PlayerInventory.floatingItem
-				PlayerInventory.floatingItem = buffer
+				val buffer = itemStack
+				itemStack = PlayerInventory.floatingItemStack
+				PlayerInventory.floatingItemStack = buffer
+
+			}
+
+		} else {
+			if (PlayerInventory.floatingItemStack == null) {
+				PlayerInventory.floatingItemStack = itemStack?.half()
+
+			} else {
+				if (itemStack?.hasTheSameItemAs(PlayerInventory.floatingItemStack) ?: false) {
+					itemStack!!.amount += 1
+					PlayerInventory.floatingItemStack = PlayerInventory.floatingItemStack?.oneLess()
+
+				} else {
+					itemStack = PlayerInventory.floatingItemStack?.splitOne()
+					
+				}
 
 			}
 

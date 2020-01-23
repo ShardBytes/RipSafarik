@@ -54,6 +54,18 @@ object GameMap_new {
 
 	}
 
+	/**
+	 * Do NOT call this function directly, use despawn() directly on the entity
+	 * you want to despawn!
+	 * 
+	 * @see Entity.despawn
+	 */
+	fun despawn(entity: Entity) {
+		val chunkId = blockPosToChunkPos(entity.position).identifier()
+		getChunk(chunkId).entitiesToRemove.add(entity)
+		
+	}
+
 	fun tick() {
 		//tick chunk if it exists
 		forChunksInRenderDistance { chunkIdentifier ->

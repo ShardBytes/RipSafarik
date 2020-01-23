@@ -10,7 +10,6 @@ import com.shardbytes.ripsafarik.dataType
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.entity.zombie.GenericZombie
-import com.shardbytes.ripsafarik.game.GameMap
 
 class CollisionListener : ContactListener {
 
@@ -34,7 +33,7 @@ class CollisionListener : ContactListener {
 
         contact.dataType<Bullet> { bullet, _ ->
             contact.dataType<GenericZombie> { zombie, _ ->
-                GameMap.Entities.despawn(bullet)
+                bullet.despawn()
                 zombie.takeDamage(5f)
 
             }
@@ -43,7 +42,7 @@ class CollisionListener : ContactListener {
 
         contact.dataType<Bullet> { bullet, _ ->
             contact.dataType<Player> { player, _ ->
-                GameMap.Entities.despawn(bullet)
+                bullet.despawn()
 
             }
         }

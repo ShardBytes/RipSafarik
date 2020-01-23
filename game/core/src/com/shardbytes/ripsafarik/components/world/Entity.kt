@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.shardbytes.ripsafarik.components.technical.GameObject
 import com.shardbytes.ripsafarik.components.IHealth
+import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameWorld
 
 /**
  * Represents a game object that can be located in the world as physical entity.
@@ -45,5 +47,11 @@ interface Entity : GameObject, IHealth {
 		set(degrees) {
 			body.setTransform(body.position, degrees * degRad)
 		}
+	
+	fun despawn() {
+		GameWorld.physics.destroyBody(body)
+		GameMap_new.despawn(this)
+		
+	}
 
 }

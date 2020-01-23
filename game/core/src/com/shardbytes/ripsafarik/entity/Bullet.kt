@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.world.Entity
@@ -42,7 +41,7 @@ class Bullet : Entity {
 	override fun tick() {
 		health -= 1f / 20f
 		if (health <= 0f) {
-			GameMap.Entities.despawn(this)
+			despawn()
 
 		}
 

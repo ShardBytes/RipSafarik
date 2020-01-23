@@ -12,6 +12,6 @@ object Settings {
 	val VISIBLE_SCREEN_HEIGHT_GUI: Float
 		get() = GAME_V_HEIGHT / CURRENT_ASPECT_RATIO
 
-	var CHUNKS_RENDER_DISTANCE = 3 //plz nepárne čísla only
+	var CHUNKS_RENDER_DISTANCE = 1 //plz nepárne čísla only
 
 }

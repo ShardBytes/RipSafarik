@@ -11,11 +11,8 @@ import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
-import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
-import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.game.GameWorld
-import com.shardbytes.ripsafarik.items.Flashlight
-import com.shardbytes.ripsafarik.screens.GameScreen
+import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
 import ktx.box2d.body
@@ -39,8 +36,8 @@ class Player : Entity {
 	override var regenSpeed = 1f
 
 	//Item using
-	var itemUseCooldown = 0f
-	var elapsedItemUseCooldown = 0f
+	private var itemUseCooldown = 0f
+	private var elapsedItemUseCooldown = 0f
 
 	override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
 		circle(radius = width * 0.5f) { userData = this@Player }
@@ -103,7 +100,7 @@ class Player : Entity {
 		if (!PlayerInventory.isOpened) {
 			if (input.isTouched) {
 				if (elapsedItemUseCooldown == itemUseCooldown) {
-					val item = Hotbar.hotbarSlots[Hotbar.selectedSlot].item
+					val item = Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack?.item
 					if (item is IUsable) { //item can be null, but null is not IUsable, so good
 						item.use(this)
 						itemUseCooldown = item.cooldown
@@ -112,9 +109,6 @@ class Player : Entity {
 					}
 
 				}
-				val pos = GameScreen.camera.unproject(input.x, input.y)
-				GameMap_new.spawn(ItemDrop(Flashlight()).apply { setPosition(pos) })
-				Thread.sleep(1000)
 
 			}
 
@@ -147,18 +141,32 @@ class Player : Entity {
 		}
 
 	}
+	
+	//TODO: max stack size
+	fun pickUp(itemStack: ItemStack): Boolean {
+		//Try to stack them together
+		var emptySlot = Hotbar.hotbarSlots.find { itemStack.hasTheSameItemAs(it.itemStack) }
+		if(emptySlot == null) {
+			emptySlot = PlayerInventory.slots.find { itemStack.hasTheSameItemAs(it.itemStack) }
+			
+		}
+		if(emptySlot != null) {
+			emptySlot.itemStack!!.amount += itemStack.amount
+			return true
+			
+		}
 
-	fun pickUp(item: Item): Boolean {
-		var emptySlot = Hotbar.hotbarSlots.find { it.item == null }
+		//Try to find an empty slot if there is no such stack in the inventory
+		emptySlot = Hotbar.hotbarSlots.find { it.itemStack == null }
 		if (emptySlot == null) {
-			emptySlot = PlayerInventory.slots.find { it.item == null }
+			emptySlot = PlayerInventory.slots.find { it.itemStack == null }
 
 		}
 		if (emptySlot == null) {
 			return false
 
 		}
-		emptySlot.item = item
+		emptySlot.itemStack = itemStack
 		return true
 
 	}
