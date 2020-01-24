@@ -6,10 +6,17 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.actors.Camera
+import com.shardbytes.ripsafarik.blocks.EmptyBlock
+import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.Settings
+import com.shardbytes.ripsafarik.items.BlockItem
+import com.shardbytes.ripsafarik.items.DestroyTool
+import com.shardbytes.ripsafarik.items.Flashlight
+import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import kotlin.concurrent.thread
 
 object GameScreen : Screen {
 
@@ -24,6 +31,45 @@ object GameScreen : Screen {
 
 	init {
 		camera.lockOn(world.player)
+
+		thread(true, true) {
+			while (true) {
+				val enteredString = readLine()
+				if (enteredString?.startsWith("-giveBlock ") == true) {
+					val blockId = enteredString.substringAfter(" ").substringBefore(" ")
+					val amount = enteredString.substringAfterLast(" ").toIntOrNull()
+					
+					val block = BlockCatalog.getBlock(blockId)
+					if(block.name == "default") {
+						System.err.println("Unknown block.")
+						
+					} else {
+						println("Given $amount $blockId to player.")
+						world.player.pickUp(ItemStack(BlockItem(block), amount ?: 1))
+						
+					}
+
+				} else if (enteredString == "-giveDestroyTool") {
+					println("Given 1 destroyTool to player.")
+					world.player.pickUp(ItemStack(DestroyTool(), 1))
+
+				} else if(enteredString == "-giveFlashlight") {
+					println("Given 1 flashlight to player.")
+					world.player.pickUp(ItemStack(Flashlight(), 1))
+				} else if(enteredString == "-help"){
+					println("Commands:\n" +
+							"-giveBlock {blockId} [amount]\n" +
+							"-giveDestroyTool\n" +
+							"-giveFlashlight\n")
+					
+				} else {
+					System.err.println("Invalid command. Check -help.")
+					
+				}
+
+			}
+
+		}
 
 	}
 

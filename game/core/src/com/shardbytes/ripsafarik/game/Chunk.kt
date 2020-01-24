@@ -19,18 +19,11 @@ class Chunk(val chunkLocation: Vector2) {
 	val chunkBlockLocation = chunkLocation.cpy().scl(16f)
 
 	var tiles: MutableMap<Long, Block> = mutableMapOf(
-			Vector2(0f, 0f).identifier() to BlockCatalog.getBlock("grass"),
-			Vector2(1f, 0f).identifier() to BlockCatalog.getBlock("grass")
+			Vector2(0f, 0f).identifier() to BlockCatalog.getBlock("grass")
 	)
 
 	var entities: MutableList<Entity> = mutableListOf()
-	var entitiesToSpawn: MutableList<Entity> = mutableListOf(
-			ItemDrop(ItemStack(Flashlight(), 1)).apply { setPosition(3f, 3f) },
-			ItemDrop(ItemStack(Gun(), 1)).apply { setPosition(4f, 3f) },
-			ItemDrop(ItemStack(BlockItem(Asfalt()), 7)).apply { setPosition(5f, 3f) },
-			ItemDrop(ItemStack(DestroyTool(), 1)).apply { setPosition(6f, 3f) },
-			ItemDrop(ItemStack(BlockItem(Concrete()), 64)).apply { setPosition(2f, 3f) }
-	)
+	var entitiesToSpawn: MutableList<Entity> = mutableListOf()
 	var entitiesToRemove: MutableList<Entity> = mutableListOf()
 
 	fun render(dt: Float, batch: SpriteBatch) {
