@@ -5,6 +5,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlin.math.floor
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 fun Vector2.inRange(start: Vector2, end: Vector2): Boolean {
 	if (this.x >= start.x && this.x <= end.x) {
@@ -56,9 +57,28 @@ fun Vector2.floor(): Vector2 {
 
 }
 
-fun blockPosToChunkPos(blockPos: Vector2): Vector2 {
+/**
+ * Calculates chunk coordinates from any world position.
+ * @param blockPos world position
+ * @return chunk coordinates
+ */
+fun blockPositionToChunkCoordinates(blockPos: Vector2): Vector2 {
 	return blockPos.cpy().add(0.5f, 0.5f).scl(1f / 16f).floor()
 
+}
+
+/**
+ * Calculates block position inside a chunk from any world
+ * position (rounds the value first).
+ * @param blockPos block position
+ * @return block position inside chunk
+ */
+fun blockPositionToChunkPosition(blockPos: Vector2): Vector2 {
+	return Vector2(
+			Math.floorMod(blockPos.x.roundToInt(), 16).toFloat(),
+			Math.floorMod(blockPos.y.roundToInt(), 16).toFloat()
+	)
+	
 }
 
 @Serializer(forClass = Vector2::class)

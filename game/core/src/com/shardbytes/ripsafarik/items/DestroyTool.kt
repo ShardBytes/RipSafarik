@@ -29,26 +29,10 @@ class DestroyTool : Item, IUsable {
 		
 		val screenCoords = GameScreen.camera.unproject(screenX, screenY)
 		
-		val mapCoords = Vector2(screenCoords.x, screenCoords.y)
-		/*
-		//TODO: remove this terrific explosion effect
-		//remove overlay first, then try removing env
-		val overlaySuccessful = GameMap.Overlay.remove(mapCoords)
-		if(overlaySuccessful) {
-			GameMap.Entities.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
-
-		}
+		val mapCoords = Vector2(screenCoords.x, screenCoords.y).copyAndround()
 		
-		if(!overlaySuccessful) {
-			val envSuccessful = GameMap.Env.remove(mapCoords)
-			if(envSuccessful) {
-				GameMap.Entities.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
-
-			}
-			
-		}
-		*/
-		GameMap_new.spawn(Explosion(1.5f).apply { setPosition(mapCoords.copyAndround()) })
+		GameMap_new.removeTile(mapCoords)
+		GameMap_new.spawn(Explosion(1.5f).apply { setPosition(mapCoords) })
 		
 	}
 

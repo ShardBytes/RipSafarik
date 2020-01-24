@@ -3,7 +3,10 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.shardbytes.ripsafarik.blockPosToChunkPos
+import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
+import com.shardbytes.ripsafarik.blockPositionToChunkPosition
+import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.identifier
 import com.shardbytes.ripsafarik.toVector
@@ -49,7 +52,7 @@ object GameMap_new {
 	}
 
 	fun spawn(entity: Entity) {
-		val chunkId = blockPosToChunkPos(entity.position).identifier()
+		val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
 		getChunk(chunkId).entitiesToSpawn.add(entity)
 
 	}
@@ -57,13 +60,34 @@ object GameMap_new {
 	/**
 	 * Do NOT call this function directly, use despawn() directly on the entity
 	 * you want to despawn!
-	 * 
+	 *
 	 * @see Entity.despawn
 	 */
 	fun despawn(entity: Entity) {
-		val chunkId = blockPosToChunkPos(entity.position).identifier()
+		val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
 		getChunk(chunkId).entitiesToRemove.add(entity)
-		
+
+	}
+
+	fun addTile(tileIdentifier: String, position: Vector2) {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		getChunk(chunkId).tiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+	}
+
+	fun removeTile(position: Vector2) {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		getChunk(chunkId).tiles.remove(blockId)
+
+	}
+
+	fun getTile(position: Vector2): Block? {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		return getChunk(chunkId).tiles[blockId]
+
 	}
 
 	fun tick() {
@@ -84,7 +108,7 @@ object GameMap_new {
 	}
 
 	private fun forChunksInRenderDistance(action: (Long) -> Unit) {
-		val playerChunk = blockPosToChunkPos(GameWorld.player.position)
+		val playerChunk = blockPositionToChunkCoordinates(GameWorld.player.position)
 		val chunkDistance = (Settings.CHUNKS_RENDER_DISTANCE - 1) / 2
 
 		for (chunkY in playerChunk.y.toInt() - chunkDistance..playerChunk.y.toInt() + chunkDistance) {
