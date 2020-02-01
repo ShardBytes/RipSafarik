@@ -100,7 +100,7 @@ class ItemSlot {
 
 				} else {
 					itemStack = PlayerInventory.floatingItemStack?.splitOne()
-					
+
 				}
 
 			}

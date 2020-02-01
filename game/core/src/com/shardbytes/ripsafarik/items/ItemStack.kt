@@ -65,7 +65,7 @@ data class ItemStack(var item: Item, var amount: Int) {
 		val half = amount / 2
 		amount -= half
 		return ItemStack(item, half)
-		
+
 	}
 
 	/**
@@ -75,8 +75,8 @@ data class ItemStack(var item: Item, var amount: Int) {
 	 */
 	fun oneLess(): ItemStack? {
 		amount -= 1
-		return if(amount == 0) null else this
-		
+		return if (amount == 0) null else this
+
 	}
 
 	/**
@@ -86,8 +86,8 @@ data class ItemStack(var item: Item, var amount: Int) {
 	 */
 	fun splitOne(): ItemStack? {
 		amount -= 1
-		return if(amount == 0) null else ItemStack(item, 1)
-		
+		return if (amount == 0) null else ItemStack(item, 1)
+
 	}
 
 }
