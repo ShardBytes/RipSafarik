@@ -10,6 +10,7 @@ import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.identifier
 import com.shardbytes.ripsafarik.toVector
+import com.shardbytes.ripsafarik.tools.SaveManager
 import kotlinx.serialization.Serializable
 
 object GameMap_new {
@@ -23,9 +24,24 @@ object GameMap_new {
 		val file = Gdx.files.internal("$map.map")
 		if (file.exists()) {
 			println("file exists ayy")
+			val json = SaveManager.json
+
+			// TODO: Potential memory oof
+			val jsonString = file.readString()
+
+			val saveFile = json.parseJson(jsonString).jsonObject
+			val loadedChunks = saveFile["chunks"]!!.jsonArray
+			loadedChunks.forEach {
+				val chunkJson = it.jsonObject
+				val chunkIdentifier = chunkJson["chunkLocation"]!!.primitive.long
+				val chunk = Chunk(chunkIdentifier.toVector())
+				chunkJson["tiles"]!!.jsonArray.content.forEach { chunk.tiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
+
+				chunks.put(chunkIdentifier, chunk)
+
+			}
 
 		}
-
 		currentMapName = map
 
 	}

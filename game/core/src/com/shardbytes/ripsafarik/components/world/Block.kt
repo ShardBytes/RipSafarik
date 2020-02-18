@@ -3,6 +3,7 @@ package com.shardbytes.ripsafarik.components.world
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
+import kotlinx.serialization.KSerializer
 
 interface Block {
 
@@ -32,5 +33,5 @@ interface Block {
 		batch.draw(TextureRegion(texture), x - sizeX * 0.5f, y - sizeY * 0.5f, sizeX * 0.5f, sizeY * 0.5f, sizeX, sizeY, 1f, 1f, rotation)
 		
 	}
-	
+
 }

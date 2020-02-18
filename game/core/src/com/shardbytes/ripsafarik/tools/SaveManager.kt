@@ -1,6 +1,9 @@
 package com.shardbytes.ripsafarik.tools
 
 import com.badlogic.gdx.Gdx
+import com.shardbytes.ripsafarik.blocks.Asfalt
+import com.shardbytes.ripsafarik.blocks.Grass
+import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.ItemDrop
@@ -16,6 +19,8 @@ import com.shardbytes.ripsafarik.items.GunMagazine
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.ItemSlot
 import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.internal.LongSerializer
+import kotlinx.serialization.internal.StringSerializer
 import kotlinx.serialization.internal.nullable
 import kotlinx.serialization.json.*
 import kotlinx.serialization.list
@@ -23,7 +28,7 @@ import kotlinx.serialization.modules.SerializersModule
 
 object SaveManager {
 
-	//save path
+	// Save path
 	private val savefile = Gdx.files.local("world.map")
 	private val polymorphicModule = SerializersModule {
 		polymorphic(Item::class) {
@@ -45,31 +50,45 @@ object SaveManager {
 
 		}
 
+		polymorphic(Block::class) {
+			Grass::class with Grass.serializer()
+			Asfalt::class with Asfalt.serializer()
+
+		}
+
 	}
-	//json processor
-	private val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
+	// JSON processor
+	val json = Json(JsonConfiguration.Stable, context = polymorphicModule)
 
 	fun save() {
-		//serializeMap()
-		serializeHotbarItems()
+		val chunks = serializeMap()
+		//val hotbarItems = serializeHotbarItems()
+
+		val save = JsonObject(mapOf("chunks" to chunks))
+		val string = save.toString()
+		savefile.writeString(string, false, "UTF-8")
 
 	}
 
-	private fun serializeMap() {
+	private fun serializeMap(): JsonArray {
 		val chunks = arrayListOf<JsonElement>()
 
 		GameMap_new.chunks.forEach {
-			//chunk info
+			// Chunk info
 			val chunkLocation = it.value.chunkLocation.identifier()
 
-			//serialize tiles
+			// Serialize tiles
+			val tiles = serializePolymorphicTilesMap(it.value.tiles)
 
-			//serialize entities
+			// Serialize entities
 			val entities = serializePolymorphicList(it.value.entities)
 			val entitiesToSpawn = serializePolymorphicList(it.value.entitiesToSpawn)
 			val entitiesToRemove = serializePolymorphicList(it.value.entitiesToRemove)
 
+			// Package it all together
 			val jsonObj = JsonObject(mapOf(
+					"chunkLocation" to JsonPrimitive(chunkLocation),
+					"tiles" to JsonArray(tiles),
 					"entities" to JsonArray(entities),
 					"entitiesToSpawn" to JsonArray(entitiesToSpawn),
 					"entitiesToRemove" to JsonArray(entitiesToRemove)
@@ -78,9 +97,7 @@ object SaveManager {
 			chunks.add(jsonObj)
 
 		}
-
-		val string = JsonArray(chunks).toString()
-		savefile.writeString(string, false, "UTF-8")
+		return JsonArray(chunks)
 
 	}
 
@@ -129,5 +146,16 @@ object SaveManager {
 
 	}
 
+	private fun serializePolymorphicTilesMap(map: MutableMap<Long, Block>): ArrayList<JsonElement> {
+		val jsonList = arrayListOf<JsonElement>()
+		map.forEach() {
+			val listKey = json.toJson(LongSerializer, it.key)
+			val listValue = json.toJson(StringSerializer, it.value.name)
+			jsonList.add(JsonObject(mapOf("key" to listKey, "value" to listValue)))
+
+		}
+		return jsonList
+
+	}
 
 }

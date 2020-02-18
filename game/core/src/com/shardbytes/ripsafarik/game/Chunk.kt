@@ -3,14 +3,10 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
-import com.shardbytes.ripsafarik.blocks.Asfalt
-import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.identifier
-import com.shardbytes.ripsafarik.items.*
 import com.shardbytes.ripsafarik.vectorXComponent
 import com.shardbytes.ripsafarik.vectorYComponent
 
