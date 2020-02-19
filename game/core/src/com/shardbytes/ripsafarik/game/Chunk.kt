@@ -3,7 +3,6 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
-import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.identifier
@@ -14,9 +13,7 @@ class Chunk(val chunkLocation: Vector2) {
 
 	val chunkBlockLocation = chunkLocation.cpy().scl(16f)
 
-	var tiles: MutableMap<Long, Block> = mutableMapOf(
-			Vector2(0f, 0f).identifier() to BlockCatalog.getBlock("grass")
-	)
+	var tiles: MutableMap<Long, Block> = mutableMapOf()
 
 	var entities: MutableList<Entity> = mutableListOf()
 	var entitiesToSpawn: MutableList<Entity> = mutableListOf()

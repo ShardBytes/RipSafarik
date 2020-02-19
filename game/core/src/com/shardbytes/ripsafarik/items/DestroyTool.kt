@@ -3,7 +3,6 @@ package com.shardbytes.ripsafarik.items
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
@@ -21,7 +20,7 @@ class DestroyTool : Item, IUsable {
 
 	override val maxUses: Int = 0
 	override var leftUses: Int = 0
-	override var cooldown: Float = 0.5f
+	override var cooldown: Float = 0.1f
 
 	override fun use(player: Player) {
 		val screenX = Gdx.input.x

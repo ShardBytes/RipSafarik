@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.actors.Camera
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.items.BlockItem
@@ -59,7 +60,19 @@ object GameScreen : Screen {
 					println("Commands:\n" +
 							"-giveBlock {blockId} [amount]\n" +
 							"-giveDestroyTool\n" +
-							"-giveFlashlight\n")
+							"-giveFlashlight\n" +
+							"-setTime {timeInSeconds}\n")
+
+				} else if (enteredString?.startsWith("-setTime ") == true) {
+					val time = enteredString.substringAfter(" ").toIntOrNull()
+					if(time != null) {
+						DaylightCycle.currentTime = time.toFloat()
+						println("Time set.")
+
+					} else {
+						System.err.println("Invalid time format.")
+
+					}
 
 				} else {
 					System.err.println("Invalid command. Check -help.")

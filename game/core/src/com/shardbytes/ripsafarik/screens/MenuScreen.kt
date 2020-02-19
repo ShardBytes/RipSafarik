@@ -19,10 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
-import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.input.InputCore
-import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.game.MainGame
 
 class MenuScreen : Screen {
 
@@ -111,6 +110,7 @@ class MenuScreen : Screen {
 		loadButton.addListener(object : ChangeListener() {
 			override fun changed(event: ChangeEvent, actor: Actor) {
 				Gdx.input.inputProcessor = InputCore.reset()
+				MainGame.Data.loadSavedWorld = true
 				MainGame.screen = GameScreen
 				uiStage.dispose()
 

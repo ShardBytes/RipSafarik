@@ -10,6 +10,11 @@ object MainGame : Game() {
 
 	val assetManager = AssetManager()
 
+	object Data {
+		var loadSavedWorld = false
+
+	}
+
 	override fun create() {
 		Textures.manager = assetManager
 		Textures.loadAll() //Load all textures

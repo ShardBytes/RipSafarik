@@ -2,7 +2,9 @@ package com.shardbytes.ripsafarik.tools
 
 import com.badlogic.gdx.Gdx
 import com.shardbytes.ripsafarik.blocks.Asfalt
+import com.shardbytes.ripsafarik.blocks.Concrete
 import com.shardbytes.ripsafarik.blocks.Grass
+import com.shardbytes.ripsafarik.blocks.Safarik
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
@@ -53,6 +55,8 @@ object SaveManager {
 		polymorphic(Block::class) {
 			Grass::class with Grass.serializer()
 			Asfalt::class with Asfalt.serializer()
+			Concrete::class with Concrete.serializer()
+			Safarik::class with Safarik.serializer()
 
 		}
 

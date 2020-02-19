@@ -30,8 +30,11 @@ object GameWorld : Disposable {
 		BlockCatalog.registerBlock(Concrete())
 		BlockCatalog.registerBlock(Lamp())
 		BlockCatalog.registerBlock(Wall())
-		
-		GameMap_new.loadMap("world")
+
+		if(MainGame.Data.loadSavedWorld) {
+			GameMap_new.loadMap("world")
+
+		}
 
 		player.position.set(1f, 1f)
 
