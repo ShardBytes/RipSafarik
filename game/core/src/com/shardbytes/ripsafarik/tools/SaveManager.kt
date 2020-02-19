@@ -15,6 +15,7 @@ import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
 import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
 import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.identifier
+import com.shardbytes.ripsafarik.items.DestroyTool
 import com.shardbytes.ripsafarik.items.Flashlight
 import com.shardbytes.ripsafarik.items.Gun
 import com.shardbytes.ripsafarik.items.GunMagazine
@@ -39,6 +40,7 @@ object SaveManager {
 			Gun::class with Gun.serializer()
 			Flashlight::class with Flashlight.serializer()
 			GunMagazine::class with GunMagazine.serializer()
+			DestroyTool::class with DestroyTool.serializer()
 
 		}
 
@@ -152,7 +154,7 @@ object SaveManager {
 
 	private fun serializePolymorphicTilesMap(map: MutableMap<Long, Block>): ArrayList<JsonElement> {
 		val jsonList = arrayListOf<JsonElement>()
-		map.forEach() {
+		map.forEach {
 			val listKey = json.toJson(LongSerializer, it.key)
 			val listValue = json.toJson(StringSerializer, it.value.name)
 			jsonList.add(JsonObject(mapOf("key" to listKey, "value" to listValue)))

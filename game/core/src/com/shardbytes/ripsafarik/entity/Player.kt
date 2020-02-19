@@ -10,7 +10,6 @@ import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar

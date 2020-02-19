@@ -10,11 +10,13 @@ import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import kotlinx.serialization.Transient
 
 class BlockItem(block: Block) : Item, IUsable {
 
 	override val name: String = block.name
 	override val displayName: String = block.displayName
+	@Transient
 	override val texture = block.texture
 
 	override val maxUses = 0

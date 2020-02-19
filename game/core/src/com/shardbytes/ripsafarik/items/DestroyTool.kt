@@ -11,11 +11,15 @@ import com.shardbytes.ripsafarik.entity.Explosion
 import com.shardbytes.ripsafarik.entity.Player
 import com.shardbytes.ripsafarik.game.GameMap_new
 import com.shardbytes.ripsafarik.screens.GameScreen
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 class DestroyTool : Item, IUsable {
 
 	override val name: String = "destroyTool"
 	override val displayName: String = "Destroy tool"
+	@Transient
 	override val texture: TextureRegion = TextureRegion(Textures.Item["tool/destroytool"])
 
 	override val maxUses: Int = 0
