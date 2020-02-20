@@ -18,7 +18,7 @@ object GameMap_new {
 	lateinit var currentMapName: String
 
 	@Serializable
-	var chunks: MutableMap<Long, Chunk> = mutableMapOf()
+	var chunks: MutableMap<Long, Chunk> = mutableMapOf() // TODO: is map needed?
 
 	fun loadMap(map: String) {
 		val file = Gdx.files.internal("$map.map")
@@ -67,6 +67,11 @@ object GameMap_new {
 
 	}
 
+	fun chunkExists(id: Long): Boolean {
+		return chunks.contains(id)
+
+	}
+
 	fun spawn(entity: Entity) {
 		val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
 		getChunk(chunkId).entitiesToSpawn.add(entity)
@@ -107,17 +112,14 @@ object GameMap_new {
 	}
 
 	fun tick() {
-		//tick chunk if it exists
-		forChunksInRenderDistance { chunkIdentifier ->
-			getChunk(chunkIdentifier).tick()
-
-		}
+		chunks.forEach { it.value.tick() }
 
 	}
 
 	fun render(dt: Float, batch: SpriteBatch) {
-		forChunksInRenderDistance { chunkIdentifier ->
-			chunks[chunkIdentifier]?.render(dt, batch)
+		// render chunks in render distance
+		forChunksInRenderDistance {
+			getChunk(it).render(dt, batch)
 
 		}
 

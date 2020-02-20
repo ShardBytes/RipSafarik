@@ -55,8 +55,15 @@ class Chunk(val chunkLocation: Vector2) {
 
 		//if entity isn't inside this chunk
 		if (!entityChunk.epsilonEquals(chunkLocation)) {
-			println("Transfering entity $entity to $entityChunk")
-			putEntityIntoNearbyChunk(entity, entityChunk)
+			if(GameMap_new.chunkExists(entityChunk.identifier())) {
+				println("Transfering entity $entity to $entityChunk")
+				putEntityIntoNearbyChunk(entity, entityChunk)
+
+			} else {
+				println("Transfering entity $entity to $entityChunk failed - chunk does not exist")
+				entity.despawn()
+
+			}
 
 		}
 

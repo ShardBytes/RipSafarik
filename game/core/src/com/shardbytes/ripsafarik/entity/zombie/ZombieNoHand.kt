@@ -3,8 +3,8 @@ package com.shardbytes.ripsafarik.entity.zombie
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
+import com.shardbytes.ripsafarik.game.GameWorld
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import ktx.box2d.body

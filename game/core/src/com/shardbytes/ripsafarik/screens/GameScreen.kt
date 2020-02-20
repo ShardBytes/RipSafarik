@@ -10,10 +10,7 @@ import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.Settings
-import com.shardbytes.ripsafarik.items.BlockItem
-import com.shardbytes.ripsafarik.items.DestroyTool
-import com.shardbytes.ripsafarik.items.Flashlight
-import com.shardbytes.ripsafarik.items.ItemStack
+import com.shardbytes.ripsafarik.items.*
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import kotlin.concurrent.thread
@@ -56,6 +53,10 @@ object GameScreen : Screen {
 				} else if (enteredString == "-giveFlashlight") {
 					println("Given 1 flashlight to player.")
 					world.player.pickUp(ItemStack(Flashlight(), 1))
+				} else if (enteredString == "-giveGun") {
+					println("Given 1 gun to player.")
+					world.player.pickUp(ItemStack(Gun(), 1))
+
 				} else if (enteredString == "-help") {
 					println("Commands:\n" +
 							"-giveBlock {blockId} [amount]\n" +

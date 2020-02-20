@@ -8,6 +8,7 @@ import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.entity.Player
+import com.shardbytes.ripsafarik.ui.DebugView
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -51,6 +52,7 @@ object GameWorld : Disposable {
 		//Draw the UI
 		Hotbar.render(batch)
 		Healthbar.render(player.health.toInt(), batch)
+		DebugView.render(batch)
 		PlayerInventory.render(batch)
 
 	}
