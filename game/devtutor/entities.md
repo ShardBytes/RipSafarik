@@ -1,9 +1,9 @@
-# ENTITY SPAWNING:
+# Entity spawning:
 #### Steps:
- 1. Create an entity object
- 2. Create entity body
- 3. (Optional) Set entity position
- 4. Add entity to GameMap
+1. Create an entity object
+1. Create entity body
+1. (Optional) Set entity position
+1. Add entity to GameMap
 
 #### Code:
 ```kotlin
@@ -20,9 +20,9 @@ GameMap.spawn(ZombieRunner().apply { createBody(); setPosition(mapCoords) })
 #### Expected behaviour:
 New entity will be spawned into the world.
 
-# ENTITY DESPAWNING:
+# Entity despawning:
 #### Steps:
- 1. Despawn entity
+1. Despawn entity
 
 #### Code:
 ```kotlin
