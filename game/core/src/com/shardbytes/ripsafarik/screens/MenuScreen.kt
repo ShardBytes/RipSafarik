@@ -90,11 +90,11 @@ class MenuScreen : Screen {
 		exitButton.width = buttonWidth
 		exitButton.setPosition(centeredButtonX, centeredButtonY - buttonHeight*3f)
 		
-		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + 250)
+		label.setPosition(Gdx.graphics.width / 2 - label.width / 2, Gdx.graphics.height / 2 - label.height / 2 + buttonHeight*3.5f)
 		
-		safarik.width = 100F
-		safarik.height = 100F
-		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + 150)
+		safarik.width = centeredButtonY / 2f
+		safarik.height = centeredButtonY / 2f
+		safarik.setPosition(Gdx.graphics.width / 2 - safarik.width / 2, Gdx.graphics.height / 2 - safarik.height / 2 + buttonHeight*2f)
 	}
 
 	override fun show() {}
