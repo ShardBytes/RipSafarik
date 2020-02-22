@@ -1,29 +1,33 @@
-----------------
-ENTITY SPAWNING:
-----------------
-Steps:
-1. Create an entity object
-2. Create entity body
-3. (Optional) Set entity position
-4. Add entity to GameMap
+# ENTITY SPAWNING:
+#### Steps:
+ 1. Create an entity object
+ 2. Create entity body
+ 3. (Optional) Set entity position
+ 4. Add entity to GameMap
 
-Code:                           |   Or:
-val newEntity = ZombieRunner()  |   GameMap.spawn(ZombieRunner().apply { createBody(); setPosition(mapCoords) })
-newEntity.createBody()          |
-newEntity.setPosition(5f, 5f)   |
-GameMap.spawn(newEntity)        |
+#### Code:
+```kotlin
+val newEntity = ZombieRunner()
+newEntity.createBody()
+newEntity.setPosition(5f, 5f)
+GameMap.spawn(newEntity)
+```
+Or:
+```kotlin
+GameMap.spawn(ZombieRunner().apply { createBody(); setPosition(mapCoords) })
+```
 
-Expected behaviour:
+#### Expected behaviour:
 New entity will be spawned into the world.
 
-------------------
-ENTITY DESPAWNING:
-------------------
-Steps:
-1. Despawn entity
+# ENTITY DESPAWNING:
+#### Steps:
+ 1. Despawn entity
 
-Code:
+#### Code:
+```kotlin
 entity.despawn()
+```
 
-Expected behaviour:
+#### Expected behaviour:
 Entity will be despawned on the next world tick.
