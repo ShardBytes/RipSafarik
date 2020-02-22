@@ -3,11 +3,10 @@ package com.shardbytes.ripsafarik.entity.zombie
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Animations
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import ktx.box2d.body
+import ktx.box2d.BodyDefinition
 
 @Serializable
 class ZombieWithHandWithBlood : GenericZombie() {
@@ -25,7 +24,9 @@ class ZombieWithHandWithBlood : GenericZombie() {
 	override var frameTime: Int = 150
 
 	@Transient
-	override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
+	override val bodyType = BodyDef.BodyType.DynamicBody
+	@Transient
+	override val bodyDef: BodyDefinition.() -> Unit = {
 		box(0.35f, 0.9f) {
 			userData = this@ZombieWithHandWithBlood
 

@@ -10,15 +10,14 @@ import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
-import ktx.box2d.body
+import ktx.box2d.BodyDefinition
 import kotlin.math.min
 import kotlin.system.exitProcess
 
-class Player : Entity {
+class Player : Entity() {
 
 	private val width = 1f
 	private val height = 1f
@@ -38,7 +37,8 @@ class Player : Entity {
 	private var itemUseCooldown = 0f
 	private var elapsedItemUseCooldown = 0f
 
-	override val body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
+	override val bodyType = BodyDef.BodyType.DynamicBody
+	override val bodyDef: BodyDefinition.() -> Unit = {
 		circle(radius = width * 0.5f) { userData = this@Player }
 		fixedRotation = true
 

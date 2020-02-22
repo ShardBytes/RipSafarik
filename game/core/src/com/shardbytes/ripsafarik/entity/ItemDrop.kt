@@ -6,17 +6,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.items.ItemStack
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import ktx.box2d.body
 
 @Serializable
-class ItemDrop(private val itemStack: ItemStack) : Entity {
+class ItemDrop(private val itemStack: ItemStack) : Entity() {
 
 	override var maxHealth = 1f
 	override var health = 1f
@@ -27,9 +24,6 @@ class ItemDrop(private val itemStack: ItemStack) : Entity {
 
 	@Transient
 	private var availableForPickup = false
-
-	@Transient
-	override val body: Body = GameWorld.physics.body(BodyDef.BodyType.StaticBody)
 
 	override fun render(dt: Float, batch: SpriteBatch) {
 		val originX = 0.5f

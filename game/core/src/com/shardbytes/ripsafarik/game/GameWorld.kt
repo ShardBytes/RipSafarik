@@ -18,7 +18,7 @@ object GameWorld : Disposable {
 
 	val physics = createWorld()
 	val lights = createLightHandler()
-	val player = Player()
+	val player = Player().apply { createBody() }
 
 	init {
 		//Set physics collider

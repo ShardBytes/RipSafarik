@@ -2,16 +2,10 @@ package com.shardbytes.ripsafarik.entity
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.assets.Animations
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.game.GameWorld
-import ktx.box2d.body
 
-class Explosion(private val strength: Float) : Entity {
-
-	override val body: Body = GameWorld.physics.body(BodyDef.BodyType.StaticBody)
+class Explosion(private val strength: Float) : Entity() {
 
 	override var maxHealth: Float = 1f
 	override var health: Float = 1f

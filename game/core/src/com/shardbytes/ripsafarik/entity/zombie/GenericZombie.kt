@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameWorld
 import kotlin.math.min
 
-abstract class GenericZombie : Entity {
+abstract class GenericZombie : Entity() {
 
 	protected abstract var textureWidth: Float
 	protected abstract var textureHeight: Float

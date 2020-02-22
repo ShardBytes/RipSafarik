@@ -35,7 +35,7 @@ class DestroyTool : Item, IUsable {
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y).copyAndround()
 		
 		GameMap_new.removeTile(mapCoords)
-		GameMap_new.spawn(Explosion(1.5f).apply { setPosition(mapCoords) })
+		GameMap_new.spawn(Explosion(1.5f).apply { createBody(); setPosition(mapCoords) })
 		
 	}
 

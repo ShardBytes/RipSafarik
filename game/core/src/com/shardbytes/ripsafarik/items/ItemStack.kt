@@ -8,6 +8,7 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.ui.Healthbar
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class ItemStack(var item: Item, var amount: Int) {
 
 	fun render(batch: SpriteBatch, screenPosition: Vector2, slotSize: Float) {
