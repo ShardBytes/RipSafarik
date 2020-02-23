@@ -13,7 +13,7 @@ import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
 import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHandWithBlood
 import com.shardbytes.ripsafarik.entity.zombie.ZombieRunner
 import com.shardbytes.ripsafarik.entity.zombie.ZombieWithHandWithBlood
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.identifier
 import com.shardbytes.ripsafarik.items.DestroyTool
 import com.shardbytes.ripsafarik.items.Flashlight
@@ -79,7 +79,7 @@ object SaveManager {
 	private fun serializeMap(): JsonArray {
 		val chunks = arrayListOf<JsonElement>()
 
-		GameMap_new.chunks.forEach {
+		GameMap.chunks.forEach {
 			// Chunk info
 			val chunkLocation = it.value.chunkLocation.identifier()
 

@@ -33,7 +33,7 @@ object GameWorld : Disposable {
 		BlockCatalog.registerBlock(Wall())
 
 		if(MainGame.Data.loadSavedWorld) {
-			GameMap_new.loadMap("world")
+			GameMap.loadMap("world")
 
 		}
 
@@ -43,7 +43,7 @@ object GameWorld : Disposable {
 
 	fun render(dt: Float, batch: SpriteBatch) {
 		//Draw the world and everything
-		GameMap_new.render(dt, batch)
+		GameMap.render(dt, batch)
 		player.render(dt, batch)
 
 	}
@@ -59,7 +59,7 @@ object GameWorld : Disposable {
 
 	fun tick(dt: Float) {
 		player.tick()
-		GameMap_new.tick()
+		GameMap.tick()
 		DaylightCycle.tick(dt)
 
 		physics.step(dt, 8, 3)

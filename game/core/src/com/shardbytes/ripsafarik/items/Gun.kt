@@ -7,7 +7,7 @@ import com.shardbytes.ripsafarik.components.IWeapon
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -28,12 +28,13 @@ class Gun : Item, IWeapon {
 	override fun use(player: Player) {
 		val playerRotation = player.rotation
 		val bullet = Bullet().apply {
+			createBody()
 			setPosition(player.position.cpy().add(Vector2.X.cpy().rotate(rotation).setLength(0.65f)))
 			body.linearVelocity = Vector2.X.setLength(1200f).setAngle(playerRotation)
 
 		}
 
-		GameMap_new.spawn(bullet)
+		GameMap.spawn(bullet)
 		if (--leftUses == 0) {
 			`break`(player)
 

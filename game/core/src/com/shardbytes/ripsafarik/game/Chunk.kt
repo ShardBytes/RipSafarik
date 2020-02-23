@@ -50,27 +50,36 @@ class Chunk(val chunkLocation: Vector2) {
 
 	}
 
+	fun load() {
+		println("Load $chunkLocation")
+		entitiesToSpawn.forEach { it.load() }
+		entities.forEach { it.load() }
+		entitiesToRemove.forEach { it.load() }
+
+	}
+
+	fun unload() {
+		println("Unload $chunkLocation")
+		entitiesToSpawn.forEach { it.unload() }
+		entities.forEach { it.unload() }
+		entitiesToRemove.forEach { it.unload() }
+
+	}
+
 	private fun passEntityToOtherChunkIfOutsideTheBounds(entity: Entity) {
 		val entityChunk = blockPositionToChunkCoordinates(entity.position)
 
 		//if entity isn't inside this chunk
 		if (!entityChunk.epsilonEquals(chunkLocation)) {
-			if(GameMap_new.chunkExists(entityChunk.identifier())) {
-				println("Transfering entity $entity to $entityChunk")
-				putEntityIntoNearbyChunk(entity, entityChunk)
-
-			} else {
-				println("Transfering entity $entity to $entityChunk failed - chunk does not exist")
-				entity.despawn()
-
-			}
+			println("Transfering entity $entity to $entityChunk")
+			putEntityIntoNearbyChunk(entity, entityChunk)
 
 		}
 
 	}
 
 	private fun putEntityIntoNearbyChunk(entity: Entity, intoChunk: Vector2) {
-		GameMap_new.getChunk(intoChunk.identifier()).entities.add(entity)
+		GameMap.getChunk(intoChunk.identifier()).entities.add(entity)
 		entitiesToRemove.add(entity)
 
 	}

@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.MathUtils
+import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
+import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
@@ -55,6 +58,10 @@ object InputCore : InputProcessor {
 		selectInventorySlot(keycode)
 		checkOpenInventory(keycode)
 		checkEscapeKey(keycode)
+
+		if(keycode == Input.Keys.H) {
+			GameMap.spawn(ZombieNoHand().apply { createBody(); setPosition(GameWorld.player.position.cpy().add(5f, 5f)) })
+		}
 
 		return true
 

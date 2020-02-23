@@ -7,11 +7,10 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.components.IHealth
 import com.shardbytes.ripsafarik.components.technical.GameObject
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import ktx.box2d.BodyDefinition
 import ktx.box2d.body
-import sun.plugin.dom.exception.InvalidStateException
 
 /**
  * Represents a game object that can be located in the world as physical entity.
@@ -24,12 +23,14 @@ abstract class Entity : GameObject, IHealth {
 	 * Body definition becomes invalid after the body is unloaded/despawned.
 	 */
 	lateinit var body: Body
-	private var bodyInvalid = false
+	private var bodyInvalid = true
 	open val bodyDef: BodyDefinition.() -> Unit = {}
 	open val bodyType: BodyDef.BodyType = BodyDef.BodyType.StaticBody
 
 	fun createBody() {
+		bodyInvalid = false
 		body = GameWorld.physics.body(bodyType, bodyDef)
+		println("Body of $this created.")
 
 	}
 
@@ -53,7 +54,7 @@ abstract class Entity : GameObject, IHealth {
 	 * Sets the position of entity (sets its body transform).
 	 */
 	fun setPosition(pos: Vector2) {
-		body.setTransform(pos.x, pos.y, body.angle)
+		body.setTransform(pos, body.angle)
 	}
 
 	/**
@@ -68,20 +69,21 @@ abstract class Entity : GameObject, IHealth {
 	fun despawn() {
 		if(!bodyInvalid) {
 			GameWorld.physics.destroyBody(body)
+			println("Body of $this destroyed.")
 			bodyInvalid = true
 
 		} else {
-			throw InvalidStateException("Cannot destroy invalid body.")
+			throw Exception("Cannot destroy invalid body.")
 
 		}
-		GameMap_new.despawn(this)
+		GameMap.despawn(this)
 		
 	}
 
 	fun load() {
+		createBody()
 		setPosition(savePosition)
 		rotation = saveAngle
-		createBody()
 		bodyInvalid = false
 
 	}
@@ -91,10 +93,11 @@ abstract class Entity : GameObject, IHealth {
 		saveAngle = rotation
 		if(!bodyInvalid) {
 			GameWorld.physics.destroyBody(body)
+			println("Body of $this destroyed.")
 			bodyInvalid = true
 
 		} else {
-			throw InvalidStateException("Cannot destroy invalid body.")
+			throw Exception("Cannot destroy invalid body - entity $this.")
 
 		}
 

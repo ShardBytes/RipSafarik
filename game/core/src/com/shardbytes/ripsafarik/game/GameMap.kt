@@ -3,6 +3,7 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.LongMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.blockPositionToChunkPosition
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
@@ -13,12 +14,27 @@ import com.shardbytes.ripsafarik.toVector
 import com.shardbytes.ripsafarik.tools.SaveManager
 import kotlinx.serialization.Serializable
 
-object GameMap_new {
+object GameMap {
 
-	lateinit var currentMapName: String
+	private lateinit var currentMapName: String
 
 	@Serializable
-	var chunks: MutableMap<Long, Chunk> = mutableMapOf() // TODO: is map needed?
+	var chunks: LongMap<Chunk> = LongMap() // TODO: is map needed?
+	var tickedChunks: LongMap<Int> = LongMap(Settings.CHUNKS_RENDER_DISTANCE * Settings.CHUNKS_RENDER_DISTANCE)
+	var chunkTickQueue: LongMap<Int> = LongMap(5)
+
+	data class ChunkTime(var time: Int, val id: Long) {
+		override operator fun equals(other: Any?): Boolean {
+			if(other == null) return false
+			return (other as? ChunkTime)?.id == this.id
+
+		}
+
+		override fun hashCode(): Int {
+			return id.hashCode()
+		}
+
+	}
 
 	fun loadMap(map: String) {
 		val file = Gdx.files.internal("$map.map")
@@ -31,11 +47,11 @@ object GameMap_new {
 
 			val saveFile = json.parseJson(jsonString).jsonObject
 			val loadedChunks = saveFile["chunks"]!!.jsonArray
-			loadedChunks.forEach {
-				val chunkJson = it.jsonObject
+			loadedChunks.forEach { jsonElement ->
+				val chunkJson = jsonElement.jsonObject
 				val chunkIdentifier = chunkJson["chunkLocation"]!!.primitive.long
 				val chunk = Chunk(chunkIdentifier.toVector())
-				chunkJson["tiles"]!!.jsonArray.content.forEach { chunk.tiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
+				chunkJson["tiles"]!!.jsonArray.content.forEach { chunk.tiles[it.jsonObject["key"]!!.primitive.long] = BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content) }
 
 				chunks.put(chunkIdentifier, chunk)
 
@@ -55,20 +71,20 @@ object GameMap_new {
 	 */
 	fun getChunk(id: Long): Chunk {
 		val chunk = chunks[id]
-		if (chunk != null) {
+
+		chunkTickQueue.put(id, Settings.CHUNK_LOAD_TIME)
+
+		if(chunk != null) {
+			// Load the chunk first if it was unloaded (not in currently ticking chunks)
+			if(!tickedChunks.containsKey(id)) chunks[id]?.load()
 			return chunk
 
 		} else {
 			println("Creating new chunk at ${id.toVector()}")
-			chunks[id] = Chunk(id.toVector())
-			return getChunk(id)
+			chunks.put(id, Chunk(id.toVector()))
+			return chunks[id]!!
 
 		}
-
-	}
-
-	fun chunkExists(id: Long): Boolean {
-		return chunks.contains(id)
 
 	}
 
@@ -93,7 +109,7 @@ object GameMap_new {
 	fun addTile(tileIdentifier: String, position: Vector2) {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).tiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
+		getChunk(chunkId).tiles[blockId] = BlockCatalog.getBlock(tileIdentifier)
 
 	}
 
@@ -112,7 +128,21 @@ object GameMap_new {
 	}
 
 	fun tick() {
-		chunks.forEach { it.value.tick() }
+		tickedChunks.forEach {
+			tickedChunks.put(it.key, --it.value)
+			if(it.value < 1) {
+				chunks[it.key]?.unload()
+
+			}
+
+		}
+		tickedChunks.removeAll { it.value < 1 }
+
+		forChunksInRenderDistance { tickedChunks.put(it, Settings.CHUNK_LOAD_TIME) }
+		tickedChunks.putAll(chunkTickQueue)
+		chunkTickQueue.clear()
+
+		tickedChunks.forEach { chunks[it.key]?.tick() }
 
 	}
 

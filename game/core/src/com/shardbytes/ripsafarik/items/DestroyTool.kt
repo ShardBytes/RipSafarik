@@ -9,7 +9,7 @@ import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.copyAndround
 import com.shardbytes.ripsafarik.entity.Explosion
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.screens.GameScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -34,8 +34,8 @@ class DestroyTool : Item, IUsable {
 		
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y).copyAndround()
 		
-		GameMap_new.removeTile(mapCoords)
-		GameMap_new.spawn(Explosion(1.5f).apply { createBody(); setPosition(mapCoords) })
+		GameMap.removeTile(mapCoords)
+		GameMap.spawn(Explosion(1.5f).apply { createBody(); setPosition(mapCoords) })
 		
 	}
 

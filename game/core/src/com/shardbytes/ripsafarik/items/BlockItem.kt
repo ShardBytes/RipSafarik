@@ -7,7 +7,7 @@ import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.copyAndround
 import com.shardbytes.ripsafarik.entity.Player
-import com.shardbytes.ripsafarik.game.GameMap_new
+import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import kotlinx.serialization.Transient
@@ -27,8 +27,8 @@ class BlockItem(block: Block) : Item, IUsable {
 		//place the block if it can be placed
 		val screenCoordinates = GameScreen.camera.unproject(input.x, input.y)
 		val position = Vector2(screenCoordinates.x, screenCoordinates.y).copyAndround()
-		if (GameMap_new.getTile(position) == null) {
-			GameMap_new.addTile(name, position)
+		if (GameMap.getTile(position) == null) {
+			GameMap.addTile(name, position)
 
 			//subtract one block from ItemStack
 			Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack = Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack?.oneLess()
