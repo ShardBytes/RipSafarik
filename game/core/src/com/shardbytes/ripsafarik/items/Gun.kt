@@ -33,8 +33,8 @@ class Gun : Item, IWeapon {
 			body.linearVelocity = Vector2.X.setLength(1200f).setAngle(playerRotation)
 
 		}
-
 		GameMap.spawn(bullet)
+
 		if (--leftUses == 0) {
 			`break`(player)
 

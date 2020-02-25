@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.MathUtils
-import com.shardbytes.ripsafarik.entity.zombie.ZombieNoHand
+import com.shardbytes.ripsafarik.blocks.Concrete
+import com.shardbytes.ripsafarik.entity.ItemDrop
 import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.game.Settings
+import com.shardbytes.ripsafarik.items.BlockItem
+import com.shardbytes.ripsafarik.items.ItemStack
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.screens.PauseScreen
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -60,7 +63,7 @@ object InputCore : InputProcessor {
 		checkEscapeKey(keycode)
 
 		if(keycode == Input.Keys.H) {
-			GameMap.spawn(ZombieNoHand().apply { createBody(); setPosition(GameWorld.player.position.cpy().add(5f, 5f)) })
+			GameMap.spawn(ItemDrop(ItemStack(BlockItem(Concrete()), 10)).apply { createBody(); setPosition(GameWorld.player.position.cpy()) })
 		}
 
 		return true

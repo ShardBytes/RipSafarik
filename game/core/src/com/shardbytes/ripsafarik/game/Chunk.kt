@@ -36,8 +36,12 @@ class Chunk(val chunkLocation: Vector2) {
 	}
 
 	fun tick() {
+		println("chunk tick ${this.chunkLocation}")
 		entities.addAll(entitiesToSpawn)
 		entitiesToSpawn.clear()
+
+		entities.removeAll(entitiesToRemove)
+		entitiesToRemove.clear()
 
 		entities.forEach {
 			passEntityToOtherChunkIfOutsideTheBounds(it)
@@ -45,16 +49,16 @@ class Chunk(val chunkLocation: Vector2) {
 
 		}
 
-		entities.removeAll(entitiesToRemove)
-		entitiesToRemove.clear()
-
 	}
 
 	fun load() {
 		println("Load $chunkLocation")
-		entitiesToSpawn.forEach { it.load() }
+		entities.removeAll(entitiesToRemove)
+		entitiesToRemove.clear()
+
+		entities.addAll(entitiesToSpawn)
+
 		entities.forEach { it.load() }
-		entitiesToRemove.forEach { it.load() }
 
 	}
 
@@ -67,12 +71,19 @@ class Chunk(val chunkLocation: Vector2) {
 	}
 
 	private fun passEntityToOtherChunkIfOutsideTheBounds(entity: Entity) {
-		val entityChunk = blockPositionToChunkCoordinates(entity.position)
+		// Only move entities with valid bodies (not in the process of despawning and actively loaded)
+		if(!entity.bodyInvalid) {
+			val entityChunk = blockPositionToChunkCoordinates(entity.position)
 
-		//if entity isn't inside this chunk
-		if (!entityChunk.epsilonEquals(chunkLocation)) {
-			println("Transfering entity $entity to $entityChunk")
-			putEntityIntoNearbyChunk(entity, entityChunk)
+			//if entity isn't inside this chunk
+			if (!entityChunk.epsilonEquals(chunkLocation)) {
+				println("Transfering entity $entity to $entityChunk")
+				putEntityIntoNearbyChunk(entity, entityChunk)
+
+			}
+
+		} else {
+			println("BLYAAAAAAA.. no")
 
 		}
 

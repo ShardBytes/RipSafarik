@@ -30,7 +30,6 @@ object GameWorld : Disposable {
 		BlockCatalog.registerBlock(Safarik())
 		BlockCatalog.registerBlock(Concrete())
 		BlockCatalog.registerBlock(Lamp())
-		BlockCatalog.registerBlock(Wall())
 
 		if(MainGame.Data.loadSavedWorld) {
 			GameMap.loadMap("world")

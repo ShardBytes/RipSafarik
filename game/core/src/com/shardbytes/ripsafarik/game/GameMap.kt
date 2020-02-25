@@ -23,19 +23,6 @@ object GameMap {
 	var tickedChunks: LongMap<Int> = LongMap(Settings.CHUNKS_RENDER_DISTANCE * Settings.CHUNKS_RENDER_DISTANCE)
 	var chunkTickQueue: LongMap<Int> = LongMap(5)
 
-	data class ChunkTime(var time: Int, val id: Long) {
-		override operator fun equals(other: Any?): Boolean {
-			if(other == null) return false
-			return (other as? ChunkTime)?.id == this.id
-
-		}
-
-		override fun hashCode(): Int {
-			return id.hashCode()
-		}
-
-	}
-
 	fun loadMap(map: String) {
 		val file = Gdx.files.internal("$map.map")
 		if (file.exists()) {
@@ -76,7 +63,7 @@ object GameMap {
 
 		if(chunk != null) {
 			// Load the chunk first if it was unloaded (not in currently ticking chunks)
-			if(!tickedChunks.containsKey(id)) chunks[id]?.load()
+			if(!tickedChunks.containsKey(id) && !chunkTickQueue.containsKey(id)) chunks[id]?.load()
 			return chunk
 
 		} else {
@@ -101,6 +88,7 @@ object GameMap {
 	 * @see Entity.despawn
 	 */
 	fun despawn(entity: Entity) {
+		println("gamemap-despawn $entity")
 		val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
 		getChunk(chunkId).entitiesToRemove.add(entity)
 
@@ -128,6 +116,7 @@ object GameMap {
 	}
 
 	fun tick() {
+		println("map tick")
 		tickedChunks.forEach {
 			tickedChunks.put(it.key, --it.value)
 			if(it.value < 1) {

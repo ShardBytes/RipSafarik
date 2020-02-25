@@ -5,10 +5,13 @@ import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
+import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.components.IHealth
 import com.shardbytes.ripsafarik.components.technical.GameObject
+import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.identifier
 import ktx.box2d.BodyDefinition
 import ktx.box2d.body
 
@@ -23,7 +26,7 @@ abstract class Entity : GameObject, IHealth {
 	 * Body definition becomes invalid after the body is unloaded/despawned.
 	 */
 	lateinit var body: Body
-	private var bodyInvalid = true
+	var bodyInvalid = true
 	open val bodyDef: BodyDefinition.() -> Unit = {}
 	open val bodyType: BodyDef.BodyType = BodyDef.BodyType.StaticBody
 
@@ -67,13 +70,16 @@ abstract class Entity : GameObject, IHealth {
 		}
 	
 	fun despawn() {
+		println("despawn $this but pizdec is at $position")
+		println("death T+${(this as Bullet).health}s")
+		println("themtitties in my chuncc: ${GameMap.chunks[blockPositionToChunkCoordinates(this.position).identifier()].entities}")
 		if(!bodyInvalid) {
 			GameWorld.physics.destroyBody(body)
 			println("Body of $this destroyed.")
 			bodyInvalid = true
 
 		} else {
-			throw Exception("Cannot destroy invalid body.")
+			throw Exception("Cannot destroy invalid body - entity $this.")
 
 		}
 		GameMap.despawn(this)
@@ -89,6 +95,7 @@ abstract class Entity : GameObject, IHealth {
 	}
 
 	fun unload() {
+		println("unload pizdec")
 		savePosition = position
 		saveAngle = rotation
 		if(!bodyInvalid) {

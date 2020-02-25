@@ -111,7 +111,6 @@ project(":ios") {
 project(":core") {
     apply plugin: "kotlin"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
@@ -122,6 +121,7 @@ project(":core") {
         compile "io.github.libktx:ktx-box2d:1.9.9-b1"
         compile "io.github.libktx:ktx-assets:1.9.9-b1"
         compile "io.github.libktx:ktx-scene2d:1.9.9-b1"
+
     }
 }
 
