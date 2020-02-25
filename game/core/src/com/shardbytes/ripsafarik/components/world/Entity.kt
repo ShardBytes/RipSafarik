@@ -5,13 +5,10 @@ import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.components.IHealth
 import com.shardbytes.ripsafarik.components.technical.GameObject
-import com.shardbytes.ripsafarik.entity.Bullet
 import com.shardbytes.ripsafarik.game.GameMap
 import com.shardbytes.ripsafarik.game.GameWorld
-import com.shardbytes.ripsafarik.identifier
 import ktx.box2d.BodyDefinition
 import ktx.box2d.body
 
@@ -70,9 +67,7 @@ abstract class Entity : GameObject, IHealth {
 		}
 	
 	fun despawn() {
-		println("despawn $this but pizdec is at $position")
-		println("death T+${(this as Bullet).health}s")
-		println("themtitties in my chuncc: ${GameMap.chunks[blockPositionToChunkCoordinates(this.position).identifier()].entities}")
+		println("Despawning $this, current position: $position")
 		if(!bodyInvalid) {
 			GameWorld.physics.destroyBody(body)
 			println("Body of $this destroyed.")

@@ -88,7 +88,6 @@ object GameMap {
 	 * @see Entity.despawn
 	 */
 	fun despawn(entity: Entity) {
-		println("gamemap-despawn $entity")
 		val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
 		getChunk(chunkId).entitiesToRemove.add(entity)
 
@@ -116,7 +115,6 @@ object GameMap {
 	}
 
 	fun tick() {
-		println("map tick")
 		tickedChunks.forEach {
 			tickedChunks.put(it.key, --it.value)
 			if(it.value < 1) {

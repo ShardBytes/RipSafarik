@@ -36,7 +36,6 @@ class Chunk(val chunkLocation: Vector2) {
 	}
 
 	fun tick() {
-		println("chunk tick ${this.chunkLocation}")
 		entities.addAll(entitiesToSpawn)
 		entitiesToSpawn.clear()
 
@@ -83,7 +82,7 @@ class Chunk(val chunkLocation: Vector2) {
 			}
 
 		} else {
-			println("BLYAAAAAAA.. no")
+			println("WARNING: tried to manipulate invalid body.")
 
 		}
 
