@@ -52,12 +52,9 @@ object GameWorld : Disposable {
 		//Draw the UI
 		Hotbar.render(batch)
 		Healthbar.render(player.health.toInt(), batch)
+		DebugView.render(batch)
 		PlayerInventory.render(batch)
 
-	}
-	
-	fun renderText(batch: SpriteBatch) {
-		DebugView.render(batch)
 	}
 
 	fun tick(dt: Float) {

@@ -124,7 +124,7 @@ object Textures {
 	}
 
 	object Font {
-		val bitmapFont = BitmapFontCache(BitmapFont().apply { data.setScale(1f) }).font
+		val bitmapFont = BitmapFontCache(BitmapFont().apply { data.setScale(1f / 10f) }).font
 
 	}
 
