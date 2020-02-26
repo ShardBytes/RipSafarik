@@ -20,6 +20,7 @@ object GameScreen : Screen {
 	// rendering
 	var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
 	var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
+	var textCamera = Camera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat(), false)
 	var batch = SpriteBatch()
 
 	// world
@@ -127,6 +128,12 @@ object GameScreen : Screen {
 		batch.begin()
 		world.renderUI(dt, batch)
 		batch.end()
+		
+		textCamera.update()
+		batch.projectionMatrix.set(textCamera.innerCamera.projection)
+		batch.begin()
+		world.renderText(batch)
+		batch.end()
 
 	}
 
@@ -145,6 +152,7 @@ object GameScreen : Screen {
 	override fun resize(width: Int, height: Int) {
 		camera.windowResized(width, height)
 		uiCamera.windowResized(width, height)
+		textCamera.windowResized(width, height)
 
 		Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
 		Hotbar.updateSlotPositions()
