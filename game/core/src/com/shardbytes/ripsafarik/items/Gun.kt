@@ -30,7 +30,7 @@ class Gun : Item, IWeapon {
 		val bullet = Bullet().apply {
 			createBody()
 			setPosition(player.position.cpy().add(Vector2.X.cpy().rotate(rotation).setLength(0.65f)))
-			body.linearVelocity = Vector2.X.setLength(1200f).setAngle(playerRotation)
+			body.linearVelocity = Vector2.X.setLength(360f).setAngle(playerRotation)
 
 		}
 		GameMap.spawn(bullet)

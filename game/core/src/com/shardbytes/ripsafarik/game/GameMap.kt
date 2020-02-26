@@ -3,6 +3,7 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.LongMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.blockPositionToChunkPosition
@@ -38,8 +39,8 @@ object GameMap {
 				val chunkJson = jsonElement.jsonObject
 				val chunkIdentifier = chunkJson["chunkLocation"]!!.primitive.long
 				val chunk = Chunk(chunkIdentifier.toVector())
-				chunkJson["tiles"]!!.jsonArray.content.forEach { chunk.tiles[it.jsonObject["key"]!!.primitive.long] = BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content) }
-
+				chunkJson["groundTiles"]!!.jsonArray.content.forEach { chunk.groundTiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
+				
 				chunks.put(chunkIdentifier, chunk)
 
 			}
@@ -93,25 +94,46 @@ object GameMap {
 
 	}
 
-	fun addTile(tileIdentifier: String, position: Vector2) {
+	fun addGroundTile(tileIdentifier: String, position: Vector2) {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).tiles[blockId] = BlockCatalog.getBlock(tileIdentifier)
+		getChunk(chunkId).groundTiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
 	}
 
-	fun removeTile(position: Vector2) {
+	fun removeGroundTile(position: Vector2) {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).tiles.remove(blockId)
+		getChunk(chunkId).groundTiles.remove(blockId)
 
 	}
 
-	fun getTile(position: Vector2): Block? {
+	fun getGroundTile(position: Vector2): Block? {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		return getChunk(chunkId).tiles[blockId]
+		return getChunk(chunkId).groundTiles[blockId]
 
+	}
+	
+	fun addOverlayTile(tileIdentifier: String, position: Vector2) {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		getChunk(chunkId).overlayTiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
+		
+	}
+	
+	fun removeOverlayTile(position: Vector2) {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		getChunk(chunkId).overlayTiles.remove(blockId)
+		
+	}
+	
+	fun getOverlayTile(position: Vector2): Block? {
+		val chunkId = blockPositionToChunkCoordinates(position).identifier()
+		val blockId = blockPositionToChunkPosition(position).identifier()
+		return getChunk(chunkId).overlayTiles[blockId]
+		
 	}
 
 	fun tick() {

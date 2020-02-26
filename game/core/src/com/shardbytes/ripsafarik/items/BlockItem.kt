@@ -27,12 +27,21 @@ class BlockItem(block: Block) : Item, IUsable {
 		//place the block if it can be placed
 		val screenCoordinates = GameScreen.camera.unproject(input.x, input.y)
 		val position = Vector2(screenCoordinates.x, screenCoordinates.y).copyAndround()
-		if (GameMap.getTile(position) == null) {
-			GameMap.addTile(name, position)
 
+		if (GameMap.getGroundTile(position) == null) {
+			GameMap.addGroundTile(name, position)
+			Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack = Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack?.oneLess()
+			return
+
+		}
+		
+		if (GameMap.getOverlayTile(position) == null) {
+			GameMap.addOverlayTile(name, position)
+			
 			//subtract one block from ItemStack
 			Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack = Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack?.oneLess()
-
+			return
+			
 		}
 
 	}

@@ -1,10 +1,8 @@
 package com.shardbytes.ripsafarik.tools
 
 import com.badlogic.gdx.Gdx
-import com.shardbytes.ripsafarik.blocks.Asfalt
-import com.shardbytes.ripsafarik.blocks.Concrete
-import com.shardbytes.ripsafarik.blocks.Grass
-import com.shardbytes.ripsafarik.blocks.Safarik
+import com.badlogic.gdx.utils.ObjectMap
+import com.shardbytes.ripsafarik.blocks.*
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
 import com.shardbytes.ripsafarik.components.world.Item
@@ -59,6 +57,7 @@ object SaveManager {
 			Asfalt::class with Asfalt.serializer()
 			Concrete::class with Concrete.serializer()
 			Safarik::class with Safarik.serializer()
+			IronFence::class with IronFence.serializer()
 
 		}
 
@@ -84,7 +83,7 @@ object SaveManager {
 			val chunkLocation = it.value.chunkLocation.identifier()
 
 			// Serialize tiles
-			val tiles = serializePolymorphicTilesMap(it.value.tiles)
+			val tiles = serializePolymorphicTilesMap(it.value.groundTiles)
 
 			// Serialize entities
 			val entities = serializePolymorphicList(it.value.entities)
@@ -152,7 +151,7 @@ object SaveManager {
 
 	}
 
-	private fun serializePolymorphicTilesMap(map: MutableMap<Long, Block>): ArrayList<JsonElement> {
+	private fun serializePolymorphicTilesMap(map: ObjectMap<Long, Block>): ArrayList<JsonElement> {
 		val jsonList = arrayListOf<JsonElement>()
 		map.forEach {
 			val listKey = json.toJson(LongSerializer, it.key)
