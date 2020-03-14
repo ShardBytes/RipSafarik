@@ -45,11 +45,11 @@ class Chunk(val chunkLocation: Vector2) {
 	}
 
 	fun tick() {
-		entities.addAll(entitiesToSpawn)
-		entitiesToSpawn.clear()
-
 		entities.removeAll(entitiesToRemove)
 		entitiesToRemove.clear()
+
+		entities.addAll(entitiesToSpawn)
+		entitiesToSpawn.clear()
 
 		entities.forEach {
 			passEntityToOtherChunkIfOutsideTheBounds(it)

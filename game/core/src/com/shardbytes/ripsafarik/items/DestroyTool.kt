@@ -29,12 +29,16 @@ class DestroyTool : Item, IUsable {
 	override fun use(player: Player) {
 		val screenX = Gdx.input.x
 		val screenY = Gdx.input.y
-		
 		val screenCoords = GameScreen.camera.unproject(screenX, screenY)
-		
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y).copyAndround()
-		
-		GameMap.removeGroundTile(mapCoords)
+
+		if(GameMap.getOverlayTile(mapCoords) != null) {
+			GameMap.removeOverlayTile(mapCoords)
+
+		} else {
+			GameMap.removeGroundTile(mapCoords)
+
+		}
 		GameMap.spawn(Explosion(1.5f).apply { createBody(); setPosition(mapCoords) })
 		
 	}
