@@ -2,7 +2,8 @@ package com.shardbytes.ripsafarik.game
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.IntMap
+import com.badlogic.gdx.utils.LongMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
@@ -14,27 +15,22 @@ class Chunk(val chunkLocation: Vector2) {
 
 	val chunkBlockLocation = chunkLocation.cpy().scl(16f)
 
-	var groundTiles: ObjectMap<Long, Block> = ObjectMap(256)
-	var overlayTiles: ObjectMap<Long, Block> = ObjectMap(256)
+	var tiles: IntMap<LongMap<Block>> = IntMap(6)
 
 	var entities: MutableList<Entity> = mutableListOf()
 	var entitiesToSpawn: MutableList<Entity> = mutableListOf()
 	var entitiesToRemove: MutableList<Entity> = mutableListOf()
 
 	fun render(dt: Float, batch: SpriteBatch) {
-		groundTiles.forEach { entry ->
-			val posX = chunkBlockLocation.x + entry.key.vectorXComponent()
-			val posY = chunkBlockLocation.y + entry.key.vectorYComponent()
+		tiles.forEach { layerEntry ->
+			layerEntry.value.forEach { entry ->
+				val posX = chunkBlockLocation.x + entry.key.vectorXComponent()
+				val posY = chunkBlockLocation.y + entry.key.vectorYComponent()
 
-			entry.value.render(batch, posX, posY)
+				entry.value.render(batch, posX, posY)
 
-		}
-		overlayTiles.forEach { entry ->
-			val posX = chunkBlockLocation.x + entry.key.vectorXComponent()
-			val posY = chunkBlockLocation.y + entry.key.vectorYComponent()
-			
-			entry.value.render(batch, posX, posY)
-			
+			}
+
 		}
 		
 		entities.forEach {
@@ -63,9 +59,7 @@ class Chunk(val chunkLocation: Vector2) {
 		println("Load $chunkLocation")
 		entities.removeAll(entitiesToRemove)
 		entitiesToRemove.clear()
-
 		entities.addAll(entitiesToSpawn)
-
 		entities.forEach { it.load() }
 
 	}

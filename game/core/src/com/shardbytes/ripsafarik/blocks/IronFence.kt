@@ -13,5 +13,7 @@ class IronFence: Block {
 	override val displayName: String = "Iron fence"
 	@Transient
 	override val texture: TextureRegion = TextureRegion(Textures.Overlay["iron_fence"])
+
+
 	
 }

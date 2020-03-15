@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.shardbytes.ripsafarik.assets.Textures
+import com.shardbytes.ripsafarik.components.IModifiable
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.copyAndround
@@ -15,7 +16,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
 @Serializable
-class DestroyTool : Item, IUsable {
+class DestroyTool : Item, IUsable, IModifiable {
 
 	override val name: String = "destroyTool"
 	override val displayName: String = "Destroy tool"
@@ -26,19 +27,15 @@ class DestroyTool : Item, IUsable {
 	override var leftUses: Int = 0
 	override var cooldown: Float = 0.1f
 
+	var selectedLayer = 0
+
 	override fun use(player: Player) {
 		val screenX = Gdx.input.x
 		val screenY = Gdx.input.y
 		val screenCoords = GameScreen.camera.unproject(screenX, screenY)
 		val mapCoords = Vector2(screenCoords.x, screenCoords.y).copyAndround()
 
-		if(GameMap.getOverlayTile(mapCoords) != null) {
-			GameMap.removeOverlayTile(mapCoords)
-
-		} else {
-			GameMap.removeGroundTile(mapCoords)
-
-		}
+		GameMap.removeTile(mapCoords, selectedLayer)
 		GameMap.spawn(Explosion(1.5f).apply { createBody(); setPosition(mapCoords) })
 		
 	}
@@ -48,5 +45,10 @@ class DestroyTool : Item, IUsable {
 		
 	}
 
+	override fun modify(modifier: Int) {
+		selectedLayer += modifier
+		println(selectedLayer) //TODO: some kinda dynamic HUD?
+
+	}
 
 }

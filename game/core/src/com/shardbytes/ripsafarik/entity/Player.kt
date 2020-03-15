@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils.radDeg
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.assets.Animations
+import com.shardbytes.ripsafarik.components.IModifiable
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
 import com.shardbytes.ripsafarik.components.world.Entity
@@ -106,6 +107,23 @@ class Player : Entity() {
 						elapsedItemUseCooldown = 0f
 
 					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	fun modifyHeldItem(diff: Int) {
+		if(!PlayerInventory.isOpened) {
+			val item = Hotbar.hotbarSlots[Hotbar.selectedSlot].itemStack?.item
+			if(item is IModifiable) {
+				item.modify(diff)
+				if(item is IUsable) {
+					itemUseCooldown = item.cooldown
+					elapsedItemUseCooldown = 0f
 
 				}
 

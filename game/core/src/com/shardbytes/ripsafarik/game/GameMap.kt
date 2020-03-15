@@ -3,7 +3,6 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.LongMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.blockPositionToChunkPosition
@@ -39,7 +38,7 @@ object GameMap {
 				val chunkJson = jsonElement.jsonObject
 				val chunkIdentifier = chunkJson["chunkLocation"]!!.primitive.long
 				val chunk = Chunk(chunkIdentifier.toVector())
-				chunkJson["groundTiles"]!!.jsonArray.content.forEach { chunk.groundTiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
+				//chunkJson["groundTiles"]!!.jsonArray.content.forEach { chunk.groundTiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
 				
 				chunks.put(chunkIdentifier, chunk)
 
@@ -94,46 +93,102 @@ object GameMap {
 
 	}
 
-	fun addGroundTile(tileIdentifier: String, position: Vector2) {
+	fun addTile(tileIdentifier: String, position: Vector2, zIndex: Int = Int.MAX_VALUE) {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).groundTiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+		val chunk = getChunk(chunkId)
+		val keys = chunk.tiles.keys().toArray().items
+		if(zIndex == Int.MAX_VALUE) {
+			val largestKey = largestKey(keys)
+			if(largestKey != Int.MIN_VALUE) {
+				// Find smallest unoccupied layer
+				var smallestKey = Int.MAX_VALUE
+				for (key in keys) {
+					if(key < smallestKey) {
+						if(getTile(position, smallestKey) == null) {
+							smallestKey = key
+
+						}
+
+					}
+
+				}
+				if(smallestKey != Int.MAX_VALUE) {
+					chunk.tiles[smallestKey].put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+				} else {
+					// All layers are occupied so create a new one above the largest
+					chunk.tiles.put(largestKey + 1, LongMap(256))
+					chunk.tiles[largestKey + 1].put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+				}
+
+			} else {
+				chunk.tiles.put(0, LongMap(256))
+				chunk.tiles[0].put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+			}
+
+		} else {
+			if(chunk.tiles.containsKey(zIndex)) {
+				chunk.tiles[zIndex].put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+			} else {
+				chunk.tiles.put(zIndex, LongMap(256))
+				chunk.tiles[zIndex].put(blockId, BlockCatalog.getBlock(tileIdentifier))
+
+			}
+
+		}
 
 	}
 
-	fun removeGroundTile(position: Vector2) {
+	fun removeTile(position: Vector2, zIndex: Int = Int.MAX_VALUE) {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).groundTiles.remove(blockId)
+
+		val chunk = getChunk(chunkId)
+		val keys = chunk.tiles.keys().toArray().items
+
+		if(zIndex == Int.MAX_VALUE) {
+			val largestKey = largestKey(keys)
+			if(chunk.tiles.containsKey(largestKey)) {
+				chunk.tiles[largestKey(keys)].remove(blockId)
+
+			}
+
+		} else {
+			if(chunk.tiles.containsKey(zIndex)) {
+				chunk.tiles[zIndex].remove(blockId)
+
+			}
+
+		}
 
 	}
 
-	fun getGroundTile(position: Vector2): Block? {
+	fun getTile(position: Vector2, zIndex: Int = Int.MAX_VALUE): Block? {
 		val chunkId = blockPositionToChunkCoordinates(position).identifier()
 		val blockId = blockPositionToChunkPosition(position).identifier()
-		return getChunk(chunkId).groundTiles[blockId]
+
+		val chunk = getChunk(chunkId)
+		if(zIndex == Int.MAX_VALUE) {
+			val largestKey = largestKey(chunk.tiles.keys().toArray().items)
+			return chunk.tiles[largestKey][blockId]
+
+		} else {
+			return chunk.tiles[zIndex][blockId]
+
+		}
 
 	}
-	
-	fun addOverlayTile(tileIdentifier: String, position: Vector2) {
-		val chunkId = blockPositionToChunkCoordinates(position).identifier()
-		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).overlayTiles.put(blockId, BlockCatalog.getBlock(tileIdentifier))
-		
-	}
-	
-	fun removeOverlayTile(position: Vector2) {
-		val chunkId = blockPositionToChunkCoordinates(position).identifier()
-		val blockId = blockPositionToChunkPosition(position).identifier()
-		getChunk(chunkId).overlayTiles.remove(blockId)
-		
-	}
-	
-	fun getOverlayTile(position: Vector2): Block? {
-		val chunkId = blockPositionToChunkCoordinates(position).identifier()
-		val blockId = blockPositionToChunkPosition(position).identifier()
-		return getChunk(chunkId).overlayTiles[blockId]
-		
+
+	private fun largestKey(keys: IntArray): Int {
+		var largestKey = Int.MIN_VALUE
+		for (key in keys) if (key > largestKey) largestKey = key
+		return largestKey
+
 	}
 
 	fun tick() {
