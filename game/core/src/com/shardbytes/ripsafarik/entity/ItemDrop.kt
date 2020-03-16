@@ -6,24 +6,24 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameMap
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.components.world.Item
-import ktx.box2d.body
+import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.items.ItemStack
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
-class ItemDrop(private val item: Item) : Entity {
+@Serializable
+class ItemDrop(private val itemStack: ItemStack) : Entity() {
 
 	override var maxHealth = 1f
 	override var health = 1f
 	override var regenSpeed = 0f
 
+	@Transient
 	private val font = BitmapFont().apply { data.setScale(0.1f) } //TODO: font scale fucks shit up, fix asap
-	private var availableForPickup = false
 
-	override val body: Body = GameWorld.physics.body(BodyDef.BodyType.StaticBody)
+	@Transient
+	private var availableForPickup = false
 
 	override fun render(dt: Float, batch: SpriteBatch) {
 		val originX = 0.5f
@@ -32,7 +32,7 @@ class ItemDrop(private val item: Item) : Entity {
 		val originBasedPositionY = position.y - originY
 
 		//Draw the item
-		batch.draw(TextureRegion(item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
+		batch.draw(TextureRegion(itemStack.item.texture), originBasedPositionX, originBasedPositionY, originX, originY, 1.0f, 1.0f, 1f, 1f, body.angle * MathUtils.radDeg - 90f)
 
 		//Pickup notice
 		if (availableForPickup) {
@@ -42,16 +42,16 @@ class ItemDrop(private val item: Item) : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
+	override fun tick() {
 		//If close enough to the player, set available for picking up
 		availableForPickup = position.dst(GameWorld.player.position) < 1
 
 		//And actually try to pick up, if key is pressed
 		if (availableForPickup) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-				val successful = GameWorld.player.pickUp(item)
+				val successful = GameWorld.player.pickUp(itemStack)
 				if (successful) {
-					GameMap.Entities.despawn(this)
+					despawn()
 
 				}
 

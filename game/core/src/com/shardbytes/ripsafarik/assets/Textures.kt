@@ -3,6 +3,8 @@ package com.shardbytes.ripsafarik.assets
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache
 import com.badlogic.gdx.utils.JsonReader
 import ktx.assets.getAsset
 import ktx.assets.load
@@ -20,11 +22,11 @@ object Textures {
 		UI.load()
 		Item.load()
 		Entity.load()
-		
+
 	}
-	
+
 	object Env {
-		
+
 		fun load() {
 			val jsonString = Gdx.files.internal("textures/envTextures.json").readString()
 			val textures = JsonReader().parse(jsonString).get("textures").asStringArray()
@@ -34,15 +36,15 @@ object Textures {
 				manager.load<Texture>(path)
 
 			}
-			
+
 		}
 
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/env/$texture.png")
-		
+
 	}
-	
+
 	object Overlay {
-		
+
 		fun load() {
 			val jsonString = Gdx.files.internal("textures/overlayTextures.json").readString()
 			val textures = JsonReader().parse(jsonString).get("textures").asStringArray()
@@ -52,15 +54,15 @@ object Textures {
 				manager.load<Texture>(path)
 
 			}
-			
+
 		}
 
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/overlay/$texture.png")
 
 	}
-	
+
 	object UI {
-		
+
 		fun load() {
 			val jsonString = Gdx.files.internal("textures/uiTextures.json").readString()
 			val textures = JsonReader().parse(jsonString).get("textures").asStringArray()
@@ -74,7 +76,7 @@ object Textures {
 		}
 
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/ui/$texture.png")
-		
+
 	}
 
 	object Item {
@@ -120,5 +122,10 @@ object Textures {
 		operator fun get(texture: String) = manager.getAsset<Texture>("textures/entity/$texture.png")
 
 	}
-	
+
+	object Font {
+		val bitmapFont = BitmapFontCache(BitmapFont().apply { data.setScale(1f / 10f) }).font
+
+	}
+
 }

@@ -3,16 +3,13 @@ package com.shardbytes.ripsafarik.entity
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.shardbytes.ripsafarik.game.GameMap
-import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.world.Entity
 import ktx.assets.disposeSafely
-import ktx.box2d.body
+import ktx.box2d.BodyDefinition
 
-class Bullet : Entity {
+class Bullet : Entity() {
 
 	private val texture = TextureRegion(Textures.Entity["bullet"])
 	private val width = 0.1f
@@ -23,7 +20,8 @@ class Bullet : Entity {
 	override var health: Float = 3f
 	override var regenSpeed: Float = 0f
 
-	override val body: Body = GameWorld.physics.body(BodyDef.BodyType.DynamicBody) {
+	override val bodyType = BodyDef.BodyType.DynamicBody
+	override val bodyDef: BodyDefinition.() -> Unit = {
 		circle(0.1f) { userData = this@Bullet }
 		bullet = true
 
@@ -39,10 +37,10 @@ class Bullet : Entity {
 
 	}
 
-	override fun tick(dt: Float) {
-		health -= dt
+	override fun tick() {
+		health -= 1f / 20f
 		if (health <= 0f) {
-			GameMap.Entities.despawn(this)
+			despawn()
 
 		}
 

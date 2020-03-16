@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.MathUtils
+import com.shardbytes.ripsafarik.game.GameWorld
 import com.shardbytes.ripsafarik.game.MainGame
 import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.screens.GameScreen
@@ -16,9 +17,10 @@ object InputCore : InputProcessor {
 	var newSelectedSlot = 1 //First slot, zero-th slot is invalid
 
 	override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
+	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
+	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean = false
 	override fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
 	override fun keyTyped(character: Char): Boolean = false
-	override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
 
 	fun reset(): InputCore {
 		direction = 0b0000
@@ -36,12 +38,7 @@ object InputCore : InputProcessor {
 
 		}
 
-		return false
-
-	}
-
-	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
-		return false
+		return true
 
 	}
 
@@ -49,7 +46,7 @@ object InputCore : InputProcessor {
 	override fun keyUp(keycode: Int): Boolean {
 		turnOffDirection(keycode)
 
-		return false
+		return true
 
 	}
 
@@ -59,8 +56,9 @@ object InputCore : InputProcessor {
 		selectInventorySlot(keycode)
 		checkOpenInventory(keycode)
 		checkEscapeKey(keycode)
+		checkPlusMinus(keycode)
 
-		return false
+		return true
 
 	}
 
@@ -120,6 +118,17 @@ object InputCore : InputProcessor {
 	private fun checkEscapeKey(keycode: Int) {
 		if (keycode == Input.Keys.ESCAPE) {
 			MainGame.screen = PauseScreen()
+
+		}
+
+	}
+
+	private fun checkPlusMinus(keycode: Int) {
+		if(keycode == Input.Keys.PLUS) {
+			GameWorld.player.modifyHeldItem(1)
+
+		} else if (keycode == Input.Keys.MINUS) {
+			GameWorld.player.modifyHeldItem(-1)
 
 		}
 

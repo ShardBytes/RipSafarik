@@ -24,7 +24,7 @@ object InventoryInput : InputProcessor {
 				GameScreen.uiCamera.viewport!!.screenWidth.toFloat(),
 				GameScreen.uiCamera.viewport!!.screenHeight.toFloat())
 
-		slotClicked(screenCoords)
+		slotClicked(screenCoords, button)
 
 		return false
 
@@ -51,7 +51,7 @@ object InventoryInput : InputProcessor {
 
 	}
 
-	private fun slotClicked(atCoords: Vector3) {
+	private fun slotClicked(atCoords: Vector3, button: Int) {
 		//check inventory slots
 		var slot = PlayerInventory.slots.find { it.isCoordinateInsideSlot(Vector2(atCoords.x, atCoords.y)) }
 
@@ -61,7 +61,7 @@ object InventoryInput : InputProcessor {
 		}
 
 		if (slot != null) {
-			slot.clicked()
+			slot.clicked(button == 1)
 
 		}
 

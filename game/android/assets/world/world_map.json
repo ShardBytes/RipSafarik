@@ -1176,6 +1176,55 @@
 	  "posY": 3,
 	  "scale": 1,
 	  "rotation": 90
+	},
+	{
+	  "name": "wall",
+	  "posX": 13,
+	  "posY": 6,
+	  "scale": 1,
+	  "rotation": 0
+	},
+	{
+	  "name": "wall",
+	  "posX": 14,
+	  "posY": 6,
+	  "scale": 1,
+	  "rotation": 0
+	},
+	{
+	  "name": "wall",
+	  "posX": 15,
+	  "posY": 6,
+	  "scale": 1,
+	  "rotation": 0
+	},
+	{
+	  "name": "wall",
+	  "posX": 16,
+	  "posY": 6,
+	  "scale": 1,
+	  "rotation": 0
+	},
+	{
+	  "name": "wall",
+	  "posX": 17,
+	  "posY": 6,
+	  "scale": 1,
+	  "rotation": 45
+	},
+	{
+	  "name": "wall",
+	  "posX": 17,
+	  "posY": 7,
+	  "scale": 1,
+	  "rotation": 90
+	},
+	{
+	  "name": "wall",
+	  "posX": 17,
+	  "posY": 8,
+	  "scale": 1,
+	  "rotation": 90
 	}
   ],
   "entities": [

@@ -5,105 +5,163 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import com.shardbytes.ripsafarik.game.Settings
 import com.shardbytes.ripsafarik.actors.Camera
-import com.shardbytes.ripsafarik.game.GameMap
+import com.shardbytes.ripsafarik.components.technical.BlockCatalog
+import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.game.GameWorld
+import com.shardbytes.ripsafarik.game.Settings
+import com.shardbytes.ripsafarik.items.*
 import com.shardbytes.ripsafarik.ui.Healthbar
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
+import kotlin.concurrent.thread
 
 object GameScreen : Screen {
 
-	// rendering
-	var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
-	var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
-	var batch = SpriteBatch()
+    // rendering
+    var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
+    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
+    var batch = SpriteBatch()
 
-	// world
-	val world = GameWorld
-	val debugRenderer = Box2DDebugRenderer()
+    // world
+    val world = GameWorld
+    val debugRenderer = Box2DDebugRenderer()
 
-	init {
-		camera.lockOn(world.player)
+    init {
+        camera.lockOn(world.player)
 
-	}
+        thread(true, true) {
+            while (true) {
+                val enteredString = readLine()
+                if (enteredString?.startsWith("-giveBlock ") == true) {
+                    val blockId = enteredString.substringAfter(" ").substringBefore(" ")
+                    val amount = enteredString.substringAfterLast(" ").toIntOrNull()
 
-	/*
-	==== update oredr ====
-	It's easiest to think of your order in a single frame, think of it as a series of dependencies.
+                    val block = BlockCatalog.getBlock(blockId)
+                    if (block.name == "default") {
+                        System.err.println("Unknown block.")
 
-	User input depends on nothing, so it goes first.
-	Objects being updated depend on the user input, so they go second.
-	Physics depend on the new updated objects, so it goes third.
-	Rendering depends on the latest physics state and object updates, so it goes fourth.
-	UI depends on the scene to already be rendered, so it goes fifth.
-	 */
-	override fun render(dt: Float) {
-		// first act/tick
-		world.tick(dt)
+                    } else {
+                        println("Given $amount $blockId to player.")
+                        world.player.pickUp(ItemStack(BlockItem(block), amount ?: 1))
 
-		// update camera before rendering
-		camera.update()
-		batch.projectionMatrix.set(camera.innerCamera.combined)
+                    }
 
-		// clear screen
-		Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+                } else if (enteredString == "-giveDestroyTool") {
+                    println("Given 1 destroyTool to player.")
+                    world.player.pickUp(ItemStack(DestroyTool(), 1))
 
-		// render stuff
-		batch.begin()
-		world.render(dt, batch)
-		batch.end()
+                } else if (enteredString == "-giveFlashlight") {
+                    println("Given 1 flashlight to player.")
+                    world.player.pickUp(ItemStack(Flashlight(), 1))
+                } else if (enteredString == "-giveGun") {
+                    println("Given 1 gun to player.")
+                    world.player.pickUp(ItemStack(Gun(), 1))
 
-		// debug render world physics into camera matrix
-		if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
+                } else if (enteredString == "-help") {
+                    println("Commands:\n" +
+                            "-giveBlock {blockId} [amount]\n" +
+                            "-giveDestroyTool\n" +
+                            "-giveFlashlight\n" +
+                            "-setTime {timeInSeconds}\n")
 
-		//Lighting
-		GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
-		GameWorld.lights.setCombinedMatrix(camera.innerCamera)
-		GameWorld.lights.updateAndRender()
+                } else if (enteredString?.startsWith("-setTime ") == true) {
+                    val time = enteredString.substringAfter(" ").toIntOrNull()
+                    if (time != null) {
+                        DaylightCycle.currentTime = time.toFloat()
+                        println("Time set.")
 
-		// render hud at the top
-		uiCamera.update()
-		batch.projectionMatrix.set(uiCamera.innerCamera.projection)
-		batch.begin()
-		world.renderUI(dt, batch)
-		batch.end()
+                    } else {
+                        System.err.println("Invalid time format.")
 
-	}
+                    }
 
-	override fun show() {
+                } else {
+                    System.err.println("Invalid command. Check -help.")
 
-	}
+                }
 
-	override fun pause() {
+            }
 
-	}
+        }
 
-	override fun resume() {
+    }
 
-	}
+    /*
+    ==== update oredr ====
+    It's easiest to think of your order in a single frame, think of it as a series of dependencies.
 
-	override fun resize(width: Int, height: Int) {
-		camera.windowResized(width, height)
-		uiCamera.windowResized(width, height)
+    User input depends on nothing, so it goes first.
+    Objects being updated depend on the user input, so they go second.
+    Physics depend on the new updated objects, so it goes third.
+    Rendering depends on the latest physics state and object updates, so it goes fourth.
+    UI depends on the scene to already be rendered, so it goes fifth.
+     */
+    override fun render(dt: Float) {
+        // tick the world first
+        world.tick(dt)
 
-		Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
-		Hotbar.updateSlotPositions()
+        // update camera before rendering
+        camera.update()
+        batch.projectionMatrix.set(camera.innerCamera.combined)
 
-	}
+        // clear screen
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-	override fun dispose() {
-		debugRenderer.dispose()
-		batch.dispose()
-		world.dispose()
+        // render stuff
+        batch.begin()
+        world.render(dt, batch)
+        batch.end()
 
-		Healthbar.dispose()
+        // debug render world physics into camera matrix
+        if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
-	}
+        //Lighting
+        GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
+        GameWorld.lights.setCombinedMatrix(camera.innerCamera)
+        GameWorld.lights.updateAndRender()
 
-	override fun hide() {
+        // render hud at the top
+        uiCamera.update()
+        batch.projectionMatrix.set(uiCamera.innerCamera.projection)
+        batch.begin()
+        world.renderUI(dt, batch)
+        batch.end()
 
-	}
+    }
+
+    override fun show() {
+
+    }
+
+    override fun pause() {
+
+    }
+
+    override fun resume() {
+
+    }
+
+    override fun resize(width: Int, height: Int) {
+        camera.windowResized(width, height)
+        uiCamera.windowResized(width, height)
+
+        Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
+        Hotbar.updateSlotPositions()
+
+    }
+
+    override fun dispose() {
+        debugRenderer.dispose()
+        batch.dispose()
+        world.dispose()
+
+        Healthbar.dispose()
+
+    }
+
+    override fun hide() {
+
+    }
 
 }

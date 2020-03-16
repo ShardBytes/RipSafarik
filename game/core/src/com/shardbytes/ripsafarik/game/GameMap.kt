@@ -1,259 +1,238 @@
 package com.shardbytes.ripsafarik.game
 
-import box2dLight.Light
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils.clamp
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.JsonReader
+import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.LongMap
+import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
+import com.shardbytes.ripsafarik.blockPositionToChunkPosition
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
-import com.shardbytes.ripsafarik.entity.ItemDrop
-import com.shardbytes.ripsafarik.items.Flashlight
-import com.shardbytes.ripsafarik.items.Gun
+import com.shardbytes.ripsafarik.identifier
+import com.shardbytes.ripsafarik.toVector
+import com.shardbytes.ripsafarik.tools.SaveManager
+import kotlinx.serialization.Serializable
 
 object GameMap {
 
-	//TODO: optimize, do not pass string but already parsed json object
-	fun loadAll(mapName: String) {
-		val jsonString = Gdx.files.internal("world/${mapName}_map.json").readString()
+    private lateinit var currentMapName: String
+
+    @Serializable
+    var chunks: LongMap<Chunk> = LongMap() // TODO: is map needed?
+    var tickedChunks: LongMap<Int> = LongMap(Settings.CHUNKS_RENDER_DISTANCE * Settings.CHUNKS_RENDER_DISTANCE)
+    var chunkTickQueue: LongMap<Int> = LongMap(5)
+
+    fun loadMap(map: String) {
+        val file = Gdx.files.internal("$map.map")
+        if (file.exists()) {
+            println("file exists ayy")
+            val json = SaveManager.json
+
+            // TODO: Potential memory oof
+            val jsonString = file.readString()
+
+            val saveFile = json.parseJson(jsonString).jsonObject
+            val loadedChunks = saveFile["chunks"]!!.jsonArray
+            loadedChunks.forEach { jsonElement ->
+                val chunkJson = jsonElement.jsonObject
+                val chunkIdentifier = chunkJson["chunkLocation"]!!.primitive.long
+                val chunk = Chunk(chunkIdentifier.toVector())
+                //chunkJson["groundTiles"]!!.jsonArray.content.forEach { chunk.groundTiles.put(it.jsonObject["key"]!!.primitive.long, BlockCatalog.getBlock(it.jsonObject["value"]!!.primitive.content)) }
+
+                chunks.put(chunkIdentifier, chunk)
+
+            }
 
-		Env.load(jsonString)
-		Overlay.load(jsonString)
-		Entities.load(jsonString)
+        }
+        currentMapName = map
 
-	}
+    }
 
-	object Env {
-		private var env: MutableList<MutableList<Block>> = mutableListOf()
+    /**
+     * Get chunk from cache or create a new one, if it does not exist yet.
+     * @param id Chunk identifier
+     * @return New or cached existing chunk
+     *
+     * @see Vector2.identifier
+     */
+    fun getChunk(id: Long): Chunk {
+        val chunk = chunks[id]
 
-		fun load(jsonString: String) {
-			val mapJson = JsonReader().parse(jsonString).get("env")
+        chunkTickQueue.put(id, Settings.CHUNK_LOAD_TIME)
 
-			env.clear()
-			mapJson.forEach {
-				val arr = it.asStringArray()
-				val arr2 = mutableListOf<Block>()
-				arr.forEachIndexed { index, s -> 
-					arr2.add(BlockCatalog.getBlockCopy(s))
-					
-				}
-				env.add(arr2)
+        if (chunk != null) {
+            // Load the chunk first if it was unloaded (not in currently ticking chunks)
+            if (!tickedChunks.containsKey(id) && !chunkTickQueue.containsKey(id)) chunks[id]?.load()
+            return chunk
 
-			}
+        } else {
+            println("Creating new chunk at ${id.toVector()}")
+            chunks.put(id, Chunk(id.toVector()))
+            return chunks[id]!!
 
-		}
+        }
 
-		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
-			//nice loop
-			//draw only the stuff inside player's render distance
-			val yMin = clamp(playerPos.y.toInt() - Settings.RENDER_DISTANCE, 0, env.size - 1)
-			val yMax = clamp(playerPos.y.toInt() + Settings.RENDER_DISTANCE, 0, env.size - 1)
+    }
 
-			for (y in yMin..yMax) {
-				val row = env[y]
-				val xMin = clamp(playerPos.x.toInt() - Settings.RENDER_DISTANCE, 0, row.size - 1)
-				val xMax = clamp(playerPos.x.toInt() + Settings.RENDER_DISTANCE, 0, row.size - 1)
+    fun spawn(entity: Entity) {
+        val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
+        getChunk(chunkId).entitiesToSpawn.add(entity)
 
-				for (x in xMin..xMax) {
-					val block = row[x]
-					batch.draw(TextureRegion(block.texture), x - 0.5f, y - 0.5f, 0.5f, 0.5f, 1f, 1f, 1f, 1f, 0f)
+    }
 
-				}
+    /**
+     * Do NOT call this function directly, use despawn() directly on the entity
+     * you want to despawn!
+     *
+     * @see Entity.despawn
+     */
+    fun despawn(entity: Entity) {
+        val chunkId = blockPositionToChunkCoordinates(entity.position).identifier()
+        getChunk(chunkId).entitiesToRemove.add(entity)
 
-			}
+    }
 
-		}
+    fun addTile(tileIdentifier: String, position: Vector2, zIndex: Int = Int.MAX_VALUE) {
+        val chunkId = blockPositionToChunkCoordinates(position).identifier()
+        val blockId = blockPositionToChunkPosition(position).identifier()
 
-		operator fun get(x: Int, y: Int) = env[y][x]
+        val chunk = getChunk(chunkId)
+        val keys = chunk.tiles.orderedKeys()
+        if (zIndex == Int.MAX_VALUE) {
+            val largestKey = largestKey(keys)
+            if (largestKey != Int.MIN_VALUE) {
+                // Find smallest unoccupied layer
+                var smallestKey = Int.MAX_VALUE
+                for (key in keys) {
+                    if (key < smallestKey) {
+                        if (getTile(position, smallestKey) == null) {
+                            smallestKey = key
 
-	}
+                        }
 
-	object Overlay {
+                    }
 
-		private var overlay: MutableList<BlockData> = mutableListOf()
+                }
+                if (smallestKey != Int.MAX_VALUE) {
+                    chunk.tiles[smallestKey].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
-		data class BlockData(
-				var name: String,
-				var posX: Float,
-				var posY: Float,
-				var scale: Float,
-				var rotation: Float)
+                } else {
+                    // All layers are occupied so create a new one above the largest
+                    chunk.tiles.put(largestKey + 1, LongMap(256))
+                    chunk.tiles[largestKey + 1].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
-		fun load(jsonString: String) {
-			val mapJson = JsonReader().parse(jsonString).get("overlay")
+                }
 
-			overlay.clear()
-			mapJson.forEach {
-				val data = BlockData(
-						it["name"].asString(),
-						it["posX"].asFloat(),
-						it["posY"].asFloat(),
-						it["scale"].asFloat(),
-						it["rotation"].asFloat()
-				)
-				overlay.add(data)
-				
-				val pos = Vector2(data.posX, data.posY)
-				BlockCatalog.getBlockCopy(data.name).createCollider(pos)
-				BlockCatalog.getBlockCopy(data.name).onCreate(pos)
+            } else {
+                chunk.tiles.put(0, LongMap(256))
+                chunk.tiles[0].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
-			}
+            }
 
-		}
+        } else {
+            if (chunk.tiles.containsKey(zIndex)) {
+                chunk.tiles[zIndex].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
-		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
-			for (overlayBlock in overlay) {
-				val texture = BlockCatalog.getBlockCopy(overlayBlock.name).texture
+            } else {
+                chunk.tiles.put(zIndex, LongMap(256))
+                chunk.tiles[zIndex].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
-				if (isInRenderDistance(Vector2(overlayBlock.posX, overlayBlock.posY), playerPos)) {
-					if(overlayBlock.name == "lamp") {
-						batch.draw(TextureRegion(texture), overlayBlock.posX - 2.5f, overlayBlock.posY - 0.5f, 2.5f, 0.5f, 3f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
-						
-					} else {
-						batch.draw(TextureRegion(texture), overlayBlock.posX - 0.5f, overlayBlock.posY - 0.5f, 0.5f, 0.5f, 1f, 1f, overlayBlock.scale, overlayBlock.scale, overlayBlock.rotation)
+            }
 
-					}
-					
-				}
+        }
+        chunk.tiles.orderedKeys().sort()
 
-			}
+    }
 
-		}
+    fun removeTile(position: Vector2, zIndex: Int = Int.MAX_VALUE) {
+        val chunkId = blockPositionToChunkCoordinates(position).identifier()
+        val blockId = blockPositionToChunkPosition(position).identifier()
 
-	}
+        val chunk = getChunk(chunkId)
+        val keys = chunk.tiles.orderedKeys()
 
-	object Entities {
+        if (zIndex == Int.MAX_VALUE) {
+            val largestKey = largestKey(keys)
+            if (chunk.tiles.containsKey(largestKey)) {
+                chunk.tiles[largestKey(keys)].remove(blockId)
 
-		private var entities: MutableList<Entity> = mutableListOf()
-		private var despawnSchedule: MutableList<Entity> = mutableListOf()
+            }
 
-		fun load(jsonString: String) {
-			val mapJson = JsonReader().parse(jsonString).get("entities")
+        } else {
+            if (chunk.tiles.containsKey(zIndex)) {
+                chunk.tiles[zIndex].remove(blockId)
 
-			entities.clear()
-			despawnSchedule.clear()
+            }
 
-			spawn(ItemDrop(Gun()).apply { setPosition(-2f, -2f) })
-			spawn(ItemDrop(Flashlight()).apply { setPosition(0f, -2f) })
+        }
 
-			//TODO: LOADING ENTITIES FROM WORLD
-			//this uses Java reflection, probably not the best solution there is
-			//pretty sure not the best solution there is
-			//NOPE NOT AT ALL
-			mapJson.forEach {
-				val obj = Class.forName(it["className"].asString())
-				val instance = obj.newInstance()
-				it.forEach {
-					if (it.name != "className") {
-						val field = obj.getDeclaredField(it.name)
-						field.isAccessible = true
-						field.set(instance, it.asFloat())
+    }
 
-					}
+    fun getTile(position: Vector2, zIndex: Int = Int.MAX_VALUE): Block? {
+        val chunkId = blockPositionToChunkCoordinates(position).identifier()
+        val blockId = blockPositionToChunkPosition(position).identifier()
 
-				}
-				spawn(instance as Entity)
+        val chunk = getChunk(chunkId)
+        if (zIndex == Int.MAX_VALUE) {
+            val largestKey = largestKey(chunk.tiles.orderedKeys())
+            return chunk.tiles[largestKey][blockId]
 
-			}
+        } else {
+            return chunk.tiles[zIndex][blockId]
 
-		}
+        }
 
-		fun render(dt: Float, batch: SpriteBatch, playerPos: Vector2) {
-			for (entity in entities) {
-				//if entity is in player's render distance
-				//draw it
-				if (isInRenderDistance(entity.position, playerPos)) {
-					entity.render(dt, batch)
+    }
 
-				}
+    private fun largestKey(keys: Array<Int>): Int { // Using boxed array instead of IntArray because OrderedMap.orderedKeys() returns Integer[] instead of int[]
+        var largestKey = Int.MIN_VALUE
+        for (key in keys) if (key > largestKey) largestKey = key
+        return largestKey
 
-			}
+    }
 
-		}
+    fun tick() {
+        tickedChunks.forEach {
+            tickedChunks.put(it.key, --it.value)
+            if (it.value < 1) {
+                chunks[it.key]?.unload()
 
-		fun tick(dt: Float) {
-			//tick all entities anywhere they are
-			//time flows in this game everywhere, no chunk loading or similar crap magic
+            }
 
-			//despawn all entities that are marked for despawn
-			if (despawnSchedule.isNotEmpty()) {
-				for (entity in despawnSchedule) {
-					GameWorld.physics.destroyBody(entity.body)
-					entities.remove(entity)
+        }
+        tickedChunks.removeAll { it.value < 1 }
 
-				}
-				despawnSchedule.clear()
+        forChunksInRenderDistance { tickedChunks.put(it, Settings.CHUNK_LOAD_TIME) }
+        tickedChunks.putAll(chunkTickQueue)
+        chunkTickQueue.clear()
 
-			}
+        tickedChunks.forEach { chunks[it.key]?.tick() }
 
-			for (entity in entities) {
-				entity.tick(dt)
+    }
 
-			}
+    fun render(dt: Float, batch: SpriteBatch) {
+        // render chunks in render distance
+        forChunksInRenderDistance {
+            getChunk(it).render(dt, batch)
 
-		}
+        }
 
-		fun spawn(vararg entity: Entity) {
-			entity.forEach { entities.add(it) }
+    }
 
-		}
+    private fun forChunksInRenderDistance(action: (Long) -> Unit) {
+        val playerChunk = blockPositionToChunkCoordinates(GameWorld.player.position)
+        val chunkDistance = (Settings.CHUNKS_RENDER_DISTANCE - 1) / 2
 
-		fun despawn(entity: Entity) {
-			if (!despawnSchedule.contains(entity)) {
-				despawnSchedule.add(entity)
+        for (chunkY in playerChunk.y.toInt() - chunkDistance..playerChunk.y.toInt() + chunkDistance) {
+            for (chunkX in playerChunk.x.toInt() - chunkDistance..playerChunk.x.toInt() + chunkDistance) {
+                action(Vector2(chunkX.toFloat(), chunkY.toFloat()).identifier())
 
-			}
+            }
 
-		}
+        }
 
-		/**
-		 * Returns total count of all entities by default.
-		 * Can accept predicate as a filter to return the number of entities matching the predicate.
-		 * @param predicate Entity filter
-		 * @return Number of entities found
-		 */
-		fun totalEntities(predicate: (Entity) -> Boolean = { true }): Int {
-			return entities.count(predicate)
-
-		}
-
-	}
-
-	object Lights {
-
-		var lights = arrayListOf<Light>()
-
-		fun load() {
-			//val light = PointLight(GameWorld.lights, 128, Color.WHITE, 10f, 4f, 4f)
-			//val light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 40f)
-			//light.attachToBody(GameWorld.player.body)
-
-			//lights.add(light)
-
-		}
-
-		fun createNew(light: Light) {
-			lights.add(light)
-
-		}
-
-	}
-
-	fun isInRenderDistance(testPos: Vector2, playerPos: Vector2): Boolean {
-		//if number is in range
-		//nice Kotlin stuff
-		if (testPos.x.toInt() in (playerPos.x.toInt() - Settings.RENDER_DISTANCE)..(playerPos.x.toInt() + Settings.RENDER_DISTANCE)) {
-			if (testPos.y.toInt() in (playerPos.y.toInt() - Settings.RENDER_DISTANCE)..(playerPos.y.toInt() + Settings.RENDER_DISTANCE)) {
-				return true
-
-			}
-
-		}
-		return false
-
-	}
+    }
 
 }

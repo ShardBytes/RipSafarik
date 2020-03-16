@@ -1,9 +1,13 @@
 {
-  "categories": ["weapon"],
-
+  "categories": [
+	"weapon",
+	"tool"
+  ],
   "weapon": [
-    "gun",
-    "gunMagazine"
+	"gun"
+  ],
+  "tool": [
+	"flashlight",
+	"destroytool"
   ]
-
 }
