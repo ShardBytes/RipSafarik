@@ -186,7 +186,7 @@ object GameMap {
 
     }
 
-    private fun largestKey(keys: Array<Int>): Int {
+    private fun largestKey(keys: Array<Int>): Int { // Using boxed array instead of IntArray because OrderedMap.orderedKeys() returns Integer[] instead of int[]
         var largestKey = Int.MIN_VALUE
         for (key in keys) if (key > largestKey) largestKey = key
         return largestKey
