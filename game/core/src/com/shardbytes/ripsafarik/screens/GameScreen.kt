@@ -17,151 +17,151 @@ import kotlin.concurrent.thread
 
 object GameScreen : Screen {
 
-	// rendering
-	var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
-	var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
-	var batch = SpriteBatch()
+    // rendering
+    var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
+    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
+    var batch = SpriteBatch()
 
-	// world
-	val world = GameWorld
-	val debugRenderer = Box2DDebugRenderer()
+    // world
+    val world = GameWorld
+    val debugRenderer = Box2DDebugRenderer()
 
-	init {
-		camera.lockOn(world.player)
+    init {
+        camera.lockOn(world.player)
 
-		thread(true, true) {
-			while (true) {
-				val enteredString = readLine()
-				if (enteredString?.startsWith("-giveBlock ") == true) {
-					val blockId = enteredString.substringAfter(" ").substringBefore(" ")
-					val amount = enteredString.substringAfterLast(" ").toIntOrNull()
+        thread(true, true) {
+            while (true) {
+                val enteredString = readLine()
+                if (enteredString?.startsWith("-giveBlock ") == true) {
+                    val blockId = enteredString.substringAfter(" ").substringBefore(" ")
+                    val amount = enteredString.substringAfterLast(" ").toIntOrNull()
 
-					val block = BlockCatalog.getBlock(blockId)
-					if (block.name == "default") {
-						System.err.println("Unknown block.")
+                    val block = BlockCatalog.getBlock(blockId)
+                    if (block.name == "default") {
+                        System.err.println("Unknown block.")
 
-					} else {
-						println("Given $amount $blockId to player.")
-						world.player.pickUp(ItemStack(BlockItem(block), amount ?: 1))
+                    } else {
+                        println("Given $amount $blockId to player.")
+                        world.player.pickUp(ItemStack(BlockItem(block), amount ?: 1))
 
-					}
+                    }
 
-				} else if (enteredString == "-giveDestroyTool") {
-					println("Given 1 destroyTool to player.")
-					world.player.pickUp(ItemStack(DestroyTool(), 1))
+                } else if (enteredString == "-giveDestroyTool") {
+                    println("Given 1 destroyTool to player.")
+                    world.player.pickUp(ItemStack(DestroyTool(), 1))
 
-				} else if (enteredString == "-giveFlashlight") {
-					println("Given 1 flashlight to player.")
-					world.player.pickUp(ItemStack(Flashlight(), 1))
-				} else if (enteredString == "-giveGun") {
-					println("Given 1 gun to player.")
-					world.player.pickUp(ItemStack(Gun(), 1))
+                } else if (enteredString == "-giveFlashlight") {
+                    println("Given 1 flashlight to player.")
+                    world.player.pickUp(ItemStack(Flashlight(), 1))
+                } else if (enteredString == "-giveGun") {
+                    println("Given 1 gun to player.")
+                    world.player.pickUp(ItemStack(Gun(), 1))
 
-				} else if (enteredString == "-help") {
-					println("Commands:\n" +
-							"-giveBlock {blockId} [amount]\n" +
-							"-giveDestroyTool\n" +
-							"-giveFlashlight\n" +
-							"-setTime {timeInSeconds}\n")
+                } else if (enteredString == "-help") {
+                    println("Commands:\n" +
+                            "-giveBlock {blockId} [amount]\n" +
+                            "-giveDestroyTool\n" +
+                            "-giveFlashlight\n" +
+                            "-setTime {timeInSeconds}\n")
 
-				} else if (enteredString?.startsWith("-setTime ") == true) {
-					val time = enteredString.substringAfter(" ").toIntOrNull()
-					if(time != null) {
-						DaylightCycle.currentTime = time.toFloat()
-						println("Time set.")
+                } else if (enteredString?.startsWith("-setTime ") == true) {
+                    val time = enteredString.substringAfter(" ").toIntOrNull()
+                    if (time != null) {
+                        DaylightCycle.currentTime = time.toFloat()
+                        println("Time set.")
 
-					} else {
-						System.err.println("Invalid time format.")
+                    } else {
+                        System.err.println("Invalid time format.")
 
-					}
+                    }
 
-				} else {
-					System.err.println("Invalid command. Check -help.")
+                } else {
+                    System.err.println("Invalid command. Check -help.")
 
-				}
+                }
 
-			}
+            }
 
-		}
+        }
 
-	}
+    }
 
-	/*
-	==== update oredr ====
-	It's easiest to think of your order in a single frame, think of it as a series of dependencies.
+    /*
+    ==== update oredr ====
+    It's easiest to think of your order in a single frame, think of it as a series of dependencies.
 
-	User input depends on nothing, so it goes first.
-	Objects being updated depend on the user input, so they go second.
-	Physics depend on the new updated objects, so it goes third.
-	Rendering depends on the latest physics state and object updates, so it goes fourth.
-	UI depends on the scene to already be rendered, so it goes fifth.
-	 */
-	override fun render(dt: Float) {
-		// tick the world first
-		world.tick(dt)
+    User input depends on nothing, so it goes first.
+    Objects being updated depend on the user input, so they go second.
+    Physics depend on the new updated objects, so it goes third.
+    Rendering depends on the latest physics state and object updates, so it goes fourth.
+    UI depends on the scene to already be rendered, so it goes fifth.
+     */
+    override fun render(dt: Float) {
+        // tick the world first
+        world.tick(dt)
 
-		// update camera before rendering
-		camera.update()
-		batch.projectionMatrix.set(camera.innerCamera.combined)
+        // update camera before rendering
+        camera.update()
+        batch.projectionMatrix.set(camera.innerCamera.combined)
 
-		// clear screen
-		Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        // clear screen
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-		// render stuff
-		batch.begin()
-		world.render(dt, batch)
-		batch.end()
+        // render stuff
+        batch.begin()
+        world.render(dt, batch)
+        batch.end()
 
-		// debug render world physics into camera matrix
-		if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
+        // debug render world physics into camera matrix
+        if (Settings.PHYSICS_DEBUG_ACTIVE) debugRenderer.render(world.physics, camera.innerCamera.combined)
 
-		//Lighting
-		GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
-		GameWorld.lights.setCombinedMatrix(camera.innerCamera)
-		GameWorld.lights.updateAndRender()
+        //Lighting
+        GameWorld.lights.useCustomViewport(camera.viewport!!.screenX, camera.viewport!!.screenY, camera.viewport!!.screenWidth, camera.viewport!!.screenHeight)
+        GameWorld.lights.setCombinedMatrix(camera.innerCamera)
+        GameWorld.lights.updateAndRender()
 
-		// render hud at the top
-		uiCamera.update()
-		batch.projectionMatrix.set(uiCamera.innerCamera.projection)
-		batch.begin()
-		world.renderUI(dt, batch)
-		batch.end()
+        // render hud at the top
+        uiCamera.update()
+        batch.projectionMatrix.set(uiCamera.innerCamera.projection)
+        batch.begin()
+        world.renderUI(dt, batch)
+        batch.end()
 
-	}
+    }
 
-	override fun show() {
+    override fun show() {
 
-	}
+    }
 
-	override fun pause() {
+    override fun pause() {
 
-	}
+    }
 
-	override fun resume() {
+    override fun resume() {
 
-	}
+    }
 
-	override fun resize(width: Int, height: Int) {
-		camera.windowResized(width, height)
-		uiCamera.windowResized(width, height)
+    override fun resize(width: Int, height: Int) {
+        camera.windowResized(width, height)
+        uiCamera.windowResized(width, height)
 
-		Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
-		Hotbar.updateSlotPositions()
+        Settings.CURRENT_ASPECT_RATIO = width.toFloat() / height.toFloat()
+        Hotbar.updateSlotPositions()
 
-	}
+    }
 
-	override fun dispose() {
-		debugRenderer.dispose()
-		batch.dispose()
-		world.dispose()
+    override fun dispose() {
+        debugRenderer.dispose()
+        batch.dispose()
+        world.dispose()
 
-		Healthbar.dispose()
+        Healthbar.dispose()
 
-	}
+    }
 
-	override fun hide() {
+    override fun hide() {
 
-	}
+    }
 
 }

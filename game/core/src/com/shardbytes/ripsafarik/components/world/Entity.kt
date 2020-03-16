@@ -17,92 +17,92 @@ import ktx.box2d.body
  */
 abstract class Entity : GameObject, IHealth {
 
-	/**
-	 * Physics box2d body.
-	 *
-	 * Body definition becomes invalid after the body is unloaded/despawned.
-	 */
-	lateinit var body: Body
-	var bodyInvalid = true
-	open val bodyDef: BodyDefinition.() -> Unit = {}
-	open val bodyType: BodyDef.BodyType = BodyDef.BodyType.StaticBody
+    /**
+     * Physics box2d body.
+     *
+     * Body definition becomes invalid after the body is unloaded/despawned.
+     */
+    lateinit var body: Body
+    var bodyInvalid = true
+    open val bodyDef: BodyDefinition.() -> Unit = {}
+    open val bodyType: BodyDef.BodyType = BodyDef.BodyType.StaticBody
 
-	fun createBody() {
-		bodyInvalid = false
-		body = GameWorld.physics.body(bodyType, bodyDef)
-		println("Body of $this created.")
+    fun createBody() {
+        bodyInvalid = false
+        body = GameWorld.physics.body(bodyType, bodyDef)
+        println("Body of $this created.")
 
-	}
+    }
 
-	private var savePosition: Vector2 = Vector2.Zero
-	private var saveAngle: Float = 0f
+    private var savePosition: Vector2 = Vector2.Zero
+    private var saveAngle: Float = 0f
 
-	/**
-	 * The position of the body.
-	 */
-	override val position: Vector2
-		get() = body.position
+    /**
+     * The position of the body.
+     */
+    override val position: Vector2
+        get() = body.position
 
-	/**
-	 * Sets the position of entity (sets its body transform).
-	 */
-	fun setPosition(x: Float, y: Float) {
-		body.setTransform(x, y, body.angle)
-	}
+    /**
+     * Sets the position of entity (sets its body transform).
+     */
+    fun setPosition(x: Float, y: Float) {
+        body.setTransform(x, y, body.angle)
+    }
 
-	/**
-	 * Sets the position of entity (sets its body transform).
-	 */
-	fun setPosition(pos: Vector2) {
-		body.setTransform(pos, body.angle)
-	}
+    /**
+     * Sets the position of entity (sets its body transform).
+     */
+    fun setPosition(pos: Vector2) {
+        body.setTransform(pos, body.angle)
+    }
 
-	/**
-	 * The angle of body in degrees.
-	 */
-	var rotation: Float
-		get() = body.angle * radDeg
-		set(degrees) {
-			body.setTransform(body.position, degrees * degRad)
-		}
-	
-	fun despawn() {
-		println("Despawning $this, current position: $position")
-		if(!bodyInvalid) {
-			GameWorld.physics.destroyBody(body)
-			println("Body of $this destroyed.")
-			bodyInvalid = true
+    /**
+     * The angle of body in degrees.
+     */
+    var rotation: Float
+        get() = body.angle * radDeg
+        set(degrees) {
+            body.setTransform(body.position, degrees * degRad)
+        }
 
-		} else {
-			throw Exception("Cannot destroy invalid body - entity $this.")
+    fun despawn() {
+        println("Despawning $this, current position: $position")
+        if (!bodyInvalid) {
+            GameWorld.physics.destroyBody(body)
+            println("Body of $this destroyed.")
+            bodyInvalid = true
 
-		}
-		GameMap.despawn(this)
-		
-	}
+        } else {
+            throw Exception("Cannot destroy invalid body - entity $this.")
 
-	fun load() {
-		createBody()
-		setPosition(savePosition)
-		rotation = saveAngle
-		bodyInvalid = false
+        }
+        GameMap.despawn(this)
 
-	}
+    }
 
-	fun unload() {
-		println("unload pizdec")
-		savePosition = position
-		saveAngle = rotation
-		if(!bodyInvalid) {
-			GameWorld.physics.destroyBody(body)
-			println("Body of $this destroyed.")
-			bodyInvalid = true
+    fun load() {
+        createBody()
+        setPosition(savePosition)
+        rotation = saveAngle
+        bodyInvalid = false
 
-		} else {
-			throw Exception("Cannot destroy invalid body - entity $this.")
+    }
 
-		}
+    fun unload() {
+        println("unload pizdec")
+        savePosition = position
+        saveAngle = rotation
+        if (!bodyInvalid) {
+            GameWorld.physics.destroyBody(body)
+            println("Body of $this destroyed.")
+            bodyInvalid = true
 
-	}
+        } else {
+            throw Exception("Cannot destroy invalid body - entity $this.")
+
+        }
+
+    }
 
 }
