@@ -8,7 +8,10 @@ import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.world.Item
 import com.shardbytes.ripsafarik.entity.Player
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
+@Serializable
 class Flashlight : Item, IUsable {
 
     override val maxUses = 0
@@ -19,7 +22,7 @@ class Flashlight : Item, IUsable {
     override val displayName = "Flashlight"
     @Transient override val texture = TextureRegion(Textures.Item["tool/flashlight"])
 
-    var light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 45f).apply {
+    @Transient var light = ConeLight(GameWorld.lights, 128, Color.WHITE, 10f, 0f, 0f, 0f, 45f).apply {
         attachToBody(GameWorld.player.body)
         isActive = false
 
