@@ -3,6 +3,7 @@ package com.shardbytes.ripsafarik.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.LongMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.blockPositionToChunkPosition
@@ -98,7 +99,7 @@ object GameMap {
 		val blockId = blockPositionToChunkPosition(position).identifier()
 
 		val chunk = getChunk(chunkId)
-		val keys = chunk.tiles.keys().toArray().items
+		val keys = chunk.tiles.orderedKeys()
 		if(zIndex == Int.MAX_VALUE) {
 			val largestKey = largestKey(keys)
 			if(largestKey != Int.MIN_VALUE) {
@@ -131,7 +132,7 @@ object GameMap {
 			}
 
 		} else {
-			if(chunk.tiles.containsKey(zIndex)) {
+			if (chunk.tiles.containsKey(zIndex)) {
 				chunk.tiles[zIndex].put(blockId, BlockCatalog.getBlock(tileIdentifier))
 
 			} else {
@@ -141,6 +142,7 @@ object GameMap {
 			}
 
 		}
+		chunk.tiles.orderedKeys().sort()
 
 	}
 
@@ -149,7 +151,7 @@ object GameMap {
 		val blockId = blockPositionToChunkPosition(position).identifier()
 
 		val chunk = getChunk(chunkId)
-		val keys = chunk.tiles.keys().toArray().items
+		val keys = chunk.tiles.orderedKeys()
 
 		if(zIndex == Int.MAX_VALUE) {
 			val largestKey = largestKey(keys)
@@ -174,7 +176,7 @@ object GameMap {
 
 		val chunk = getChunk(chunkId)
 		if(zIndex == Int.MAX_VALUE) {
-			val largestKey = largestKey(chunk.tiles.keys().toArray().items)
+			val largestKey = largestKey(chunk.tiles.orderedKeys())
 			return chunk.tiles[largestKey][blockId]
 
 		} else {
@@ -184,7 +186,7 @@ object GameMap {
 
 	}
 
-	private fun largestKey(keys: IntArray): Int {
+	private fun largestKey(keys: Array<Int>): Int {
 		var largestKey = Int.MIN_VALUE
 		for (key in keys) if (key > largestKey) largestKey = key
 		return largestKey

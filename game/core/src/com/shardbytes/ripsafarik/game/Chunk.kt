@@ -2,8 +2,8 @@ package com.shardbytes.ripsafarik.game
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.IntMap
 import com.badlogic.gdx.utils.LongMap
+import com.badlogic.gdx.utils.OrderedMap
 import com.shardbytes.ripsafarik.blockPositionToChunkCoordinates
 import com.shardbytes.ripsafarik.components.world.Block
 import com.shardbytes.ripsafarik.components.world.Entity
@@ -15,7 +15,7 @@ class Chunk(val chunkLocation: Vector2) {
 
 	val chunkBlockLocation = chunkLocation.cpy().scl(16f)
 
-	var tiles: IntMap<LongMap<Block>> = IntMap(6)
+	var tiles: OrderedMap<Int, LongMap<Block>> = OrderedMap(6)
 
 	var entities: MutableList<Entity> = mutableListOf()
 	var entitiesToSpawn: MutableList<Entity> = mutableListOf()
