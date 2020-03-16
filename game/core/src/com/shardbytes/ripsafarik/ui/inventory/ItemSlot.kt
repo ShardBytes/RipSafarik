@@ -10,7 +10,6 @@ import com.shardbytes.ripsafarik.items.ItemStack
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
 class ItemSlot {
 
     var itemStack: ItemStack? = null
