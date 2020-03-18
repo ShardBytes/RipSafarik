@@ -15,8 +15,12 @@ object Animations {
                 "animatedMonster2" to load("animatedMonster2"),
                 "animatedMonster3" to load("animatedMonster3"),
                 "animatedFastMonster" to load("animatedFastMonster"),
-                "animatedPlayer" to load("animatedPlayer"),
-                "animatedExplosion" to load("animatedExplosion")
+                "animatedExplosion" to load("animatedExplosion"),
+
+                "playerRight" to load("player/right"),
+                "playerLeft" to load("player/left"),
+                "playerUp" to load("player/up"),
+                "playerDown" to load("player/down")
         )
 
     }

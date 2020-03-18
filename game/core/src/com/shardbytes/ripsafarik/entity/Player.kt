@@ -3,10 +3,12 @@ package com.shardbytes.ripsafarik.entity
 import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.MathUtils.radDeg
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.shardbytes.ripsafarik.assets.Animations
+import com.shardbytes.ripsafarik.assets.Textures
 import com.shardbytes.ripsafarik.components.IModifiable
 import com.shardbytes.ripsafarik.components.IUsable
 import com.shardbytes.ripsafarik.components.input.InputCore
@@ -21,13 +23,20 @@ import kotlin.system.exitProcess
 class Player : Entity() {
 
     private val width = 1f
-    private val height = 1f
+    private val height = 2f
     private val maxSpeed = 4f //TODO: What unit?
 
     private var isWalking = false
     private var elapsedTime = 0f
 
-    private val animatedPlayer = Animations["animatedPlayer"]
+    private val animationUp = Animations["playerUp"]
+    private val animationDown = Animations["playerDown"]
+    private val animationLeft = Animations["playerLeft"]
+    private val animationRight = Animations["playerRight"]
+    private val staticUp = TextureRegion(Textures.Entity["playerStatic/up"])
+    private val staticDown = TextureRegion(Textures.Entity["playerStatic/down"])
+    private val staticLeft = TextureRegion(Textures.Entity["playerStatic/left"])
+    private val staticRight = TextureRegion(Textures.Entity["playerStatic/right"])
 
     //Health stuff
     override var maxHealth = 100f
@@ -40,7 +49,7 @@ class Player : Entity() {
 
     override val bodyType = BodyDef.BodyType.DynamicBody
     override val bodyDef: BodyDefinition.() -> Unit = {
-        circle(radius = width * 0.5f) { userData = this@Player }
+        circle(radius = width * 0.4f) { userData = this@Player }
         fixedRotation = true
 
     }
@@ -59,18 +68,31 @@ class Player : Entity() {
     }
 
     override fun render(dt: Float, batch: SpriteBatch) {
-        val originX = width * 0.5f
-        val originY = height * 0.5f
-        val originBasedPositionX = position.x - originX
-        val originBasedPositionY = position.y - originY
+        val posX = position.x - width * 0.5f
+        val posY = position.y - height * 0.2f
 
-        if (isWalking) {
-            batch.draw(animatedPlayer.getKeyFrame(elapsedTime), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
+        if(isWalking) {
+            when(body.angle * MathUtils.radDeg) {
+                in 0f..45f -> batch.draw(animationRight.getKeyFrame(elapsedTime), posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 45f..135f -> batch.draw(animationUp.getKeyFrame(elapsedTime), posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 135f..225f -> batch.draw(animationLeft.getKeyFrame(elapsedTime), posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 225f..315f -> batch.draw(animationDown.getKeyFrame(elapsedTime), posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 315f..360f -> batch.draw(animationRight.getKeyFrame(elapsedTime), posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+
+            }
 
         } else {
-            batch.draw(animatedPlayer.getKeyFrame(0.25f), originBasedPositionX, originBasedPositionY, originX, originY, width, height, 1f, 1f, body.angle * radDeg - 90f)
+            when(body.angle * MathUtils.radDeg) {
+                in 0f..45f -> batch.draw(staticRight, posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 45f..135f -> batch.draw(staticUp, posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 135f..225f -> batch.draw(staticLeft, posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 225f..315f -> batch.draw(staticDown, posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+                in 315f..360f -> batch.draw(staticRight, posX, posY, 0f, 0f, width, height, 1f, 1f, 0f)
+
+            }
 
         }
+
         elapsedTime += dt
         elapsedTime %= 0.8f //4 animation frames @ 200ms per frame rate
 

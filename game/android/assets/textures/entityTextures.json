@@ -1,5 +1,9 @@
 {
   "textures": [
-    "bullet"
+    "bullet",
+    "playerStatic/up",
+    "playerStatic/down",
+    "playerStatic/left",
+    "playerStatic/right"
   ]
 }
