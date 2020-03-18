@@ -1,8 +1,9 @@
 package com.shardbytes.ripsafarik.components.input
 
-import com.badlogic.gdx.*
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.shardbytes.ripsafarik.screens.GameScreen
 import com.shardbytes.ripsafarik.ui.inventory.Hotbar
 import com.shardbytes.ripsafarik.ui.inventory.PlayerInventory
@@ -17,13 +18,7 @@ object InventoryInput : InputProcessor {
 	override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean = false
 
 	override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-		val screenCoords = GameScreen.uiCamera.innerCamera.unproject(
-				Vector3(screenX.toFloat(), screenY.toFloat(), 0f),
-				GameScreen.uiCamera.viewport!!.screenX.toFloat(),
-				GameScreen.uiCamera.viewport!!.screenY.toFloat(),
-				GameScreen.uiCamera.viewport!!.screenWidth.toFloat(),
-				GameScreen.uiCamera.viewport!!.screenHeight.toFloat())
-
+		val screenCoords = GameScreen.uiCamera.unproject(screenX, screenY)
 		slotClicked(screenCoords, button)
 
 		return false
@@ -51,13 +46,13 @@ object InventoryInput : InputProcessor {
 
 	}
 
-	private fun slotClicked(atCoords: Vector3, button: Int) {
+	private fun slotClicked(atCoords: Vector2, button: Int) {
 		//check inventory slots
-		var slot = PlayerInventory.slots.find { it.isCoordinateInsideSlot(Vector2(atCoords.x, atCoords.y)) }
+		var slot = PlayerInventory.slots.find { it.isCoordinateInsideSlot(atCoords) }
 
 		//check hotbar slots
 		if (slot == null) {
-			slot = Hotbar.hotbarSlots.find { it.isCoordinateInsideSlot(Vector2(atCoords.x, atCoords.y)) }
+			slot = Hotbar.hotbarSlots.find { it.isCoordinateInsideSlot(atCoords) }
 		}
 
 		if (slot != null) {

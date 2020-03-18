@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.shardbytes.ripsafarik.actors.Camera
+import com.shardbytes.ripsafarik.actors.UICamera
 import com.shardbytes.ripsafarik.components.technical.BlockCatalog
 import com.shardbytes.ripsafarik.components.world.DaylightCycle
 import com.shardbytes.ripsafarik.game.GameWorld
@@ -19,7 +20,7 @@ object GameScreen : Screen {
 
     // rendering
     var camera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, true)
-    var uiCamera = Camera(Settings.GAME_V_WIDTH, Settings.GAME_V_HEIGHT, false)
+    var uiCamera = UICamera()
     var batch = SpriteBatch()
 
     // world
