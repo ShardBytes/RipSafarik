@@ -23,7 +23,7 @@ class ItemSlot {
     @Transient
     val slotMarkerTexture = TextureRegion(Textures.UI["itemslotmarker"])
     @Transient
-    val slotSize = 1f
+    val slotSize = 60f
 
     fun render(batch: SpriteBatch) {
         drawSlotTexture(batch)

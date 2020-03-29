@@ -9,8 +9,8 @@ import com.shardbytes.ripsafarik.game.Settings
 
 object Healthbar: Disposable {
 
-    val width = 8f
-    val height = 0.1f
+    val width = 400f
+    val height = 5f
 
     private val textures = arrayOfNulls<TextureRegion>(101)
 
@@ -42,7 +42,7 @@ object Healthbar: Disposable {
 
         batch.draw(pixels,
                 -width * 0.5f, //half the width of the healthbar
-                Settings.VISIBLE_SCREEN_HEIGHT_GUI * -0.5f + 1.1f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
+                Settings.VISIBLE_SCREEN_HEIGHT_GUI * -0.5f + 100f, //at the bottom + 1.1 points to the top (1 down is the hotbar)
                 0.5f,
                 0.5f,
                 width,

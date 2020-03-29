@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.shardbytes.ripsafarik.game.Settings
 
 class UICamera {
 
@@ -14,6 +15,8 @@ class UICamera {
     init {
         innerCamera = OrthographicCamera()
         viewport = ScreenViewport(innerCamera)
+        
+        Settings.SCREEN_HEIGHT = viewport.screenHeight.toFloat()
 
         innerCamera.update()
 
@@ -22,6 +25,8 @@ class UICamera {
     fun windowResized(width: Int, height: Int) {
         viewport.update(width, height)
         innerCamera.update()
+        
+        Settings.SCREEN_HEIGHT = height.toFloat()
 
     }
 
