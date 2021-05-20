@@ -10,19 +10,19 @@ import com.shardbytes.ripsafarik.items.ItemStack
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
+//@Serializable
 class ItemSlot {
 
     var itemStack: ItemStack? = null
 
-    @Serializable(with = Vector2Serializer::class)
+    //@Serializable(with = Vector2Serializer::class)
     var screenPosition = Vector2()
 
-    @Transient
+    //@Transient
     val slotTexture = TextureRegion(Textures.UI["itemslot"])
-    @Transient
+    //@Transient
     val slotMarkerTexture = TextureRegion(Textures.UI["itemslotmarker"])
-    @Transient
+    //@Transient
     val slotSize = 1f
 
     fun render(batch: SpriteBatch) {

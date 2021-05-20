@@ -34,30 +34,30 @@ object SaveManager {
 	private val polymorphicModule = SerializersModule {
 		polymorphic(Item::class) {
 			//class - its serializer
-			//serializer is auto-generated when @Serializable annotation is found
-			Gun::class with Gun.serializer()
-			Flashlight::class with Flashlight.serializer()
-			GunMagazine::class with GunMagazine.serializer()
-			DestroyTool::class with DestroyTool.serializer()
+			//serializer is auto-generated when //@Serializable annotation is found
+			//Gun::class with Gun.serializer()
+			//Flashlight::class with Flashlight.serializer()
+			//GunMagazine::class with GunMagazine.serializer()
+			//DestroyTool::class with DestroyTool.serializer()
 
 		}
 
 		polymorphic(Entity::class) {
-			ZombieNoHand::class with ZombieNoHand.serializer()
-			ZombieNoHandWithBlood::class with ZombieNoHandWithBlood.serializer()
-			ZombieRunner::class with ZombieRunner.serializer()
-			ZombieWithHandWithBlood::class with ZombieWithHandWithBlood.serializer()
+			//ZombieNoHand::class with ZombieNoHand.serializer()
+			//ZombieNoHandWithBlood::class with ZombieNoHandWithBlood.serializer()
+			//ZombieRunner::class with ZombieRunner.serializer()
+			//ZombieWithHandWithBlood::class with ZombieWithHandWithBlood.serializer()
 
-			ItemDrop::class with ItemDrop.serializer()
+			//ItemDrop::class with ItemDrop.serializer()
 
 		}
 
 		polymorphic(Block::class) {
-			Grass::class with Grass.serializer()
-			Asfalt::class with Asfalt.serializer()
-			Concrete::class with Concrete.serializer()
-			Safarik::class with Safarik.serializer()
-			IronFence::class with IronFence.serializer()
+			//Grass::class with Grass.serializer()
+			//Asfalt::class with Asfalt.serializer()
+			//Concrete::class with Concrete.serializer()
+			//Safarik::class with Safarik.serializer()
+			//IronFence::class with IronFence.serializer()
 
 		}
 
@@ -128,8 +128,8 @@ object SaveManager {
 
 		}
 		*/
-		val jsonnnn = json.toJson(ItemSlot.serializer().nullable.list, Hotbar.hotbarSlots.toList())
-		hotbarItems.add(jsonnnn)
+		//val jsonnnn = json.toJson(ItemSlot.serializer().nullable.list, Hotbar.hotbarSlots.toList())
+		//hotbarItems.add(jsonnnn)
 
 		//make an array of all the slots (which are now JSON objects)
 		//and put it to string

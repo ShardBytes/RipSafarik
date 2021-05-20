@@ -19,7 +19,7 @@ object GameMap {
 
     private lateinit var currentMapName: String
 
-    @Serializable
+    //@Serializable
     var chunks: LongMap<Chunk> = LongMap() // TODO: is map needed?
     var tickedChunks: LongMap<Int> = LongMap(Settings.CHUNKS_RENDER_DISTANCE * Settings.CHUNKS_RENDER_DISTANCE)
     var chunkTickQueue: LongMap<Int> = LongMap(5)

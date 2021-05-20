@@ -16,7 +16,7 @@ class BlockItem(block: Block) : Item, IUsable, IModifiable {
 
 	override val name: String = block.name
 	override val displayName: String = block.displayName
-	@Transient
+	//@Transient
 	override val texture = block.texture
 
 	override val maxUses = 0

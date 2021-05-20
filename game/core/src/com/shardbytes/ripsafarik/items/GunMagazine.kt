@@ -6,12 +6,13 @@ import com.shardbytes.ripsafarik.components.world.Item
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
+//@Serializable
 class GunMagazine: Item {
 
     override val name: String = "gunMagazine"
     override val displayName: String = "Magazine"
-    @Transient override val texture: TextureRegion = TextureRegion(Textures.Item["weapon/gunMagazine"])
+    //@Transient
+    override val texture: TextureRegion = TextureRegion(Textures.Item["weapon/gunMagazine"])
 
 
 }

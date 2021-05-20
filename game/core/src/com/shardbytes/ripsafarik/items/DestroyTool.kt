@@ -15,12 +15,12 @@ import com.shardbytes.ripsafarik.screens.GameScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
+//@Serializable
 class DestroyTool : Item, IUsable, IModifiable {
 
     override val name: String = "destroyTool"
     override val displayName: String = "Destroy tool"
-    @Transient
+    //@Transient
     override val texture: TextureRegion = TextureRegion(Textures.Item["tool/destroytool"])
 
     override val maxUses: Int = 0

@@ -6,12 +6,12 @@ import com.shardbytes.ripsafarik.components.world.Block
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
+//@Serializable
 class Asfalt : Block {
 
 	override val name = "asfalt"
 	override val displayName = "Asphalt"
-	@Transient
+	//@Transient
 	override val texture = TextureRegion(Textures.Env["asfalt"])
 	
 }

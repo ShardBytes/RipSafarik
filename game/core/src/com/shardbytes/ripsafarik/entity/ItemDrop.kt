@@ -12,17 +12,17 @@ import com.shardbytes.ripsafarik.items.ItemStack
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
-@Serializable
+//@Serializable
 class ItemDrop(private val itemStack: ItemStack) : Entity() {
 
 	override var maxHealth = 1f
 	override var health = 1f
 	override var regenSpeed = 0f
 
-	@Transient
+	//@Transient
 	private val font = BitmapFont().apply { data.setScale(0.1f) } //TODO: font scale fucks shit up, fix asap
 
-	@Transient
+	//@Transient
 	private var availableForPickup = false
 
 	override fun render(dt: Float, batch: SpriteBatch) {

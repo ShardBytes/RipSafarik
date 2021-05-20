@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import ktx.box2d.BodyDefinition
 
-@Serializable
+//@Serializable
 class ZombieNoHand : GenericZombie() {
 
 	override var textureWidth: Float = 1f
@@ -18,14 +18,14 @@ class ZombieNoHand : GenericZombie() {
 	override var followRange: Float = 10f
 	override var knockbackForce: Float = 20f
 
-	@Transient
+	//@Transient
 	override val animatedMonster: Animation<TextureRegion> = Animations["animatedMonster"]
 	override var frames: Int = 4
 	override var frameTime: Int = 150
 
-	@Transient
+	//@Transient
 	override val bodyType = BodyDef.BodyType.DynamicBody
-	@Transient
+	//@Transient
 	override val bodyDef: BodyDefinition.() -> Unit = {
 		box(0.35f, 0.9f) {
 			userData = this@ZombieNoHand
